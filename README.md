@@ -65,6 +65,10 @@ Postgres using SQLAlchemy ORM
 ## API
 **For API Documentation, please see the [ENDPOINTS.md](ENDPOINTS.md) file**
 
+### Roadmap
+
+View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
+
 ## Contributing
 **INSERT contributing workflow steps or link here**
 [APP NAME] was built using waffle.io as the project organization tool.
