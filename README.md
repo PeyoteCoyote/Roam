@@ -66,13 +66,6 @@ Postgres using SQLAlchemy ORM
 **For API Documentation, please see the [ENDPOINTS.md](ENDPOINTS.md) file**
 
 ## Contributing
-
-Product Owner: Kent Lee
-
-Scrum Master: Rodaan Rabang
-
-Development Team: Esther Cuan and Dan Sajjad
-
 **INSERT contributing workflow steps or link here**
 [APP NAME] was built using waffle.io as the project organization tool.
 Please visit the [GITFLOW.MD](GITFLOW.md) for our workflow guidelines.
