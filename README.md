@@ -1,4 +1,3 @@
-# 2016-04-greenfield
 # Roam
 ** New Adventures with New People **
 
