@@ -83,6 +83,6 @@ Product Owner: [Kent Lee](https://github.com/kqlee)
 
 Scrum Master: [Rodaan Rabang](https://github.com/rodaan)
 
-Development Team: [Esther Cuan](https://github.com/esthercuan) and [Dan Sajjad](https://github.com/Dansajjad)
+Development Team: [Esther Cuan](https://github.com/esthercuan), [Dan Sajjad](https://github.com/Dansajjad)
 
 "Distributed under the MIT License."
