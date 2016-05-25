@@ -79,10 +79,10 @@ Please direct any questions regarding [APP NAME] to [**our wiki page**](https://
 
 ## Meta
 
-Product Owner: Kent Lee
+Product Owner: [Kent Lee](https://github.com/kqlee)
 
-Scrum Master: Rodaan Rabang
+Scrum Master: [Rodaan Rabang](https://github.com/rodaan)
 
-Development Team: Esther Cuan and Dan Sajjad
+Development Team: [Esther Cuan](https://github.com/esthercuan) and [Dan Sajjad](https://github.com/Dansajjad)
 
 "Distributed under the MIT License."
