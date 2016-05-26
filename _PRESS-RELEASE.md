@@ -17,28 +17,28 @@ Once the project moves into development, the press release can be used as a touc
  -->
  
 ## Heading ##
-  > Name the product in a way the reader (i.e. your target customers) will understand.
+  > Roam
 
 ## Sub-Heading ##
-  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  > New Adventures with new people
 
 ## Summary ##
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  > This mobile app is a way for users to enjoy new experiences and meet new people at the same time.
 
 ## Problem ##
-  > Describe the problem your product solves.
+  > For many people in their 20's, meeting new people and making new friends is hard. Chances are their college friends will have different priorities or have relocated to a different area.
 
 ## Solution ##
-  > Describe how your product elegantly solves the problem.
+  > Our app allows users to engage in the social experience in a casual way without being overwhelmed by the countless activities and the commitments that follow.
 
 ## Quote from You ##
-  > A quote from a spokesperson in your company.
+  > Making friends should be casual, easy, and fun!
 
 ## How to Get Started ##
-  > Describe how easy it is to get started.
+  > Simply download our app and sign up, select from a list of interests, and pick a time that you are free - we will handle the rest.
 
 ## Customer Quote ##
-  > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  > Roam has given me new experiences while allowing me to meet interesting people along the way!
 
 ## Closing and Call to Action ##
-  > Wrap it up and give pointers where the reader should go next.
+  > Our product launch will happen in the next couple of weeks.
