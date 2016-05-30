@@ -18,8 +18,7 @@ class roam extends Component{
         initialRoute={{
           title: 'Roam',
           component: Main 
-        }} 
-        />
+        }} />
     );
   }
 };

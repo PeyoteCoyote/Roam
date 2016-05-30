@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+//Require authentication component
+var SignUp = require('./Signup');
+
 import {
   View,
   Text,
@@ -28,6 +31,7 @@ const styles = StyleSheet.create({
     height: 50,
     padding: 4,
     marginRight: 5,
+    marginBottom: 15,
     fontSize: 23,
     borderWidth: 1,
     borderColor: 'white',
@@ -64,9 +68,9 @@ class Main extends Component {
     }
   }
 
-  handleUsername(event) {
+  handleEmail(event) {
     this.setState({
-      username: event.nativeEvent.text
+      email: event.nativeEvent.text
     });
   }
 
@@ -76,14 +80,25 @@ class Main extends Component {
     });
   }
 
-  handleSubmit() {
+  handleSignIn() {
     this.setState({
       isLoading: true
     });
 
-
-
   }
+
+  handleSignUp() {
+    this.setState({
+      isLoading: true
+    });
+    this.props.navigator.push({
+      title: 'Sign Up',
+      component: SignUp
+    });
+    this.setState({
+      isLoading: false
+    });
+  }  
 
   render() {
     var showErr = (
@@ -92,11 +107,11 @@ class Main extends Component {
     return(
       <View style={styles.mainContainer}>
         <Text style={styles.title}> Welcome to Roam! </Text>
-        {/* Fields that we want to bind the username and password input */}
+        {/* Fields that we want to bind the email and password input */}
         <TextInput
           style={styles.submit}
-          value={this.state.username}
-          onChange={this.handleUsername.bind(this)} 
+          value={this.state.email}
+          onChange={this.handleEmail.bind(this)} 
           />
         <TextInput
           style={styles.submit}
@@ -105,9 +120,15 @@ class Main extends Component {
         />
         <TouchableHighlight 
           style={styles.button}
-          onPress={this.handleSubmit.bind(this)}
+          onPress={this.handleSignIn.bind(this)}
           underlayColor="white" >
-            <Text style={styles.buttonText}> SIGN-IN </Text>
+            <Text style={styles.buttonText}> Sign-In </Text>
+        </TouchableHighlight>
+        <TouchableHighlight 
+          style={styles.button}
+          onPress={this.handleSignUp.bind(this)}
+          underlayColor="white" >
+            <Text style={styles.buttonText}> Not a user? Sign-Up! </Text>
         </TouchableHighlight>
         {/* This is the loading animation when isLoading is set to true */}
         <ActivityIndicatorIOS
