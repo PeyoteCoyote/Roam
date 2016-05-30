@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+var Interests = require('./Interests');
+
 import {
   View,
   Text,
@@ -63,8 +65,28 @@ class SignUp extends Component {
       password: '',
       passwordAgain: '',
       email: '',
+      isLoading: false,
       error: false
     }
+  }
+
+  handleSubmit() {
+    console.log(this.state);
+    this.setState({
+      isLoading: true
+    });
+    //Need logic to check if username is taken in the database
+    //Check if the passwords are matching
+    //Check if the email is valid
+    //Route to the hobbies screen
+    this.props.navigator.push({
+      title: 'Select Interests',
+      component: Interests
+    });
+    //Set isloading to false after conditions
+    this.setState({
+      isLoading: false
+    });
   }
 
   render() {
@@ -73,23 +95,44 @@ class SignUp extends Component {
     );
     return(
       <View style={styles.mainContainer}>
-        <Text style={styles.title}> Welcome to Roam! </Text>
+        <Text style={styles.title}> Create an acount and you will be roaming in no time! </Text>
         {/* Fields that we want to bind the username and password input */}
         <TextInput
           style={styles.submit}
-          value={this.state.username}
-          onChange={this.handleEmail.bind(this)} 
+          placeholder="Your first name"
+          onChangeText={(text) => this.setState({firstName: text})} 
+          value={this.state.firstName}
           />
         <TextInput
           style={styles.submit}
+          placeholder="Your last name"
+          onChangeText={(text) => this.setState({lastName: text})} 
+          value={this.state.lastName}
+          />
+        <TextInput
+          style={styles.submit}
+          placeholder="Enter a password"
+          onChangeText={(text) => this.setState({password: text})} 
           value={this.state.password}
-          onChange={this.handlePassword.bind(this)} 
-        />
+          />
+        <TextInput
+          style={styles.submit}
+          placeholder="Enter password again"
+          onChangeText={(text) => this.setState({passwordAgain: text})} 
+          value={this.state.passwordAgain}
+          />
+        <TextInput
+          style={styles.submit}
+          autoCapitalize="none"
+          placeholder="Email"
+          onChangeText={(text) => this.setState({email: text})} 
+          value={this.state.email}
+          />          
         <TouchableHighlight 
           style={styles.button}
           onPress={this.handleSubmit.bind(this)}
           underlayColor="white" >
-            <Text style={styles.buttonText}> SIGN-UP! </Text>
+            <Text style={styles.buttonText}> Sign-Up! </Text>
         </TouchableHighlight>
         {/* This is the loading animation when isLoading is set to true */}
         <ActivityIndicatorIOS

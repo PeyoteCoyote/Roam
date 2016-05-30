@@ -84,7 +84,11 @@ class Main extends Component {
     this.setState({
       isLoading: true
     });
-
+    if (this.state.email === '') {
+      this.setState({
+        error: true
+      });
+    }
   }
 
   handleSignUp() {
@@ -110,11 +114,13 @@ class Main extends Component {
         {/* Fields that we want to bind the email and password input */}
         <TextInput
           style={styles.submit}
+          placeholder="Email"
           value={this.state.email}
           onChange={this.handleEmail.bind(this)} 
           />
         <TextInput
           style={styles.submit}
+          placeholder="Password"
           value={this.state.password}
           onChange={this.handlePassword.bind(this)} 
         />
