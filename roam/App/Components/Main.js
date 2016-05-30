@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 //Require authentication component
 var SignUp = require('./Signup');
+var Time = require('./Time');
 
 import {
   View,
@@ -89,6 +90,13 @@ class Main extends Component {
         error: true
       });
     }
+    this.props.navigator.push({
+      title: 'When are you free?',
+      Component: Time
+    });
+    this.setState({
+      isLoading: false
+    });
   }
 
   handleSignUp() {
