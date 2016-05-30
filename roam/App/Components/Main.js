@@ -92,7 +92,7 @@ class Main extends Component {
     }
     this.props.navigator.push({
       title: 'When are you free?',
-      Component: Time
+      component: Time
     });
     this.setState({
       isLoading: false
