@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 
 var Separator = require('./Helpers/Separator');
+var Time = require('./Time')
 
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
+  ListView,
   TouchableHighlight,
   ActivityIndicatorIOS
 } from 'react-native';
@@ -54,9 +56,28 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     justifyContent: 'center'
   },
+  choice: {
+    fontSize: 20,
+    backgroundColor: 'orange',
+    marginTop: 20,
+    marginBottom: 20,
+    borderColor: 'black',
+    padding: 10,
+    textAlign: 'center',
+    justifyContent: 'center'
+  }
 });
 
 class Interests extends Component {
+
+  handleSubmit() {
+    console.log('NEXT');
+    this.props.navigator.push({
+      title: 'Select Time',
+      Component: Time
+    });
+  }
+
   render() {
     var interestsList = [
       'Coffee',
@@ -64,11 +85,27 @@ class Interests extends Component {
       'Brunch',
       'Wine Bars',
       'Sports Bars',
-      'Desserts',
+      'Dessert',
     ];
+    var list = interestsList.map((item, index) => {
+      return (
+        <View key={index}>
+          <Text style={styles.choice}> {item} </Text>
+          <Separator />
+        </View>
+      )
+    });
+
     return (
-      <View>
-        <Text>Select your interests:</Text>
+      <View style={styles.mainContainer}>
+        <Text style={styles.title}>Select your interests:</Text>
+          {list}
+        <TouchableHighlight 
+          style={styles.button}
+          onPress={this.handleSubmit.bind(this)}
+          underlayColor="white" >
+            <Text style={styles.buttonText}> Next </Text>
+        </TouchableHighlight>
       </View>
     );
   }
