@@ -15,39 +15,96 @@ import {
   View
 } from 'react-native';
 
+//Contains Navigation Bar and manages Routes
 class roam extends Component {
   renderScene(route, navigator) {
-    if(route.name == 'SignIn') {
-      return <SignIn navigator={navigator} {...route.passProps}/>
+    // if(route.name == 'SignIn') {
+    //   return <SignIn navigator={navigator} {...route.passProps}/>
+    // }
+    // if(route.name == 'SignUp') {
+    //   return <SignUp navigator={navigator} {...route.passProps}/>
+    // }
+    // if(route.name == 'Main') {
+    //   return <Main navigator={navigator} {...route.passProps}/>
+    // }
+    // if(route.name == 'OnBoard') {
+    //   return <OnBoard navigator={navigator} {...route.passProps}/>
+    // }
+    return <route.component navigator={navigator} {...route.passProps} />
+  }
+  configureScene(route, routeStack){
+    if(route.type == 'Modal') {
+      return Navigator.SceneConfigs.FloatFromBottom
     }
-    if(route.name == 'SignUp') {
-      return <SignUp navigator={navigator} {...route.passProps}/>
-    }
-    if(route.name == 'Main') {
-      return <Main navigator={navigator} {...route.passProps}/>
-    }
-    if(route.name == 'OnBoard') {
-      return <OnBoard navigator={navigator} {...route.passProps}/>
-    }
+    return Navigator.SceneConfigs.PushFromRight 
   }
   render() {
     return (
       <Navigator
         style={{ flex:1 }}
-        initialRoute={{ name: 'SignIn' }}
-        renderScene={ this.renderScene } />
+        configureScene={ this.configureScene }
+        initialRoute={{ name: 'Sign In', component: SignIn }}
+        renderScene={ this.renderScene }
+        navigationBar={
+          <Navigator.NavigationBar
+            style={styles.nav}
+            routeMapper={NavigationBarRouteMapper} />
+        }
+      />
     )
   }
   
 }
 
+//Creation of the Navigation Bar
+const NavigationBarRouteMapper = {
+  LeftButton(route, navigator, index, navState){
+    if(index > 0) {
+      return (
+        <TouchableHighlight
+          underlayColor="transparent"
+          onPress={() => { if (index > 0) { navigator.pop() } }}>
+          <Text style={ styles.leftNavButtonText }>Back</Text>
+        </TouchableHighlight>
+      )
+    }
+    else { return null};
+  },
+  RightButton(route, navigator, index, navState) {
+    if(route.onPress){
+      return (
+        <TouchableHighlight
+          onPress={ () => route.onPress() }>
+          <Text style={ styles.rightNavButtonText }>
+              { route.rightText || 'Right Button' }
+          </Text>
+        </TouchableHighlight>
+      )
+    }
+  },
+  Title(route, navigator, index, navState) {
+    return <Text style={ styles.title }>MY APP TITLE</Text>
+  }
+};
+
+
 class SignIn extends Component {
-  _navigate(name){
+  toSignUp(name, type='Normal'){
     this.props.navigator.push({
-      name: name,
+      component: SignUp,
       passProps: {
         name: name
-      }
+      },
+      type: type
+    })
+  }
+  toHome(name, type='Modal'){
+    this.props.navigator.replace({
+      component: Home,
+      passProps: {
+        name: name
+      },
+      type: type
     })
   }
   render() {
@@ -64,10 +121,10 @@ class SignIn extends Component {
           Password:
         </Text>
         <TextInput style={styles.input}/>
-        <TouchableHighlight style={styles.button} onPress={() => this._navigate('Main')}>
+        <TouchableHighlight style={styles.button} onPress={() => this.toHome('Main')}>
           <Text style={styles.buttonText}>Sign In</Text>
         </TouchableHighlight>
-        <TouchableHighlight onPress={() => this._navigate('SignUp')}>
+        <TouchableHighlight onPress={() => this.toSignUp('SignUp')}>
           <Text style={styles.link}>Create Account</Text>
         </TouchableHighlight>
       </View>
@@ -76,12 +133,13 @@ class SignIn extends Component {
 }
 
 class SignUp extends Component {
-  _navigate(name){
-    this.props.navigator.push({
-      name: name,
+  toSettings(name, type='Modal'){
+    this.props.navigator.resetTo({
+      component: Settings,
       passProps: {
         name: name
-      }
+      },
+      type: type
     })
   }
   render(){
@@ -108,7 +166,7 @@ class SignUp extends Component {
           Confirm Password:
         </Text>
         <TextInput style={styles.input}/>
-        <TouchableHighlight style={ styles.button } onPress={ () => this._navigate('OnBoard') }>
+        <TouchableHighlight style={ styles.button } onPress={ () => this.toSettings('Settings') }>
           <Text style={ styles.buttonText }>Sign Up</Text>
         </TouchableHighlight>
         <TouchableHighlight style={ styles.button } onPress={ () => this.props.navigator.pop() }>
@@ -119,7 +177,7 @@ class SignUp extends Component {
   }
 }
 
-class Main extends Component {
+class Home extends Component {
   _navigate(name){
     this.props.navigator.push({
       name: name,
@@ -139,34 +197,35 @@ class Main extends Component {
   }
 }
 
-class OnBoard extends Component {
-  _navigate(name){
-    this.props.navigator.push({
-      name: name,
+class Settings extends Component {
+  toHome(name, type='Modal'){
+    this.props.navigator.resetTo({
+      component: Home,
       passProps: {
         name: name
-      }
+      },
+      type: type
     })
   }
   render(){
     return(
       <View style={ styles.container }>
-        <TouchableHighlight style={ styles.button } onPress={console.log('Foodie') }>
+        <TouchableHighlight style={ styles.button } >
           <Text style={ styles.buttonText }>Coffee Shops</Text>
         </TouchableHighlight>
-        <TouchableHighlight style={ styles.button } onPress={ console.log('Foodie')}>
+        <TouchableHighlight style={ styles.button } >
           <Text style={ styles.buttonText }>Nature</Text>
         </TouchableHighlight>
-        <TouchableHighlight style={ styles.button } onPress={ console.log('Foodie') }>
+        <TouchableHighlight style={ styles.button } >
           <Text style={ styles.buttonText }>Wine Bars</Text>
         </TouchableHighlight>
-        <TouchableHighlight style={ styles.button } onPress={ console.log('Foodie')}>
+        <TouchableHighlight style={ styles.button } >
           <Text style={ styles.buttonText }>Sports Bars</Text>
         </TouchableHighlight>
-        <TouchableHighlight style={ styles.button } onPress={ console.log('Foodie') }>
+        <TouchableHighlight style={ styles.button } >
           <Text style={ styles.buttonText }>Foodie Adventures</Text>
         </TouchableHighlight>
-        <TouchableHighlight style={ styles.button } onPress={ this._navigate('Main') }>
+        <TouchableHighlight style={ styles.button } onPress={ () => this.toHome('Home') }>
           <Text style={ styles.buttonText }>Next</Text>
         </TouchableHighlight>
       </View>
@@ -210,7 +269,25 @@ const styles = StyleSheet.create({
   link: {
     color: 'red',
     textDecorationStyle: 'solid'
-  }
+  },
+  leftNavButtonText: {
+    fontSize: 18,
+    marginLeft:13,
+    marginTop:2
+  },
+  rightNavButtonText: {
+    fontSize: 18,
+    marginRight:13,
+    marginTop:2
+  },
+  nav: {
+    height: 60,
+    backgroundColor: '#efefef'
+  },
+  title: {
+    marginTop:4,
+    fontSize:16
+  },
 });
 
 AppRegistry.registerComponent('roam', () => roam);
