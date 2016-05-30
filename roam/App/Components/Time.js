@@ -71,16 +71,24 @@ class Time extends Component {
 
   handleSubmit() {
     console.log('ROAM!');
+    //Link to Geolocations/Event confirmation page
+    // this.props.navigator.push({
+    //   name: 'Location',
+    //   component: Location,
+    //   passProps: {
+    //     time: time
+    //   }
+    // });
   }
 
   render () {
-    var times = [
+    var timesList = [
       'In 1 hour',
       'In 2 hours',
       'Anytime in the next 4 hours',
-      'Anytime today'
+      'Anytime today!'
     ];
-    var list = times.map((item, index) => {
+    var list = timesList.map((item, index) => {
       return (
         <View key={index}>
           <Text style={styles.choice}> {item} </Text>
@@ -89,10 +97,10 @@ class Time extends Component {
       )
     });
 
-    return(
-      <View>
+    return (
+      <View style={styles.mainContainer}>
         <Text style={styles.title}> When are you free? </Text>
-        {list}
+          {list}
         <TouchableHighlight 
           style={styles.button}
           onPress={this.handleSubmit.bind(this)}

@@ -74,7 +74,7 @@ class Interests extends Component {
     console.log('NEXT');
     this.props.navigator.push({
       title: 'Select Time',
-      Component: Time
+      component: Time
     });
   }
 
