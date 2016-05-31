@@ -89,6 +89,7 @@ class Time extends Component {
     .catch((error) => {
       console.log('Error handling submit:', error);
     });
+    console.log('ROAM!');
     //Link to Geolocations/Event confirmation page
     // this.props.navigator.push({
     //   name: 'Location',
