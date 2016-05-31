@@ -26,33 +26,33 @@
 http://gifmaker.me/
 
 ## Getting Started
-**Use this section to describe the spin-up process. Installation steps, dependencies, etc.**
 
-* Pretend your reader has never worked with your specific frameworks or languages. 
-* Do you have multiple environments? (dev, staging, etc.)?
-* What is your testing workflow?
+Please install neo4j community edition. Run the neo4j application. Upon running the neo4j application run the following command on the browser app served up by the application:
 
-Please install Python/Flask dependencies within the root directory
 ```
-$ virtualenv .
-$ source bin/activate
-$ pip install -r requirements.txt
+:server connect
+
 ```
 
-Next, install the client-side dependencies
+When prompted, set a password to your neo4j database.
+
+Ensure you create a .apoc.yml file within the home directory containing this:
 ```
-$ sudo npm install -g bower
-$ bower install
+protocol: http
+host: 127.0.0.1
+port: 7474
+username: neo4j
+password: roam
 ```
-**For testing**
+
+Be sure to change the port in the file above to the port you've chosen to run neo4j on and change the password to the one you've added to your database.
+
+Next, install the client-side dependencies by going to the roam directory in terminal and entering:
 ```
 $ npm install
 ```
 
-You're good to go. Start the server with:
-```
-$ npm start
-```
+ToDO: Fill this out more.
 
 ## Architecture
 ### High Level Architecture
