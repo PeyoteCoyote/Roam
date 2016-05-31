@@ -75,6 +75,27 @@ class SignUp extends Component {
     this.setState({
       isLoading: true
     });
+
+    fetch('http://localhost:3000', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        password: this.state.password,
+        email: this.state.email,
+      })
+    })
+    .then((res) => {
+      console.log(res);
+      console.log('Sent ROAM request!');
+    })
+    .catch((error) => {
+      console.log('Error handling submit:', error);
+    });
     //Need logic to check if username is taken in the database
     //Check if the passwords are matching
     //Check if the email is valid
