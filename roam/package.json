@@ -9,7 +9,7 @@
     "apoc": "^2.1.6",
     "body-parser": "^1.15.1",
     "react": "15.0.2",
-    "react-native": "^0.26.2"
+    "react-native": "^0.26.2",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "~1.13.2",
     "connect-flash": "^0.1.1",
