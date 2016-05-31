@@ -70,6 +70,25 @@ const styles = StyleSheet.create({
 class Time extends Component {
 
   handleSubmit() {
+    console.log('Sending ROAM request!');
+    fetch('http://localhost:3000', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        firstParam: 'Sweet',
+        secondParam: 'It works',
+      })
+    })
+    .then((res) => {
+      console.log(res);
+      console.log('Sent ROAM request!');
+    })
+    .catch((error) => {
+      console.log('Error handling submit:', error);
+    });
     console.log('ROAM!');
     //Link to Geolocations/Event confirmation page
     // this.props.navigator.push({
