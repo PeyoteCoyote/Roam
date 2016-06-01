@@ -1,15 +1,11 @@
 {
-  "name": "roam",
-  "version": "0.0.1",
+  "name": "Roam",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "start": "node ./bin/www"
   },
   "dependencies": {
-    "apoc": "^2.1.6",
-    "body-parser": "^1.15.1",
-    "react": "15.0.2",
-    "react-native": "^0.26.2",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "~1.13.2",
     "connect-flash": "^0.1.1",
@@ -22,6 +18,7 @@
     "morgan": "~1.6.1",
     "passport": "~0.2.0",
     "passport-local": "~1.0.0",
+    "react-native-radio-buttons": "^0.11.0",
     "serve-favicon": "~2.3.0"
   }
 }

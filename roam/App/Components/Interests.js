@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
 var Separator = require('./Helpers/Separator');
-var Time = require('./Time')
+var Time = require('./Time');
+var styles = require('./Helpers/styles');
 
 import {
   View,
@@ -13,62 +14,24 @@ import {
   ActivityIndicatorIOS
 } from 'react-native';
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    padding: 30,
-    marginTop: 65,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    backgroundColor: '#48BBEC'
-  },
-  title: {
-    marginBottom: 20,
-    fontSize: 25,
-    textAlign: 'center',
-    color: '#fff'
-  },
-  submit: {
-    height: 50,
-    padding: 4,
-    marginRight: 5,
-    marginBottom: 15,
-    fontSize: 23,
-    borderWidth: 1,
-    borderColor: 'white',
-    borderRadius: 8,
-    color: 'white'
-  },
-  buttonText: {
-    fontSize: 18,
-    color: '#111',
-    alignSelf: 'center'
-  },
-  button: {
-    height: 35,
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    borderColor: 'white',
-    borderWidth: 1,
-    borderRadius: 20,
-    marginBottom: 10,
-    marginTop: 10,
-    alignSelf: 'stretch',
-    justifyContent: 'center'
-  },
-  choice: {
-    fontSize: 20,
-    backgroundColor: 'orange',
-    marginTop: 20,
-    marginBottom: 20,
-    borderColor: 'black',
-    padding: 10,
-    textAlign: 'center',
-    justifyContent: 'center'
-  }
-});
-
 class Interests extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      "Coffee": false,
+      "Nature": false,
+      "Brunch": false,
+      "Wine Bars": false,
+      "Sports Bars": false,
+      "Dessert": false
+    };
+  }
+  handleSelected(choice) {
+    //set the state of the selection to the opposite value
+    let newState = {...this.state};
+    newState[choice] = !newState[choice];
+    this.setState(newState);
+  }
 
   handleSubmit() {
     console.log('NEXT');
@@ -89,10 +52,13 @@ class Interests extends Component {
     ];
     var list = interestsList.map((item, index) => {
       return (
-        <View key={index}>
-          <Text style={styles.choice}> {item} </Text>
-          <Separator />
-        </View>
+        <TouchableHighlight 
+          key={index}
+          underlayColor='transparent'
+          onPress={() => {this.handleSelected(item)}} 
+          selected={this.state[item]} >
+          <Text style={this.state[item] ? styles.selected : styles.unselected }> {item} </Text>
+        </TouchableHighlight>
       )
     });
 
