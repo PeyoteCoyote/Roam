@@ -21,7 +21,8 @@ class Main extends Component {
       email: '',
       password: '',
       isLoading: false,
-      error: false
+      error: false,
+      errorMessage: ''
     };
   }
 
@@ -41,18 +42,55 @@ class Main extends Component {
     this.setState({
       isLoading: true
     });
-    if (this.state.email === '') {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (this.state.email === '' || !re.test(this.state.email)) {
       this.setState({
-        error: true
+        isLoading: false,
+        error: true,
+        errorMessage: 'Invalid Email!'
       });
     }
-    this.props.navigator.push({
-      title: 'When are you free?',
-      component: Time
-    });
-    this.setState({
-      isLoading: false
-    });
+    if (this.state.password === '') {
+      this.setState({
+        isLoading: false,
+        error: true,
+        errorMessage: 'Invalid Password!'
+      });
+    }
+    //If email and password exists on the database, log the user into the select time page
+    if(this.state.email !== '' && re.test(this.state.email) && this.state.password !== ''){
+      fetch('http://localhost:3000/signin', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          password: this.state.password,
+          email: this.state.email.toLowerCase(),
+        })
+      })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        if(res.message === 'Incorrect email/password combination!'){
+          this.setState({errorMessage: res.message, error: true, isLoading: false});
+        } else{
+          this.props.navigator.push({
+            title: 'When are you free?',
+            component: Time
+          });
+          this.setState({
+            isLoading: false
+          });
+        }
+      })
+      .catch((error) => {
+        console.log('Error handling submit:', error);
+      });
+
+    }   
   }
 
   handleSignUp() {
@@ -70,20 +108,20 @@ class Main extends Component {
 
   render() {
     var showErr = (
-      this.state.error ? <Text> {this.state.error} </Text> : <View></View>
+      this.state.error ? <Text> {this.state.errorMessage} </Text> : <View></View>
     );
     return(
       <View style={styles.mainContainer}>
         <Text style={styles.title}> Welcome to Roam! </Text>
         {/* Fields that we want to bind the email and password input */}
         <TextInput
-          style={styles.submit}
+          style={this.state.email === '' ? styles.submitError : styles.submit}
           placeholder="Email"
           value={this.state.email}
           onChange={this.handleEmail.bind(this)} 
           />
         <TextInput
-          style={styles.submit}
+          style={this.state.password === '' ? styles.submitError : styles.submit}
           placeholder="Password"
           value={this.state.password}
           onChange={this.handlePassword.bind(this)} 

@@ -13,7 +13,7 @@ app.get('/', function(req, res){
 	res.send('Hello World!');
 });
 
-app.post('/', function(req, res){
+app.post('/signup', function(req, res){
   console.log('I got it!');
   console.log(req.body);
   var data = req.body;
@@ -54,6 +54,35 @@ app.post('/', function(req, res){
 
 
 }); //close post request
+
+app.post('/signin', function(req, res){
+  console.log('Signing in');
+
+  var data = req.body;
+  console.log(data);
+  
+  apoc.query('MATCH (n:User {email: "%email%"}) RETURN n.password', {email: data.email}).exec().then(function(queryRes){
+
+      console.log(JSON.stringify(queryRes));
+      if(queryRes[0].data.length === 0) {
+        res.send(JSON.stringify({message: 'Incorrect email/password combination!'}));
+      } else {
+        console.log(queryRes[0].data[0].row[0]);
+        bcrypt.compare(data.password, queryRes[0].data[0].row[0], function(err, bcryptRes){
+         if(err){
+          console.log('error in comparing password:', err);
+         }
+          console.log('response is:', bcryptRes);
+          if(bcryptRes){
+            res.send(JSON.stringify({message: 'Password Match'}));
+          } else {
+            res.send(JSON.stringify({message: 'Incorrect email/password combination!'}));
+          }
+        });
+      }
+  });
+
+});
 
 app.listen(3000, function(){
 	console.log('Example app listening on port 3000!');
