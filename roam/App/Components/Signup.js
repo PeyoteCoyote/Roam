@@ -5,6 +5,7 @@ var styles = require('./Helpers/styles');
 
 import {
   View,
+  Image,
   Text,
   StyleSheet,
   TextInput,
@@ -97,39 +98,45 @@ class SignUp extends Component {
       this.state.error ? <Text> {this.state.errorMessage} </Text> : <View></View>
     );
     return(
-      <View style={styles.mainContainer}>
-        <Text style={styles.title}> Create an acount and you will be roaming in no time! </Text>
+      <Image style={styles.backgroundImage}
+        source={require('../../imgs/uni.jpg')} >
+        <Text style={styles.title}> SIGN UP </Text>
         {/* Fields that we want to bind the username and password input */}
         <TextInput
-          style={this.state.firstName === '' ? styles.submitError : styles.submit}
+          style={styles.submit}
           placeholder="Your first name"
+          placeholderTextColor="white"
           onChangeText={(text) => this.setState({firstName: text})} 
           value={this.state.firstName}
           />
         <TextInput
-          style={this.state.lastName === '' ? styles.submitError : styles.submit}
+          style={styles.submit}
           placeholder="Your last name"
+          placeholderTextColor="white"
           onChangeText={(text) => this.setState({lastName: text})} 
           value={this.state.lastName}
           />
         <TextInput
-          style={this.state.password === '' ? styles.submitError : styles.submit}
+          style={styles.submit}
           placeholder="Enter a password"
+          placeholderTextColor="white"
           onChangeText={(text) => this.setState({password: text})} 
           value={this.state.password}
           secureTextEntry={true}
           />
         <TextInput
-          style={this.state.passwordAgain === '' ? styles.submitError : styles.submit}
+          style={styles.submit}
           placeholder="Enter password again"
+          placeholderTextColor="white"
           onChangeText={(text) => this.setState({passwordAgain: text})} 
           value={this.state.passwordAgain}
           secureTextEntry={true}
           />
         <TextInput
-          style={this.state.email === '' ? styles.submitError : styles.submit}
+          style={styles.submit}
           autoCapitalize="none"
           placeholder="Email"
+          placeholderTextColor="white"
           onChangeText={(text) => this.setState({email: text})} 
           value={this.state.email}
           />          
@@ -137,7 +144,7 @@ class SignUp extends Component {
           style={styles.button}
           onPress={this.handleSubmit.bind(this)}
           underlayColor="white" >
-            <Text style={styles.buttonText}> Sign-Up! </Text>
+            <Text style={styles.buttonText}> Create Account </Text>
         </TouchableHighlight>
         {/* This is the loading animation when isLoading is set to true */}
         <ActivityIndicatorIOS
@@ -145,7 +152,7 @@ class SignUp extends Component {
           color="#111"
           size="large"></ActivityIndicatorIOS>
         {showErr}
-      </View>
+      </Image>
     )
   }
 }
