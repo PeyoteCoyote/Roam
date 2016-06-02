@@ -5,6 +5,7 @@ var Time = require('./Time');
 var styles = require('./Helpers/styles');
 
 import {
+  Image,
   View,
   Text,
   StyleSheet,
@@ -52,10 +53,10 @@ class Interests extends Component {
     ];
     var list = interestsList.map((item, index) => {
       return (
-        <TouchableHighlight 
+        <TouchableHighlight
           key={index}
           underlayColor='transparent'
-          onPress={() => {this.handleSelected(item)}} 
+          onPress={() => {this.handleSelected(item)}}
           selected={this.state[item]} >
           <Text style={this.state[item] ? styles.selected : styles.unselected }> {item} </Text>
         </TouchableHighlight>
@@ -63,16 +64,16 @@ class Interests extends Component {
     });
 
     return (
-      <View style={styles.mainContainer}>
-        <Text style={styles.title}>Select your interests:</Text>
+      <Image style = {styles.backgroundImage} source = {require('../../imgs/uni.jpg')}>
+        <Text style={styles.title}>LIKES</Text>
           {list}
-        <TouchableHighlight 
+        <TouchableHighlight
           style={styles.button}
           onPress={this.handleSubmit.bind(this)}
           underlayColor="white" >
             <Text style={styles.buttonText}> Next </Text>
         </TouchableHighlight>
-      </View>
+      </Image>
     );
   }
 }

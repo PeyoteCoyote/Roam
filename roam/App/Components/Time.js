@@ -5,6 +5,7 @@ var Separator = require('./Helpers/Separator');
 var styles = require('./Helpers/styles');
 
 import {
+  Image,
   View,
   Text,
   StyleSheet,
@@ -66,8 +67,8 @@ class Time extends Component {
       'Anytime today'
     ];
     return (
-      <View style={styles.mainContainer}>
-        <Text style={styles.title}> When are you free? </Text>
+      <Image style = {styles.backgroundImage} source = {require('../../imgs/uni.jpg')}>
+        <Text style={styles.title}> Meet in: </Text>
         <SegmentedControls
           tint={'#F80046'}
           selectedTint={'white'}
@@ -76,13 +77,13 @@ class Time extends Component {
           allowFontScaling={false}
           onSelection={this.handleSelected.bind(this)}
           selectedOption={this.state.selectedOption} />
-        <TouchableHighlight 
+        <TouchableHighlight
           style={styles.button}
           onPress={this.handleSubmit.bind(this)}
           underlayColor="white" >
             <Text style={styles.buttonText}> Roam! </Text>
         </TouchableHighlight>
-      </View>
+      </Image>
     );
   }
 }
