@@ -68,6 +68,17 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlign: 'center',
     justifyContent: 'center'
+  },
+  submitError: {
+    height: 50,
+    padding: 4,
+    marginRight: 5,
+    marginBottom: 15,
+    fontSize: 23,
+    borderWidth: 1,
+    borderColor: 'red',
+    borderRadius: 8,
+    color: 'white'
   }
 });
 
