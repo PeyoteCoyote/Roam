@@ -36,7 +36,7 @@ app.post('/', function(req, res){
           apoc.query('CREATE (newUser:User {firstName: "%firstName%", lastName: "%lastName%", password: "%password%", email: "%email%"});', data).exec().then(
             function(dbRes){
               console.log('saved to database:', dbRes);
-              res.send('User created');
+              res.send(JSON.stringify({message: 'User created'}));
             },
             function(fail){
               console.log('issues saving to database:', fail);
@@ -45,7 +45,7 @@ app.post('/', function(req, res){
         });
       }); //close genssalt
     } else {
-      res.send('Email already exists!');
+      res.send(JSON.stringify({message: 'Email already exists!'}));
     }
 
 

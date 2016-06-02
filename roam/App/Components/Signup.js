@@ -43,8 +43,8 @@ class SignUp extends Component {
     }
 
     //ensure all fields in our state is not empty
-    if (this.state.firstName !== '' && this.state.lastName !== '' && this.state.password !== '' && this.state.passwordAgain !== '' && this.state.email !== '' && (this.state.password === this.state.passwordAgain)) {
-      console.log('CHECKED STATE!');
+    if (this.state.firstName !== '' && this.state.lastName !== '' && this.state.password !== '' && this.state.passwordAgain !== '' && (this.state.password === this.state.passwordAgain) && re.test(this.state.email)) {
+
       fetch('http://localhost:3000', {
         method: 'POST',
         headers: {
@@ -59,8 +59,27 @@ class SignUp extends Component {
         })
       })
       .then((res) => {
-        console.log(res);
-        console.log('Sent ROAM request!');
+        return res.json();
+      })
+      .then((res) => {
+        console.log('RESPONSE FROM SERVER ON SIGNUP PAGE', res);
+        if (res.message === 'User created') {
+          this.props.navigator.push({
+            title: 'Select Interests',
+            component: Interests
+          });
+          //Set isloading to false after conditions
+          this.setState({
+            isLoading: false
+          });
+        } else {
+          this.setState({
+            errorMessage: res.message,
+            isLoading: false
+          });
+          
+        }
+        
       })
       .catch((error) => {
         console.log('Error handling submit:', error);
@@ -69,14 +88,6 @@ class SignUp extends Component {
       //Check if the passwords are matching
       //Check if the email is valid
       //Route to the hobbies screen
-      this.props.navigator.push({
-        title: 'Select Interests',
-        component: Interests
-      });
-      //Set isloading to false after conditions
-      this.setState({
-        isLoading: false
-      });
     }
 
   }
