@@ -80,7 +80,7 @@ class Main extends Component {
         } else{
           this.props.navigator.push({
             title: 'When are you free?',
-            email: this.state.email,
+            email: this.state.email.toLowerCase(),
             component: Time
           });
           this.setState({

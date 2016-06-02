@@ -87,8 +87,20 @@ app.post('/signin', function(req, res){
 
 app.post('/roam', function(req, res) {
 	console.log('ROAM REQUEST POST>>>>>>>>>>>>>>>>', req.body);
-	var roamOffAfter = req.body.timestamp;
 
+	var dateMS = Date.now();
+	var	userLatitude = req.body.coordinates.coords.latitude;
+	var	userLongitude = req.body.coordinates.coords.longitude;
+	var userEmail = req.body.userEmail;
+	var startRoam = Number(req.body.coordinates.timestamp);
+	var roamOffAfter = Number(startRoam);
+
+
+	// console.log('ROAM REQUEST POST Location>>>>>>>>>>>>>>>>', userLocation);
+	console.log('ROAM REQUEST POST Time >>>>>>>>>>>>>>>>', startRoam);
+	console.log('ROAM REQUEST POST Email >>>>>>>>>>>>>>>>', userEmail);
+	console.log('>>>>>>>>>>>>>>>>', typeof roamOffAfter);
+	console.log('>>>>>>>>>>>>>>>>>>>>DATE', dateMS);
 	if(req.body.time === '1 hour') {
 		roamOffAfter += 	3600000;
 	}
@@ -99,10 +111,62 @@ app.post('/roam', function(req, res) {
 		roamOffAfter += 	14400000;
 	}
 	if(req.body.time === 'Anytime today') {
-		var date = new Date();
-		var millisecondsUntilMidnight = date.getHours() * 3600000;
-		roamOffAfter = 	millisecondsUntilMidnight;
+		var today = new Date();
+		var millisecondsUntilMidnight = (24 - today.getHours()) * 3600000;
+		roamOffAfter += 	millisecondsUntilMidnight;
 	}
+
+	function matchWithinRadius(coordA, coordB) {
+		// var radius: 20
+		// (x - userLatitude)^2 + (y - userLocation)^2 < radius^2;
+
+		var latA = coordA.lat;
+		var lonA = coordA.lon;
+		var latB = coordB.lat;
+		var lonB = coordB.lon;
+
+
+		var R = 6371e3; // metres
+		var aLat = latA.toRadians();
+		var bLat = latB.toRadians();
+		var diffLat = (latB-latA).toRadians();
+		var diffLong = (lonB-lonA).toRadians();
+
+		var a = Math.sin(diffLat/2) * Math.sin(diffLat/2) +
+		        Math.cos(aLat) * Math.cos(bLat) *
+		        Math.sin(diffLong/2) * Math.sin(diffLong/2);
+		var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+		var distInMiles = (R * c) * 0.000621371; //used meter to mile conversion
+
+		return distInMiles < 20;
+		maxDistNorth = latA + 20;
+		minDistNorth = latA - 20;
+
+		maxDistEast = lonA + 20;
+		minDistWest = lonA - 20;
+
+		// distlatLng = new google.maps.LatLng(dist.latlng[0],dist.latlng[1]);
+		// 	var latLngBounds = circle.getBounds();
+		// 	if(latLngBounds.contains(distlatLng)){
+		// 		dropPins(distlatLng,dist.f_addr);
+		// 	}
+
+	}
+
+	//query based on time
+	apoc.query('MATCH (n:Roam) WHERE n.roamOffAfter > %currentDate% RETURN n', {currentDate:dateMS}).exec().then(function(matchResults) {
+		console.log(">>>>>>>>>>>>>>>>ROAM MATCHES", matchResults);
+		if(matchResults[0].data.length === 0) {//if find matches
+			apoc.query('CREATE (n:Roam {creatorEmail: "%userEmail%", creatorLatitute: %userLatitude%, creatorLongitude: %userLongitude%, creatorRoamStart: "%startRoam%", creatorRoamEnd: %roamOffAfter%})', { userEmail: userEmail, userLatitude: userLatitude, userLongitude: userLongitude,
+			startRoam: startRoam, roamOffAfter: roamOffAfter }).exec().then(function(queryRes) {
+				//return as response "Matched"
+
+			});
+		}
+	});
+
+
 });
 
 app.listen(3000, function(){

@@ -34,6 +34,7 @@ class Time extends Component {
 
   handleSubmit() {
     console.log('Sending ROAM request!', coordinates);
+    console.log('EMAIL: >>>>>>>>>', this.props.navigator.navigationContext._currentRoute.email)
     fetch('http://localhost:3000/roam', {
       method: 'POST',
       headers: {
@@ -44,7 +45,8 @@ class Time extends Component {
         firstParam: 'Sweet',
         secondParam: 'It works',
         time: this.state.selectedOption,
-        coordinates: coordinates
+        coordinates: coordinates,
+        userEmail: this.props.navigator.navigationContext._currentRoute.email
       })
     })
     .then((res) => {
@@ -146,7 +148,6 @@ class Geolocation extends Component {
         }]});
       });
     }
-
 
     componentWillUnmount() {
       navigator.geolocation.clearWatch(this.watchID);
