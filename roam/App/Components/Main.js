@@ -6,6 +6,7 @@ var Time = require('./Time');
 var styles = require('./Helpers/styles');
 
 import {
+  Image,
   View,
   Text,
   StyleSheet,
@@ -111,18 +112,21 @@ class Main extends Component {
       this.state.error ? <Text> {this.state.errorMessage} </Text> : <View></View>
     );
     return(
-      <View style={styles.mainContainer}>
-        <Text style={styles.title}> Welcome to Roam! </Text>
+      <Image style={styles.backgroundImage}
+      source={require('../../imgs/uni.jpg')}>
+        <Text style={styles.title}> ROAM </Text>
         {/* Fields that we want to bind the email and password input */}
         <TextInput
-          style={this.state.email === '' ? styles.submitError : styles.submit}
+          style={styles.submit}
           placeholder="Email"
+          placeholderTextColor="white"
           value={this.state.email}
           onChange={this.handleEmail.bind(this)} 
           />
         <TextInput
-          style={this.state.password === '' ? styles.submitError : styles.submit}
+          style={styles.submit}
           placeholder="Password"
+          placeholderTextColor="white"
           value={this.state.password}
           onChange={this.handlePassword.bind(this)} 
           secureTextEntry={true}
@@ -145,7 +149,7 @@ class Main extends Component {
           color="#111"
           size="large"></ActivityIndicatorIOS>
         {showErr}
-      </View>
+      </Image>
     )
   }
 }
