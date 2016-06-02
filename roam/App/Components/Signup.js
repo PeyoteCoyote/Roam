@@ -4,6 +4,7 @@ var Interests = require('./Interests');
 var styles = require('./Helpers/styles');
 
 import {
+  Image,
   View,
   Text,
   StyleSheet,
@@ -71,45 +72,50 @@ class SignUp extends Component {
       this.state.error ? <Text> {this.state.error} </Text> : <View></View>
     );
     return(
-      <View style={styles.mainContainer}>
-        <Text style={styles.title}> Create an acount and you will be roaming in no time! </Text>
+      <Image style = {styles.backgroundImage} source = {require('../../imgs/uni.jpg')}>
+        <Text style={styles.title}>SIGN UP</Text>
         {/* Fields that we want to bind the username and password input */}
         <TextInput
           style={styles.submit}
           placeholder="Your first name"
-          onChangeText={(text) => this.setState({firstName: text})} 
+          placeholderTextColor = "white"
+          onChangeText={(text) => this.setState({firstName: text})}
           value={this.state.firstName}
           />
         <TextInput
           style={styles.submit}
           placeholder="Your last name"
-          onChangeText={(text) => this.setState({lastName: text})} 
+          placeholderTextColor = "white"
+          onChangeText={(text) => this.setState({lastName: text})}
           value={this.state.lastName}
           />
         <TextInput
           style={styles.submit}
           placeholder="Enter a password"
-          onChangeText={(text) => this.setState({password: text})} 
+          placeholderTextColor = "white"
+          onChangeText={(text) => this.setState({password: text})}
           value={this.state.password}
           />
         <TextInput
           style={styles.submit}
           placeholder="Enter password again"
-          onChangeText={(text) => this.setState({passwordAgain: text})} 
+          placeholderTextColor = "white"
+          onChangeText={(text) => this.setState({passwordAgain: text})}
           value={this.state.passwordAgain}
           />
         <TextInput
           style={styles.submit}
           autoCapitalize="none"
           placeholder="Email"
-          onChangeText={(text) => this.setState({email: text})} 
+          placeholderTextColor = "white"
+          onChangeText={(text) => this.setState({email: text})}
           value={this.state.email}
-          />          
-        <TouchableHighlight 
+          />
+        <TouchableHighlight
           style={styles.button}
           onPress={this.handleSubmit.bind(this)}
           underlayColor="white" >
-            <Text style={styles.buttonText}> Sign-Up! </Text>
+            <Text style={styles.buttonText}> Create Account</Text>
         </TouchableHighlight>
         {/* This is the loading animation when isLoading is set to true */}
         <ActivityIndicatorIOS
@@ -117,7 +123,7 @@ class SignUp extends Component {
           color="#111"
           size="large"></ActivityIndicatorIOS>
         {showErr}
-      </View>
+      </Image>
     )
   }
 }
