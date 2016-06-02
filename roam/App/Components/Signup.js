@@ -78,9 +78,9 @@ class SignUp extends Component {
             errorMessage: res.message,
             isLoading: false
           });
-          
+
         }
-        
+
       })
       .catch((error) => {
         console.log('Error handling submit:', error);
@@ -106,21 +106,21 @@ class SignUp extends Component {
           style={styles.submit}
           placeholder="Your first name"
           placeholderTextColor="white"
-          onChangeText={(text) => this.setState({firstName: text})} 
+          onChangeText={(text) => this.setState({firstName: text})}
           value={this.state.firstName}
           />
         <TextInput
           style={styles.submit}
           placeholder="Your last name"
           placeholderTextColor="white"
-          onChangeText={(text) => this.setState({lastName: text})} 
+          onChangeText={(text) => this.setState({lastName: text})}
           value={this.state.lastName}
           />
         <TextInput
           style={styles.submit}
           placeholder="Enter a password"
           placeholderTextColor="white"
-          onChangeText={(text) => this.setState({password: text})} 
+          onChangeText={(text) => this.setState({password: text})}
           value={this.state.password}
           secureTextEntry={true}
           />
@@ -128,7 +128,7 @@ class SignUp extends Component {
           style={styles.submit}
           placeholder="Enter password again"
           placeholderTextColor="white"
-          onChangeText={(text) => this.setState({passwordAgain: text})} 
+          onChangeText={(text) => this.setState({passwordAgain: text})}
           value={this.state.passwordAgain}
           secureTextEntry={true}
           />
@@ -137,10 +137,10 @@ class SignUp extends Component {
           autoCapitalize="none"
           placeholder="Email"
           placeholderTextColor="white"
-          onChangeText={(text) => this.setState({email: text})} 
+          onChangeText={(text) => this.setState({email: text})}
           value={this.state.email}
-          />          
-        <TouchableHighlight 
+          />
+        <TouchableHighlight
           style={styles.button}
           onPress={this.handleSubmit.bind(this)}
           underlayColor="white" >
