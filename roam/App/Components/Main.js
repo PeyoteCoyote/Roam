@@ -80,6 +80,7 @@ class Main extends Component {
         } else{
           this.props.navigator.push({
             title: 'When are you free?',
+            email: this.state.email,
             component: Time
           });
           this.setState({
@@ -91,7 +92,7 @@ class Main extends Component {
         console.log('Error handling submit:', error);
       });
 
-    }   
+    }
   }
 
   handleSignUp() {
@@ -105,7 +106,7 @@ class Main extends Component {
     this.setState({
       isLoading: false
     });
-  }  
+  }
 
   render() {
     var showErr = (
@@ -121,23 +122,23 @@ class Main extends Component {
           placeholder="Email"
           placeholderTextColor="white"
           value={this.state.email}
-          onChange={this.handleEmail.bind(this)} 
+          onChange={this.handleEmail.bind(this)}
           />
         <TextInput
           style={styles.submit}
           placeholder="Password"
           placeholderTextColor="white"
           value={this.state.password}
-          onChange={this.handlePassword.bind(this)} 
+          onChange={this.handlePassword.bind(this)}
           secureTextEntry={true}
         />
-        <TouchableHighlight 
+        <TouchableHighlight
           style={styles.button}
           onPress={this.handleSignIn.bind(this)}
           underlayColor="white" >
             <Text style={styles.buttonText}> Sign-In </Text>
         </TouchableHighlight>
-        <TouchableHighlight 
+        <TouchableHighlight
           style={styles.button}
           onPress={this.handleSignUp.bind(this)}
           underlayColor="white" >

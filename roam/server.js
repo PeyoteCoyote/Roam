@@ -27,7 +27,7 @@ app.post('/signup', function(req, res){
       bcrypt.genSalt(saltRounds, function(err, salt) {
         if (err) {
           console.log('Error generating salt', err);
-        } 
+        }
         bcrypt.hash(req.body.password, salt, function(err, hash) {
           if (err) {
             console.log('Error hashing password', err);
@@ -60,7 +60,7 @@ app.post('/signin', function(req, res){
 
   var data = req.body;
   console.log(data);
-  
+
   apoc.query('MATCH (n:User {email: "%email%"}) RETURN n.password', {email: data.email}).exec().then(function(queryRes){
 
       console.log(JSON.stringify(queryRes));
@@ -82,6 +82,27 @@ app.post('/signin', function(req, res){
       }
   });
 
+});
+
+
+app.post('/roam', function(req, res) {
+	console.log('ROAM REQUEST POST>>>>>>>>>>>>>>>>', req.body);
+	var roamOffAfter = req.body.timestamp;
+
+	if(req.body.time === '1 hour') {
+		roamOffAfter += 	3600000;
+	}
+	if(req.body.time === '2 hours') {
+		roamOffAfter += 	7200000;
+	}
+	if(req.body.time === '4 hours') {
+		roamOffAfter += 	14400000;
+	}
+	if(req.body.time === 'Anytime today') {
+		var date = new Date();
+		var millisecondsUntilMidnight = date.getHours() * 3600000;
+		roamOffAfter = 	millisecondsUntilMidnight;
+	}
 });
 
 app.listen(3000, function(){
