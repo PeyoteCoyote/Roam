@@ -87,6 +87,7 @@ class Main extends Component {
           placeholder="Password"
           value={this.state.password}
           onChange={this.handlePassword.bind(this)} 
+          secureTextEntry={true}
         />
         <TouchableHighlight 
           style={styles.button}

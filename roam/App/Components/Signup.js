@@ -22,8 +22,9 @@ class SignUp extends Component {
       passwordAgain: '',
       email: '',
       isLoading: false,
-      error: false
-    }
+      error: false,
+      errorMessage: ''
+    };
   }
 
   handleSubmit() {
@@ -31,75 +32,91 @@ class SignUp extends Component {
     this.setState({
       isLoading: true
     });
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    //check if the passwords entered matches
+    if (this.state.password !== this.state.passwordAgain) {
+      this.setState({isLoading: false, error: true, errorMessage: 'Passwords do not match!'});
+    }
+    //check if the email supplied is valid
+    if (!re.test(this.state.email)) {
+      this.setState({isLoading: false, error: true, errorMessage: 'Invalid Email!'});
+    }
 
-    fetch('http://localhost:3000', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-        password: this.state.password,
-        email: this.state.email,
+    //ensure all fields in our state is not empty
+    if (this.state.firstName !== '' && this.state.lastName !== '' && this.state.password !== '' && this.state.passwordAgain !== '' && this.state.email !== '' && (this.state.password === this.state.passwordAgain)) {
+      console.log('CHECKED STATE!');
+      fetch('http://localhost:3000', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          firstName: this.state.firstName,
+          lastName: this.state.lastName,
+          password: this.state.password,
+          email: this.state.email,
+        })
       })
-    })
-    .then((res) => {
-      console.log(res);
-      console.log('Sent ROAM request!');
-    })
-    .catch((error) => {
-      console.log('Error handling submit:', error);
-    });
-    //Need logic to check if username is taken in the database
-    //Check if the passwords are matching
-    //Check if the email is valid
-    //Route to the hobbies screen
-    this.props.navigator.push({
-      title: 'Select Interests',
-      component: Interests
-    });
-    //Set isloading to false after conditions
-    this.setState({
-      isLoading: false
-    });
+      .then((res) => {
+        console.log(res);
+        console.log('Sent ROAM request!');
+      })
+      .catch((error) => {
+        console.log('Error handling submit:', error);
+      });
+      //Need logic to check if username is taken in the database
+      //Check if the passwords are matching
+      //Check if the email is valid
+      //Route to the hobbies screen
+      this.props.navigator.push({
+        title: 'Select Interests',
+        component: Interests
+      });
+      //Set isloading to false after conditions
+      this.setState({
+        isLoading: false
+      });
+    }
+
   }
 
   render() {
     var showErr = (
-      this.state.error ? <Text> {this.state.error} </Text> : <View></View>
+      this.state.error ? <Text> {this.state.errorMessage} </Text> : <View></View>
     );
     return(
       <View style={styles.mainContainer}>
         <Text style={styles.title}> Create an acount and you will be roaming in no time! </Text>
         {/* Fields that we want to bind the username and password input */}
         <TextInput
-          style={styles.submit}
+          style={this.state.firstName === '' ? styles.submitError : styles.submit}
           placeholder="Your first name"
           onChangeText={(text) => this.setState({firstName: text})} 
           value={this.state.firstName}
           />
         <TextInput
-          style={styles.submit}
+          style={this.state.lastName === '' ? styles.submitError : styles.submit}
           placeholder="Your last name"
           onChangeText={(text) => this.setState({lastName: text})} 
           value={this.state.lastName}
           />
         <TextInput
-          style={styles.submit}
+          style={this.state.password === '' ? styles.submitError : styles.submit}
           placeholder="Enter a password"
           onChangeText={(text) => this.setState({password: text})} 
           value={this.state.password}
+          secureTextEntry={true}
           />
         <TextInput
-          style={styles.submit}
+          style={this.state.passwordAgain === '' ? styles.submitError : styles.submit}
           placeholder="Enter password again"
           onChangeText={(text) => this.setState({passwordAgain: text})} 
           value={this.state.passwordAgain}
+          secureTextEntry={true}
           />
         <TextInput
-          style={styles.submit}
+          style={this.state.email === '' ? styles.submitError : styles.submit}
           autoCapitalize="none"
           placeholder="Email"
           onChangeText={(text) => this.setState({email: text})} 
