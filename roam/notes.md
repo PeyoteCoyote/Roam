@@ -51,7 +51,7 @@ user presses ROAM
 
 ###How does Matching work if we go with Scenario 2? 
 
-  BoundingBox Function determines the bounding box area. Our matches
+  createGeoFence Function determines the bounding box area. Our matches
   have to be inside this area
     
 
@@ -87,6 +87,7 @@ user presses ROAM
         new roam node created 
           {status: pending, coords:userloc}
           create a xship b/w user and his roam node
+          
 
     WHERE TO FROM HERE? HOW DOES HE GET NOTIFIED???      
 

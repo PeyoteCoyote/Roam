@@ -144,19 +144,24 @@ app.post('/roam', function(req, res) {
 			wLat: westLat,
 			wLong: westLong
 		}
-
-	}
+  }
 
 	//query based on time
-	apoc.query('MATCH (n:Roam) WHERE n.roamOffAfter > %currentDate% RETURN n', {currentDate:dateMS}).exec().then(function(matchResults) {
+	apoc.query('MATCH (n:Roam) WHERE n.creatorRoamEnd > %currentDate%  AND n.status = "Pending" RETURN n' , {currentDate:dateMS}).exec().then(function(matchResults) {
 		console.log(">>>>>>>>>>>>>>>>ROAM MATCHES", matchResults);
-		if(matchResults[0].data.length === 0) {//if find matches
-			apoc.query('CREATE (n:Roam {creatorEmail: "%userEmail%", creatorLatitute: %userLatitude%, creatorLongitude: %userLongitude%, creatorRoamStart: "%startRoam%", creatorRoamEnd: %roamOffAfter%})', { userEmail: userEmail, userLatitude: userLatitude, userLongitude: userLongitude,
-			startRoam: startRoam, roamOffAfter: roamOffAfter }).exec().then(function(queryRes) {
-				//return as response "Matched"
-
+		if(matchResults[0].data.length === 0) {
+    //if no match found create a pending roam node
+      apoc.query('CREATE (m:Roam {creatorEmail: "%userEmail%", creatorLatitute: %userLatitude%, creatorLongitude: %userLongitude%, creatorRoamStart: %startRoam%, creatorRoamEnd: %roamOffAfter%, status: "Pending"})', { email: userEmail, userEmail: userEmail, userLatitude: userLatitude, userLongitude: userLongitude,
+      startRoam: startRoam, roamOffAfter: roamOffAfter}).exec().then(function(queryRes) {
+        console.log('I arrived here <<<<<<<<<<<<<<<<<');
+        // return as response "Matched"
+        apoc.query('MATCH (n:User {email:"%email%"}), (m:Roam {creatorEmail: "%creatorEmail%", creatorRoamStart: %roamStart%}) CREATE (n)-[:CREATED]->(m)', {email:userEmail, creatorEmail: userEmail, roamStart: startRoam} ).exec().then(function(relationshipRes) {
+           console.log('Relationship created >>', relationshipRes); 
+        })
 			});
-		}
+		} else {
+      console.log("<<<<<<<<<<Found a match>>>>>>>>>>>>")
+    }
 	});
 
 
@@ -166,3 +171,38 @@ app.post('/roam', function(req, res) {
 app.listen(3000, function(){
   console.log('Example app listening on port 3000!');
 });
+
+
+
+  // function distBetweenTwoCoordinates(a, b) {
+  //   // var radius: 20
+  //   // (x - userLatitude)^2 + (y - userLocation)^2 < radius^2;
+
+
+  //   var R = 6371e3; // metres
+  //   var aLat = a.lat.toRadians();
+  //   var bLat = b.lat.toRadians();
+  //   var diffLat = (b.lat-a.lat).toRadians();
+  //   var diffLong = (b.long-a.long).toRadians();
+
+  //   var a = Math.sin(diffLat/2) * Math.sin(diffLat/2) +
+  //           Math.cos(aLat) * Math.cos(bLat) *
+  //           Math.sin(diffLong/2) * Math.sin(diffLong/2);
+  //   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+  //   var distInMiles = (R * c) * 0.000621371; //used meter to mile conversion
+
+  //   return distInMiles < 20;
+  //   maxDistNorth = a.lat + 20;
+  //   minDistNorth = a.lat - 20;
+
+  //   maxDistEast = a.long + 20;
+  //   minDistWest = a.long - 20;
+
+  //   // distlatLng = new google.maps.LatLng(dist.latlng[0],dist.latlng[1]);
+  //   //  var latLngBounds = circle.getBounds();
+  //   //  if(latLngBounds.contains(distlatLng)){
+  //   //    dropPins(distlatLng,dist.f_addr);
+  //   //  }
+
+  // }
