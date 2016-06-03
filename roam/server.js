@@ -116,41 +116,33 @@ app.post('/roam', function(req, res) {
 		roamOffAfter += 	millisecondsUntilMidnight;
 	}
 
-	function matchWithinRadius(coordA, coordB) {
-		// var radius: 20
-		// (x - userLatitude)^2 + (y - userLocation)^2 < radius^2;
+	function createGeoFence(lat, long, distInMiles) {
+    
+    var dist = distInMiles * 1.60934; //convert to km
+    var R = 6371e3;
 
-		var latA = coordA.lat;
-		var lonA = coordA.lon;
-		var latB = coordB.lat;
-		var lonB = coordB.lon;
+		var northLat = Math.asin( Math.sin(lat)*Math.cos(d/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(0) );
+		var northLong = long + Math.atan2(Math.sin(0)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(lat));
 
+		var southLat = Math.asin( Math.sin(lat)*Math.cos(d/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(180) );
+		var southLong = long + Math.atan2(Math.sin(180)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(lat));
 
-		var R = 6371e3; // metres
-		var aLat = latA.toRadians();
-		var bLat = latB.toRadians();
-		var diffLat = (latB-latA).toRadians();
-		var diffLong = (lonB-lonA).toRadians();
+		var eastLat = Math.asin( Math.sin(lat)*Math.cos(d/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(90) );
+		var eastLong = long + Math.atan2(Math.sin(90)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(lat));
 
-		var a = Math.sin(diffLat/2) * Math.sin(diffLat/2) +
-		        Math.cos(aLat) * Math.cos(bLat) *
-		        Math.sin(diffLong/2) * Math.sin(diffLong/2);
-		var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		var westLat = Math.asin( Math.sin(lat)*Math.cos(d/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(270) );
+		var westLong = long + Math.atan2(Math.sin(270)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(lat));
 
-		var distInMiles = (R * c) * 0.000621371; //used meter to mile conversion
-
-		return distInMiles < 20;
-		maxDistNorth = latA + 20;
-		minDistNorth = latA - 20;
-
-		maxDistEast = lonA + 20;
-		minDistWest = lonA - 20;
-
-		// distlatLng = new google.maps.LatLng(dist.latlng[0],dist.latlng[1]);
-		// 	var latLngBounds = circle.getBounds();
-		// 	if(latLngBounds.contains(distlatLng)){
-		// 		dropPins(distlatLng,dist.f_addr);
-		// 	}
+		return {
+			nLat: northLat,
+			nLong: northLong,
+			sLat: southLat,
+			sLong: southLong,
+			eLat: eastLat,
+			eLong: eastLong,
+			wLat: westLat,
+			wLong: westLong
+		}
 
 	}
 
