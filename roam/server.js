@@ -147,7 +147,7 @@ app.post('/roam', function(req, res) {
   }
 
 	//query based on time
-	apoc.query('MATCH (n:Roam) WHERE n.creatorRoamEnd > %currentDate%  AND n.status = "Pending" RETURN n' , {currentDate:dateMS}).exec().then(function(matchResults) {
+	apoc.query('MATCH (n:Roam) WHERE n.creatorRoamEnd > %currentDate%  AND n.status = "Pending" RETURN n', {currentDate:dateMS}).exec().then(function(matchResults) {
 		console.log(">>>>>>>>>>>>>>>>ROAM MATCHES", matchResults);
 		if(matchResults[0].data.length === 0) {
     //if no match found create a pending roam node
@@ -164,9 +164,9 @@ app.post('/roam', function(req, res) {
 
       var id = matchResults[0].data[0].meta[0].id;
       apoc.query('MATCH (n:User {email:"%email%"}), (m:Roam) WHERE id(m) = %id% CREATE (n)-[:CREATED]->(m), SET m.status="Active"', {email:userEmail, id:id} ).exec().then(function(roamRes) {
-           console.log('Relationship created b/w Users created', roamRes); 
+           console.log('Relationship created b/w Users created', roamRes);
+           res.send("You have been matched"); 
         })
-
     }
 	});
 
