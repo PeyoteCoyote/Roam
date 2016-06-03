@@ -10,7 +10,7 @@ var saltRounds = 10;
 app.use(bodyParser.json());
 
 app.get('/', function(req, res){
-	res.send('Hello World!');
+  res.send('Hello World!');
 });
 
 app.post('/signup', function(req, res){
@@ -86,6 +86,7 @@ app.post('/signin', function(req, res){
 
 
 app.post('/roam', function(req, res) {
+
 	console.log('ROAM REQUEST POST>>>>>>>>>>>>>>>>', req.body);
 
 	var dateMS = Date.now();
@@ -159,8 +160,9 @@ app.post('/roam', function(req, res) {
 	});
 
 
+
 });
 
 app.listen(3000, function(){
-	console.log('Example app listening on port 3000!');
+  console.log('Example app listening on port 3000!');
 });

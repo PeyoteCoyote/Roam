@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
-var Interests = require('./Interests');
+// var Interests = require('./Interests');
+var Time = require('./Time');
+
 var styles = require('./Helpers/styles');
 
 import {
@@ -66,8 +68,8 @@ class SignUp extends Component {
         console.log('RESPONSE FROM SERVER ON SIGNUP PAGE', res);
         if (res.message === 'User created') {
           this.props.navigator.push({
-            title: 'Select Interests',
-            component: Interests
+            title: 'Select Time',
+            component: Time
           });
           //Set isloading to false after conditions
           this.setState({

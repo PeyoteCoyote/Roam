@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { SegmentedControls } from 'react-native-radio-buttons';
 // var Geolocation = require('./Geolocation');
-
+var Confirmation = require('./Confirmation');
 var Separator = require('./Helpers/Separator');
 var styles = require('./Helpers/styles');
 
@@ -34,7 +34,14 @@ class Time extends Component {
 
   handleSubmit() {
     console.log('Sending ROAM request!', coordinates);
-    console.log('EMAIL: >>>>>>>>>', this.props.navigator.navigationContext._currentRoute.email)
+    this.props.navigator.push({
+      title: 'Confirmation',
+      component: Confirmation
+    });
+
+    console.log('EMAIL: >>>>>>>>>',
+    this.props.navigator.navigationContext._currentRoute.email)
+
     fetch('http://localhost:3000/roam', {
       method: 'POST',
       headers: {
@@ -51,7 +58,7 @@ class Time extends Component {
     })
     .then((res) => {
       console.log(res);
-      console.log('Sent ROAM request!');
+      console.log('Added to db. Waiting for ROAM request confirmation!');
     })
     .catch((error) => {
       console.log('Error handling submit:', error);
