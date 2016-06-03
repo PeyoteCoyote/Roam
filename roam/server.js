@@ -160,7 +160,13 @@ app.post('/roam', function(req, res) {
         })
 			});
 		} else {
-      console.log("<<<<<<<<<<Found a match>>>>>>>>>>>>")
+      console.log("<<<<<<<<<<Found a match>>>>>>>>>>>>", matchResults[0].data[0].meta[0].id);
+
+      var id = matchResults[0].data[0].meta[0].id;
+      apoc.query('MATCH (n:User {email:"%email%"}), (m:Roam) WHERE id(m) = %id% CREATE (n)-[:CREATED]->(m), SET m.status="Active"', {email:userEmail, id:id} ).exec().then(function(roamRes) {
+           console.log('Relationship created b/w Users created', roamRes); 
+        })
+
     }
 	});
 

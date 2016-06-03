@@ -61,10 +61,10 @@ user presses ROAM
 
 
       Add property:STATUS to ROAM NODE: 
-        PENDING
-        have been matched
-        Concluded
+        Pending
+        Active
         Expired
+        Concluded
       Add property: COORDINATES to ROAM NODE
         Max: lat
         Min: lat
@@ -87,7 +87,7 @@ user presses ROAM
         new roam node created 
           {status: pending, coords:userloc}
           create a xship b/w user and his roam node
-          
+
 
     WHERE TO FROM HERE? HOW DOES HE GET NOTIFIED???      
 
