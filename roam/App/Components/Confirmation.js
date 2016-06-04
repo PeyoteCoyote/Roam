@@ -8,7 +8,27 @@ class Confirmation extends Component {
     //we will cancel roam from here
     //remove the roam from db
     //take the user back to the 'Time' page
+    console.log('email is:', this.props.navigator.navigationContext._currentRoute.email);
+
     this.props.navigator.pop();
+    
+    fetch('http://localhost:3000/cancel', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userEmail: this.props.navigator.navigationContext._currentRoute.email
+      })
+    })
+    .then((res) => {
+      console.log('Canceled Roam:', res);
+    })
+    .catch((error) => {
+      console.log('Error handling submit:', error);
+    });
+
   }
 
   render() {

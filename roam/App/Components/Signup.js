@@ -69,6 +69,7 @@ class SignUp extends Component {
         if (res.message === 'User created') {
           this.props.navigator.push({
             title: 'Select Time',
+            email: this.state.email.toLowerCase(),
             component: Time
           });
           //Set isloading to false after conditions

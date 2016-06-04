@@ -4,12 +4,11 @@ var bodyParser = require('body-parser');
 var apoc = require('apoc');
 var bcrypt = require('bcrypt');
 var crypto = require('crypto');
-var request = require('request');
-var saltRounds = 10;
 var yelp = require('./App/Utils/api');
 var nodemailer = require('nodemailer');
-var xoauth2 = require('xoauth2');
 var gmailKeys = require('./App/Utils/apiKeys').gmailKeys;
+
+var saltRounds = 10;
 
 var smtpConfig = {
   host: 'smtp.gmail.com',
@@ -119,9 +118,10 @@ app.post('/roam', function(req, res) {
 
   console.log(maxLat, minLat, maxLong, minLong);
 
-	apoc.query('MATCH (n:Roam) WHERE n.creatorRoamEnd > %currentDate%  AND n.status = "Pending" AND n.creatorLatitude < %maxLat% AND n.creatorLatitude > %minLat% AND n.creatorLongitude < %maxLong% AND n.creatorLongitude > %minLong% RETURN n', {currentDate:dateMS, maxLat: maxLat, minLat: minLat, maxLong: maxLong, minLong: minLong}).exec().then(function(matchResults) {
+	apoc.query('MATCH (n:Roam) WHERE n.creatorRoamEnd > %currentDate%  AND n.status = "Pending" AND n.creatorLatitude < %maxLat% AND n.creatorLatitude > %minLat% AND n.creatorLongitude < %maxLong% AND n.creatorLongitude > %minLong% AND n.creatorEmail <> "%userEmail%" RETURN n', {currentDate:dateMS, maxLat: maxLat, minLat: minLat, maxLong: maxLong, minLong: minLong, userEmail: userEmail}).exec().then(function(matchResults) {
     if(matchResults[0].data.length === 0) {
     //if no match found create a pending roam node
+    console.log('nomatch');
       var searchParams = {
         term: 'Bars',
         limit: 20,
@@ -149,35 +149,65 @@ app.post('/roam', function(req, res) {
 
       var id = matchResults[0].data[0].meta[0].id;
       apoc.query('MATCH (n:User {email:"%email%"}), (m:Roam) WHERE id(m) = %id% SET m.status="Active" CREATE (n)-[:CREATED]->(m) RETURN m', {email:userEmail, id:id} ).exec().then(function(roamRes) {
-           console.log('Relationship created b/w Users created', roamRes[0].data[0].row[0]);
-           var roamInfo = roamRes[0].data[0].row[0];
+          console.log('Relationship created b/w Users created', roamRes[0].data[0].row[0]);
+          var roamInfo = roamRes[0].data[0].row[0];
 
           var date = new Date();
           var hour = Number(date.getHours());
           var minute = date.getMinutes();
           var newDate = new Date(date.getFullYear(), date.getMonth(), date.getDay(), (hour + 1), minute);
 
-        var mailOptions = {
-          from: '"Roam" <Roamincenterprises@gmail.com>', // sender address 
-          to: 'kentqlee@gmail.com', // list of receivers 
-          bcc: roamInfo.creatorEmail + ',' + userEmail,
-          subject: 'Your Roam is Ready!', // Subject line 
-          text: 'Your Roam is at:' + roamInfo.venueName + ' Roam Address: ' + roamInfo.venueAddress, // plaintext body 
-          html: '<div><h3>Your Roam is at: ' + roamInfo.venueName + '</h3></div><div><h3>Roam Address: ' + roamInfo.venueAddress + '</h3></div><div>Please arrive at the venue by ' + newDate // html body 
-        };
-         
-        // send mail with defined transport object 
-        transporter.sendMail(mailOptions, function(error, info){
-          if(error){
-            return console.log(error);
-          }
-          console.log('Message sent: ' + info.response);
-        });
+	        var mailOptions = {
+	          from: '"Roam" <Roamincenterprises@gmail.com>', // sender address 
+	          // to: 'kentqlee@gmail.com', // list of receivers 
+	          bcc: roamInfo.creatorEmail + ',' + userEmail,
+	          subject: 'Your Roam is Ready!', // Subject line 
+	          text: 'Your Roam is at:' + roamInfo.venueName + ' Roam Address: ' + roamInfo.venueAddress, // plaintext body 
+	          html: '<div><h3>Your Roam is at: ' + roamInfo.venueName + '</h3></div><div><h3>Roam Address: ' + roamInfo.venueAddress + '</h3></div><div>Please arrive at the venue by ' + newDate // html body 
+	        };
+	         
+	        // send mail with defined transport object 
+	        transporter.sendMail(mailOptions, function(error, info){
+	          if(error){
+	            return console.log(error);
+	          }
+	          console.log('Message sent: ' + info.response);
+	        });
 
-           res.send("You have been matched"); 
+          res.send("You have been matched"); 
         })
     }
 	});
+});
+
+app.post('/cancel', function(req, res){
+  var userEmail = req.body.userEmail;
+  console.log('useremail is:', userEmail)
+  apoc.query('MATCH (m:Roam {creatorEmail: "%userEmail%"}) WHERE m.status="Pending" SET m.status="Canceled" RETURN m', {userEmail: userEmail}).exec().then(function(cancelRes){
+
+  	console.log('Roam canceled:', cancelRes[0].data[0].row[0]);
+
+    var roamInfo = cancelRes[0].data[0].row[0];
+
+    var mailOptions = {
+      from: '"Roam" <Roamincenterprises@gmail.com>', // sender address 
+      // to: 'kentqlee@gmail.com', // list of receivers 
+      bcc: roamInfo.creatorEmail + ',' + userEmail,
+      subject: 'Your Roam has been canceled!', // Subject line 
+      text: 'Your Roam at:' + roamInfo.venueName + ' Roam Address: ' + roamInfo.venueAddress + ' has been canceled.', // plaintext body 
+      html: '<div><h3>Your Roam at: ' + roamInfo.venueName + '</h3></div><div><h3>Roam Address: ' + roamInfo.venueAddress + ' has been canceled.</h3></div>' // html body 
+    };
+     
+    // send mail with defined transport object 
+    transporter.sendMail(mailOptions, function(error, info){
+      if(error){
+        return console.log(error);
+      }
+      console.log('Message sent: ' + info.response);
+    });
+
+    res.send("Your Roam has been canceled"); 
+  });
 });
 
 app.listen(3000, function(){
