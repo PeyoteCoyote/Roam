@@ -7,6 +7,21 @@ var crypto = require('crypto');
 var request = require('request');
 var saltRounds = 10;
 var yelp = require('./App/Utils/api');
+var nodemailer = require('nodemailer');
+var xoauth2 = require('xoauth2');
+var gmailKeys = require('./App/Utils/apiKeys').gmailKeys;
+
+var smtpConfig = {
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, // use SSL 
+  auth: {
+    user: 'roamincenterprises@gmail.com',
+    pass: 'roamroam'
+  }
+};
+
+var transporter = nodemailer.createTransport(smtpConfig);
 
 const offsetToDegrees = 0.02;
 
@@ -17,13 +32,10 @@ app.get('/', function(req, res){
 });
 
 app.post('/signup', function(req, res){
-  console.log('I got it!');
-  console.log(req.body);
   var data = req.body;
 
   //Check database to see if incoming email on signup already exists
   apoc.query('MATCH (n:User {email: "%email%"}) RETURN n', { email: data.email }).exec().then(function(queryRes) {
-    console.log('RES in SERVER FILE:', queryRes[0].data.length);
     //If there is no matching email in the database
     if (queryRes[0].data.length === 0) {
       //Hash password upon creation of account
@@ -50,41 +62,28 @@ app.post('/signup', function(req, res){
     } else {
       res.send(JSON.stringify({message: 'Email already exists!'}));
     }
-
-
-
   }); //closing 'then'
-
-
 }); //close post request
 
 app.post('/signin', function(req, res){
-  console.log('Signing in');
-
   var data = req.body;
-  console.log(data);
-
   apoc.query('MATCH (n:User {email: "%email%"}) RETURN n.password', {email: data.email}).exec().then(function(queryRes){
-
-      console.log(JSON.stringify(queryRes));
-      if(queryRes[0].data.length === 0) {
-        res.send(JSON.stringify({message: 'Incorrect email/password combination!'}));
-      } else {
-        console.log(queryRes[0].data[0].row[0]);
-        bcrypt.compare(data.password, queryRes[0].data[0].row[0], function(err, bcryptRes){
-         if(err){
-          console.log('error in comparing password:', err);
-         }
-          console.log('response is:', bcryptRes);
-          if(bcryptRes){
-            res.send(JSON.stringify({message: 'Password Match'}));
-          } else {
-            res.send(JSON.stringify({message: 'Incorrect email/password combination!'}));
-          }
-        });
-      }
+    if(queryRes[0].data.length === 0) {
+      res.send(JSON.stringify({message: 'Incorrect email/password combination!'}));
+    } else {
+      console.log(queryRes[0].data[0].row[0]);
+      bcrypt.compare(data.password, queryRes[0].data[0].row[0], function(err, bcryptRes){
+       if(err){
+        console.log('error in comparing password:', err);
+       }
+        if(bcryptRes){
+          res.send(JSON.stringify({message: 'Password Match'}));
+        } else {
+          res.send(JSON.stringify({message: 'Incorrect email/password combination!'}));
+        }
+      });
+    }
   });
-
 });
 
 
@@ -141,21 +140,44 @@ app.post('/roam', function(req, res) {
 
           // return as response "Matched"
           apoc.query('MATCH (n:User {email:"%email%"}), (m:Roam {creatorEmail: "%creatorEmail%", creatorRoamStart: %roamStart%}) CREATE (n)-[:CREATED]->(m)', {email:userEmail, creatorEmail: userEmail, roamStart: startRoam} ).exec().then(function(relationshipRes) {
-             console.log('Relationship created >>', relationshipRes); 
+             console.log('Relationship created', relationshipRes); 
           });
         });
       });
 		} else {
-      console.log("<<<<<<<<<<Found a match>>>>>>>>>>>>", matchResults[0].data[0].meta[0].id);
+      console.log('Found a match', matchResults[0].data[0].meta[0].id);
 
       var id = matchResults[0].data[0].meta[0].id;
-      apoc.query('MATCH (n:User {email:"%email%"}), (m:Roam) WHERE id(m) = %id% SET m.status="Active" CREATE (n)-[:CREATED]->(m)', {email:userEmail, id:id} ).exec().then(function(roamRes) {
-           console.log('Relationship created b/w Users created', roamRes);
+      apoc.query('MATCH (n:User {email:"%email%"}), (m:Roam) WHERE id(m) = %id% SET m.status="Active" CREATE (n)-[:CREATED]->(m) RETURN m', {email:userEmail, id:id} ).exec().then(function(roamRes) {
+           console.log('Relationship created b/w Users created', roamRes[0].data[0].row[0]);
+           var roamInfo = roamRes[0].data[0].row[0];
+
+          var date = new Date();
+          var hour = Number(date.getHours());
+          var minute = date.getMinutes();
+          var newDate = new Date(date.getFullYear(), date.getMonth(), date.getDay(), (hour + 1), minute);
+
+        var mailOptions = {
+          from: '"Roam" <Roamincenterprises@gmail.com>', // sender address 
+          to: 'kentqlee@gmail.com', // list of receivers 
+          bcc: roamInfo.creatorEmail + ',' + userEmail,
+          subject: 'Your Roam is Ready!', // Subject line 
+          text: 'Your Roam is at:' + roamInfo.venueName + ' Roam Address: ' + roamInfo.venueAddress, // plaintext body 
+          html: '<div><h3>Your Roam is at: ' + roamInfo.venueName + '</h3></div><div><h3>Roam Address: ' + roamInfo.venueAddress + '</h3></div><div>Please arrive at the venue by ' + newDate // html body 
+        };
+         
+        // send mail with defined transport object 
+        transporter.sendMail(mailOptions, function(error, info){
+          if(error){
+            return console.log(error);
+          }
+          console.log('Message sent: ' + info.response);
+        });
+
            res.send("You have been matched"); 
         })
     }
 	});
-
 });
 
 app.listen(3000, function(){
