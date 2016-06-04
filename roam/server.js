@@ -121,7 +121,6 @@ app.post('/roam', function(req, res) {
   console.log(maxLat, minLat, maxLong, minLong);
 
 	apoc.query('MATCH (n:Roam) WHERE n.creatorRoamEnd > %currentDate%  AND n.status = "Pending" AND n.creatorLatitude < %maxLat% AND n.creatorLatitude > %minLat% AND n.creatorLongitude < %maxLong% AND n.creatorLongitude > %minLong% RETURN n', {currentDate:dateMS, maxLat: maxLat, minLat: minLat, maxLong: maxLong, minLong: minLong}).exec().then(function(matchResults) {
-		console.log(">>>>>>>>>>>>>>>>ROAM MATCHES", matchResults);
     if(matchResults[0].data.length === 0) {
     //if no match found create a pending roam node
       var searchParams = {
@@ -134,10 +133,11 @@ app.post('/roam', function(req, res) {
 
       yelp.searchYelp(searchParams, function(venue) {
         
-        console.log('CHOSEN VENUE:', venue);
+        var venueName = venue.name;
+        var venueAddress = venue.location.display_address.join(' ');
 
-        apoc.query('CREATE (m:Roam {creatorEmail: "%userEmail%", creatorLatitude: %userLatitude%, creatorLongitude: %userLongitude%, creatorRoamStart: %startRoam%, creatorRoamEnd: %roamOffAfter%, status: "Pending"})', { email: userEmail, userEmail: userEmail, userLatitude: userLatitude, userLongitude: userLongitude,
-      startRoam: startRoam, roamOffAfter: roamOffAfter}).exec().then(function(queryRes) {
+        apoc.query('CREATE (m:Roam {creatorEmail: "%userEmail%", creatorLatitude: %userLatitude%, creatorLongitude: %userLongitude%, creatorRoamStart: %startRoam%, creatorRoamEnd: %roamOffAfter%, status: "Pending", venueName: "%venueName%", venueAddress: "%venueAddress%"})', { email: userEmail, userEmail: userEmail, userLatitude: userLatitude, userLongitude: userLongitude,
+      startRoam: startRoam, roamOffAfter: roamOffAfter, venueName: venueName, venueAddress: venueAddress }).exec().then(function(queryRes) {
 
           // return as response "Matched"
           apoc.query('MATCH (n:User {email:"%email%"}), (m:Roam {creatorEmail: "%creatorEmail%", creatorRoamStart: %roamStart%}) CREATE (n)-[:CREATED]->(m)', {email:userEmail, creatorEmail: userEmail, roamStart: startRoam} ).exec().then(function(relationshipRes) {

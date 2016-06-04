@@ -13,10 +13,8 @@ yelp.searchYelp = (searchPreferences, callback) => {
 
   yelp.search(searchPreferences)
   .then((jsonData) => {
-
     var randomIndex = Math.floor(Math.random() * jsonData.businesses.length);
     var chosen = jsonData.businesses[randomIndex];
-    console.log(chosen);
     callback(chosen);
   })
   .catch((error) => {
