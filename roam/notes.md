@@ -99,7 +99,7 @@ user presses ROAM
           create a xship b/w user and his roam node
 
 
-    WHERE TO FROM HERE? HOW DOES HE GET NOTIFIED???      
+    WHERE TO FROM HERE? HOW DOES HE GET NOTIFIED??? Email 
 
 ####Scenario 2: Users exist and a new user seeks a roam. What happens? 
       presses roam 

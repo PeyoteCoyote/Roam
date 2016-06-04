@@ -1,5 +1,5 @@
 var Yelp = require('yelp');
-var yelpKeys = require('./apiKeys');
+var yelpKeys = require('./apiKeys').yelpKeys;
 var request = require('request');
 
 let yelp = new Yelp({
