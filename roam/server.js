@@ -90,21 +90,13 @@ app.post('/signin', function(req, res){
 
 app.post('/roam', function(req, res) {
 
-	console.log('ROAM REQUEST POST>>>>>>>>>>>>>>>>', req.body);
-
 	var dateMS = Date.now();
 	var	userLatitude = Number(req.body.coordinates.coords.latitude);
 	var	userLongitude = Number(req.body.coordinates.coords.longitude);
 	var userEmail = req.body.userEmail;
 	var startRoam = Number(req.body.coordinates.timestamp);
 	var roamOffAfter = Number(startRoam);
-
-
-	// console.log('ROAM REQUEST POST Location>>>>>>>>>>>>>>>>', userLocation);
-	console.log('ROAM REQUEST POST Time >>>>>>>>>>>>>>>>', startRoam);
-	console.log('ROAM REQUEST POST Email >>>>>>>>>>>>>>>>', userEmail);
-	console.log('>>>>>>>>>>>>>>>>', typeof roamOffAfter);
-	console.log('>>>>>>>>>>>>>>>>>>>>DATE', dateMS);
+	
 	if(req.body.time === '1 hour') {
 		roamOffAfter += 	3600000;
 	}
@@ -120,44 +112,6 @@ app.post('/roam', function(req, res) {
 		roamOffAfter += 	millisecondsUntilMidnight;
 	}
 
-
-
-// function createGeofence(lat, long, distInMiles) {
-    
-//     var dist = distInMiles * 1.60934; //convert to km
-//     var R = 6371e3;
-
-//     var northLat = Math.asin( Math.sin(lat)*Math.cos(dist/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(0) );
-//     var northLong = long + Math.atan2(Math.sin(0)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(northLat));
-
-//     var southLat = Math.asin( Math.sin(lat)*Math.cos(dist/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(180) );
-//     var southLong = long + Math.atan2(Math.sin(180)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(southLat));
-
-//     var eastLat = Math.asin( Math.sin(lat)*Math.cos(dist/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(90) );
-//     var eastLong = long + Math.atan2(Math.sin(90)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(eastLat));
-
-//     var westLat = Math.asin( Math.sin(lat)*Math.cos(dist/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(270) );
-//     var westLong = long + Math.atan2(Math.sin(270)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(westLat));
-
-//     return {
-//       nLat: northLat,
-//       nLong: northLong,
-//       sLat: southLat,
-//       sLong: southLong,
-//       eLat: eastLat,
-//       eLong: eastLong,
-//       wLat: westLat,
-//       wLong: westLong
-//     }
-
-//   }
-  // var geofence = createGeofence(userLatitude, userLongitude, 10)
-  // console.log(geofence);
-
-  //
-  // userLat < northLat && userLat > southLat
-  // userLong > wLong && userLong < eLong
-
 	//query based on time
   var maxLat = userLatitude + offsetToDegrees;
   var minLat = userLatitude - offsetToDegrees;
@@ -167,46 +121,30 @@ app.post('/roam', function(req, res) {
   console.log(maxLat, minLat, maxLong, minLong);
 
 	apoc.query('MATCH (n:Roam) WHERE n.creatorRoamEnd > %currentDate%  AND n.status = "Pending" AND n.creatorLatitude < %maxLat% AND n.creatorLatitude > %minLat% AND n.creatorLongitude < %maxLong% AND n.creatorLongitude > %minLong% RETURN n', {currentDate:dateMS, maxLat: maxLat, minLat: minLat, maxLong: maxLong, minLong: minLong}).exec().then(function(matchResults) {
-		console.log(">>>>>>>>>>>>>>>>ROAM MATCHES", matchResults);
-		if(matchResults[0].data.length === 0) {
+    if(matchResults[0].data.length === 0) {
     //if no match found create a pending roam node
-
-      let searchParams = {
+      var searchParams = {
         term: 'Bars',
-        limit: 10,
+        limit: 20,
         sort: 0,
         radius_filter: 3200, //2-mile radius
-        bounds: {
-          sw_latitude: maxLat,
-          sw_longitude: minLong, 
-          ne_latitude: minLat,
-          ne_longitude: maxLong
-        }
+        bounds: maxLat + ',' + minLong + '|' +  minLat  + ',' + maxLong
       };      
 
+      yelp.searchYelp(searchParams, function(venue) {
+        
+        var venueName = venue.name;
+        var venueAddress = venue.location.display_address.join(' ');
 
-      yelp.searchYelp(searchParams);
-      console.log("<><><><><><><><>> This is loc", loc);
-    // request(yelpUrl, function (error, response, body) {
-    //   if (!error && response.statusCode == 200) {
-    //     console.log(body) // Show the HTML for the Google homepage. 
+        apoc.query('CREATE (m:Roam {creatorEmail: "%userEmail%", creatorLatitude: %userLatitude%, creatorLongitude: %userLongitude%, creatorRoamStart: %startRoam%, creatorRoamEnd: %roamOffAfter%, status: "Pending", venueName: "%venueName%", venueAddress: "%venueAddress%"})', { email: userEmail, userEmail: userEmail, userLatitude: userLatitude, userLongitude: userLongitude,
+      startRoam: startRoam, roamOffAfter: roamOffAfter, venueName: venueName, venueAddress: venueAddress }).exec().then(function(queryRes) {
 
-    //   } else {
-    //     console.log('Something went wrong ', error);
-    //   }
-    // })
-
-      apoc.query('CREATE (m:Roam {creatorEmail: "%userEmail%", creatorLatitude: %userLatitude%, creatorLongitude: %userLongitude%, creatorRoamStart: %startRoam%, creatorRoamEnd: %roamOffAfter%, status: "Pending"})', { email: userEmail, userEmail: userEmail, userLatitude: userLatitude, userLongitude: userLongitude,
-      startRoam: startRoam, roamOffAfter: roamOffAfter}).exec().then(function(queryRes) {
-        console.log('I arrived here <<<<<<<<<<<<<<<<<');
-
-
-
-        // return as response "Matched"
-        apoc.query('MATCH (n:User {email:"%email%"}), (m:Roam {creatorEmail: "%creatorEmail%", creatorRoamStart: %roamStart%}) CREATE (n)-[:CREATED]->(m)', {email:userEmail, creatorEmail: userEmail, roamStart: startRoam} ).exec().then(function(relationshipRes) {
-           console.log('Relationship created >>', relationshipRes); 
-        })
-			});
+          // return as response "Matched"
+          apoc.query('MATCH (n:User {email:"%email%"}), (m:Roam {creatorEmail: "%creatorEmail%", creatorRoamStart: %roamStart%}) CREATE (n)-[:CREATED]->(m)', {email:userEmail, creatorEmail: userEmail, roamStart: startRoam} ).exec().then(function(relationshipRes) {
+             console.log('Relationship created >>', relationshipRes); 
+          });
+        });
+      });
 		} else {
       console.log("<<<<<<<<<<Found a match>>>>>>>>>>>>", matchResults[0].data[0].meta[0].id);
 
@@ -218,45 +156,8 @@ app.post('/roam', function(req, res) {
     }
 	});
 
-
-
 });
 
 app.listen(3000, function(){
   console.log('Example app listening on port 3000!');
 });
-
-
-
-  // function distBetweenTwoCoordinates(a, b) {
-  //   // var radius: 20
-  //   // (x - userLatitude)^2 + (y - userLocation)^2 < radius^2;
-
-
-  //   var R = 6371e3; // metres
-  //   var aLat = a.lat.toRadians();
-  //   var bLat = b.lat.toRadians();
-  //   var diffLat = (b.lat-a.lat).toRadians();
-  //   var diffLong = (b.long-a.long).toRadians();
-
-  //   var a = Math.sin(diffLat/2) * Math.sin(diffLat/2) +
-  //           Math.cos(aLat) * Math.cos(bLat) *
-  //           Math.sin(diffLong/2) * Math.sin(diffLong/2);
-  //   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
-  //   var distInMiles = (R * c) * 0.000621371; //used meter to mile conversion
-
-  //   return distInMiles < 20;
-  //   maxDistNorth = a.lat + 20;
-  //   minDistNorth = a.lat - 20;
-
-  //   maxDistEast = a.long + 20;
-  //   minDistWest = a.long - 20;
-
-  //   // distlatLng = new google.maps.LatLng(dist.latlng[0],dist.latlng[1]);
-  //   //  var latLngBounds = circle.getBounds();
-  //   //  if(latLngBounds.contains(distlatLng)){
-  //   //    dropPins(distlatLng,dist.f_addr);
-  //   //  }
-
-  // }

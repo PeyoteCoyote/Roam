@@ -3,14 +3,7 @@ import {Text, View, Image, TouchableHighlight, ListView} from 'react-native'
 var styles = require('./Helpers/styles');
 
 class Confirmation extends Component {
-    constructor(props) {
-    super(props);
-    this.state = {
-      address: null,
-      time: null,
-    };
-  }
-
+  
   handleCancel() {
     //we will cancel roam from here
     //remove the roam from db
@@ -24,9 +17,8 @@ class Confirmation extends Component {
         source={require('../../imgs/uni.jpg')}>
         <Text style={styles.title}> ROAM </Text>
 
-          <Text>Your next Roam is located at</Text>
-          <Text>{this.state.address}</Text>
-          <Text>Roam starts at {this.state.time}</Text>
+          <Text>Great! We are working on finding your next Roam!</Text>
+          <Text>We will notify you the details through email.</Text>
           <TouchableHighlight
             style={styles.button}
             onPress={this.handleCancel.bind(this)}
