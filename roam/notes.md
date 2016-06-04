@@ -23,6 +23,16 @@ user presses ROAM
     DB Matches interests in 20m radius
 
 
+  barMatching for Roam
+    grabs creator's coords
+    query Yelp for bars with the creator coords
+    yelp returns 20 results in that area 
+    we select a random one
+    pass that to the confirmation screen for the last matched user 
+    push notification to the creator
+
+
+
   Show Confirmation
   Otherwise Notification
 
