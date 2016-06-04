@@ -7,6 +7,8 @@ var crypto = require('crypto');
 
 var saltRounds = 10;
 
+const offsetToDegrees = 0.02;
+
 app.use(bodyParser.json());
 
 app.get('/', function(req, res){
@@ -90,8 +92,8 @@ app.post('/roam', function(req, res) {
 	console.log('ROAM REQUEST POST>>>>>>>>>>>>>>>>', req.body);
 
 	var dateMS = Date.now();
-	var	userLatitude = req.body.coordinates.coords.latitude;
-	var	userLongitude = req.body.coordinates.coords.longitude;
+	var	userLatitude = Number(req.body.coordinates.coords.latitude);
+	var	userLongitude = Number(req.body.coordinates.coords.longitude);
 	var userEmail = req.body.userEmail;
 	var startRoam = Number(req.body.coordinates.timestamp);
 	var roamOffAfter = Number(startRoam);
@@ -117,41 +119,57 @@ app.post('/roam', function(req, res) {
 		roamOffAfter += 	millisecondsUntilMidnight;
 	}
 
-	function createGeoFence(lat, long, distInMiles) {
+
+
+// function createGeofence(lat, long, distInMiles) {
     
-    var dist = distInMiles * 1.60934; //convert to km
-    var R = 6371e3;
+//     var dist = distInMiles * 1.60934; //convert to km
+//     var R = 6371e3;
 
-		var northLat = Math.asin( Math.sin(lat)*Math.cos(d/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(0) );
-		var northLong = long + Math.atan2(Math.sin(0)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(lat));
+//     var northLat = Math.asin( Math.sin(lat)*Math.cos(dist/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(0) );
+//     var northLong = long + Math.atan2(Math.sin(0)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(northLat));
 
-		var southLat = Math.asin( Math.sin(lat)*Math.cos(d/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(180) );
-		var southLong = long + Math.atan2(Math.sin(180)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(lat));
+//     var southLat = Math.asin( Math.sin(lat)*Math.cos(dist/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(180) );
+//     var southLong = long + Math.atan2(Math.sin(180)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(southLat));
 
-		var eastLat = Math.asin( Math.sin(lat)*Math.cos(d/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(90) );
-		var eastLong = long + Math.atan2(Math.sin(90)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(lat));
+//     var eastLat = Math.asin( Math.sin(lat)*Math.cos(dist/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(90) );
+//     var eastLong = long + Math.atan2(Math.sin(90)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(eastLat));
 
-		var westLat = Math.asin( Math.sin(lat)*Math.cos(d/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(270) );
-		var westLong = long + Math.atan2(Math.sin(270)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(lat));
+//     var westLat = Math.asin( Math.sin(lat)*Math.cos(dist/R) + Math.cos(lat)*Math.sin(dist/R)*Math.cos(270) );
+//     var westLong = long + Math.atan2(Math.sin(270)*Math.sin(dist/R)*Math.cos(lat), Math.cos(dist/R)-Math.sin(lat)*Math.sin(westLat));
 
-		return {
-			nLat: northLat,
-			nLong: northLong,
-			sLat: southLat,
-			sLong: southLong,
-			eLat: eastLat,
-			eLong: eastLong,
-			wLat: westLat,
-			wLong: westLong
-		}
-  }
+//     return {
+//       nLat: northLat,
+//       nLong: northLong,
+//       sLat: southLat,
+//       sLong: southLong,
+//       eLat: eastLat,
+//       eLong: eastLong,
+//       wLat: westLat,
+//       wLong: westLong
+//     }
+
+//   }
+  // var geofence = createGeofence(userLatitude, userLongitude, 10)
+  // console.log(geofence);
+
+  //
+  // userLat < northLat && userLat > southLat
+  // userLong > wLong && userLong < eLong
 
 	//query based on time
-	apoc.query('MATCH (n:Roam) WHERE n.creatorRoamEnd > %currentDate%  AND n.status = "Pending" RETURN n', {currentDate:dateMS}).exec().then(function(matchResults) {
+  var maxLat = userLatitude + offsetToDegrees;
+  var minLat = userLatitude - offsetToDegrees;
+  var maxLong = userLongitude + offsetToDegrees;
+  var minLong = userLongitude - offsetToDegrees;
+
+  console.log(maxLat, minLat, maxLong, minLong);
+
+	apoc.query('MATCH (n:Roam) WHERE n.creatorRoamEnd > %currentDate%  AND n.status = "Pending" AND n.creatorLatitude < %maxLat% AND n.creatorLatitude > %minLat% AND n.creatorLongitude < %maxLong% AND n.creatorLongitude > %minLong% RETURN n', {currentDate:dateMS, maxLat: maxLat, minLat: minLat, maxLong: maxLong, minLong: minLong}).exec().then(function(matchResults) {
 		console.log(">>>>>>>>>>>>>>>>ROAM MATCHES", matchResults);
 		if(matchResults[0].data.length === 0) {
     //if no match found create a pending roam node
-      apoc.query('CREATE (m:Roam {creatorEmail: "%userEmail%", creatorLatitute: %userLatitude%, creatorLongitude: %userLongitude%, creatorRoamStart: %startRoam%, creatorRoamEnd: %roamOffAfter%, status: "Pending"})', { email: userEmail, userEmail: userEmail, userLatitude: userLatitude, userLongitude: userLongitude,
+      apoc.query('CREATE (m:Roam {creatorEmail: "%userEmail%", creatorLatitude: %userLatitude%, creatorLongitude: %userLongitude%, creatorRoamStart: %startRoam%, creatorRoamEnd: %roamOffAfter%, status: "Pending"})', { email: userEmail, userEmail: userEmail, userLatitude: userLatitude, userLongitude: userLongitude,
       startRoam: startRoam, roamOffAfter: roamOffAfter}).exec().then(function(queryRes) {
         console.log('I arrived here <<<<<<<<<<<<<<<<<');
         // return as response "Matched"
@@ -163,7 +181,7 @@ app.post('/roam', function(req, res) {
       console.log("<<<<<<<<<<Found a match>>>>>>>>>>>>", matchResults[0].data[0].meta[0].id);
 
       var id = matchResults[0].data[0].meta[0].id;
-      apoc.query('MATCH (n:User {email:"%email%"}), (m:Roam) WHERE id(m) = %id% CREATE (n)-[:CREATED]->(m), SET m.status="Active"', {email:userEmail, id:id} ).exec().then(function(roamRes) {
+      apoc.query('MATCH (n:User {email:"%email%"}), (m:Roam) WHERE id(m) = %id% SET m.status="Active" CREATE (n)-[:CREATED]->(m)', {email:userEmail, id:id} ).exec().then(function(roamRes) {
            console.log('Relationship created b/w Users created', roamRes);
            res.send("You have been matched"); 
         })
