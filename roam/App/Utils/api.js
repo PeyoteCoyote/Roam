@@ -1,5 +1,6 @@
 var Yelp = require('yelp');
 var yelpKeys = require('./apiKeys');
+var request = require('request');
 
 let yelp = new Yelp({
   consumer_key: yelpKeys.consumer_key,
@@ -8,28 +9,15 @@ let yelp = new Yelp({
   token_secret: yelpKeys.token_secret
 });
 
-let defaultParams = {
-  term: 'Bars',
-  limit: 10,
-  sort: 0,
-  radius_filter: 3200, //2-mile radius
-  cll: {
-    latitude: 37.78825,
-    longitude: -122.4324,
-  }
-};
+yelp.searchYelp = (searchPreferences, callback) => {
 
-let apiUrl = '/';
-
-yelp.searchYelp = (searchPreferences, response) => {
-  fetch(apiUrl, defaultParams)
-  .then((data) => {
-    return data.json();
-  })
+  yelp.search(searchPreferences)
   .then((jsonData) => {
-    console.log(jsonData);
-    return jsonData;
-    // response.send(jsonData);
+
+    var randomIndex = Math.floor(Math.random() * jsonData.businesses.length);
+    var chosen = jsonData.businesses[randomIndex];
+    console.log(chosen);
+    callback(chosen);
   })
   .catch((error) => {
     console.log('Error:', error);
@@ -37,11 +25,3 @@ yelp.searchYelp = (searchPreferences, response) => {
 };
 
 module.exports = yelp;
-
-
-//sample Yelp query stringify
-  //https://api.yelp.com/v2/search?term=german+food&location=Hayes&cll=37.77493,-122.419415
-//Minimal
-  //https://api.yelp.com/v2/search?term=food&ll=37.788022,-122.399797
-//With geo-bounding
-  //https://api.yelp.com/v2/search?term=food&bounds=37.900000,-122.500000|37.788022,-122.399797&limit=3
