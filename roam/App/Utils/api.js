@@ -1,17 +1,18 @@
 var Yelp = require('yelp');
+var yelpKeys = require('./apiKeys');
 
 let yelp = new Yelp({
-  consumer_key: '',
-  consumer_secret: '',
-  token: '',
-  token_secret: ''
+  consumer_key: yelpKeys.consumer_key,
+  consumer_secret: yelpKeys.consumer_secret,
+  token: yelpKeys.token,
+  token_secret: yelpKeys.token_secret
 });
 
 let defaultParams = {
   term: 'Bars',
   limit: 10,
   sort: 0,
-  radius_filter: 16000, //10-mile radius
+  radius_filter: 3200, //2-mile radius
   cll: {
     latitude: 37.78825,
     longitude: -122.4324,
@@ -27,7 +28,8 @@ yelp.searchYelp = (searchPreferences, response) => {
   })
   .then((jsonData) => {
     console.log(jsonData);
-    response.send(jsonData);
+    return jsonData;
+    // response.send(jsonData);
   })
   .catch((error) => {
     console.log('Error:', error);
