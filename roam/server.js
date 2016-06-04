@@ -4,8 +4,9 @@ var bodyParser = require('body-parser');
 var apoc = require('apoc');
 var bcrypt = require('bcrypt');
 var crypto = require('crypto');
-
+var request = require('request');
 var saltRounds = 10;
+var yelp = require('./App/Utils/api');
 
 const offsetToDegrees = 0.02;
 
@@ -170,20 +171,37 @@ app.post('/roam', function(req, res) {
 		if(matchResults[0].data.length === 0) {
     //if no match found create a pending roam node
 
-      var yelpUrl = "https://api.yelp.com/v2/search?term=bar&bounds=" 
-      + maxLat + "," 
-      + minLong  + ","
-      + minLat  + ","
-      + maxLong + "&limit=15";
-      
-      
+      let searchParams = {
+        term: 'Bars',
+        limit: 10,
+        sort: 0,
+        radius_filter: 3200, //2-mile radius
+        bounds: {
+          sw_latitude: maxLat,
+          sw_longitude: minLong, 
+          ne_latitude: minLat,
+          ne_longitude: maxLong
+        }
+      };      
+
+
+      yelp.searchYelp(searchParams);
+      console.log("<><><><><><><><>> This is loc", loc);
+    // request(yelpUrl, function (error, response, body) {
+    //   if (!error && response.statusCode == 200) {
+    //     console.log(body) // Show the HTML for the Google homepage. 
+
+    //   } else {
+    //     console.log('Something went wrong ', error);
+    //   }
+    // })
 
       apoc.query('CREATE (m:Roam {creatorEmail: "%userEmail%", creatorLatitude: %userLatitude%, creatorLongitude: %userLongitude%, creatorRoamStart: %startRoam%, creatorRoamEnd: %roamOffAfter%, status: "Pending"})', { email: userEmail, userEmail: userEmail, userLatitude: userLatitude, userLongitude: userLongitude,
       startRoam: startRoam, roamOffAfter: roamOffAfter}).exec().then(function(queryRes) {
         console.log('I arrived here <<<<<<<<<<<<<<<<<');
-        
 
-        
+
+
         // return as response "Matched"
         apoc.query('MATCH (n:User {email:"%email%"}), (m:Roam {creatorEmail: "%creatorEmail%", creatorRoamStart: %roamStart%}) CREATE (n)-[:CREATED]->(m)', {email:userEmail, creatorEmail: userEmail, roamStart: startRoam} ).exec().then(function(relationshipRes) {
            console.log('Relationship created >>', relationshipRes); 

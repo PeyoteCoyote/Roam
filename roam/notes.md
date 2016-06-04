@@ -113,3 +113,15 @@ user presses ROAM
             show match conf screen
           else 
 
+
+####Scenario3: User already in an active Roam, should not be able to create a new roam node
+  when the roam is pressed the search query should make sure the user does not have 
+  an active roam. 
+  HOW TO DO THIS? 
+  All users should have a boolean property: inARoam
+  When the 2nd user is matched up and the roam status is set to active 
+  both user's inARoam property should be set to true
+  Check upon the button press if the user's inARoam is true
+  if Yes
+    send message: You are in a roam
+  else { proceed with creating a new roam or matching to an existing roam}
