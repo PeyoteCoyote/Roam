@@ -36,6 +36,7 @@ class Time extends Component {
     console.log('Sending ROAM request!', coordinates);
     this.props.navigator.push({
       title: 'Confirmation',
+      email: this.props.navigator.navigationContext._currentRoute.email,
       component: Confirmation
     });
 
@@ -49,8 +50,6 @@ class Time extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        firstParam: 'Sweet',
-        secondParam: 'It works',
         time: this.state.selectedOption,
         coordinates: coordinates,
         userEmail: this.props.navigator.navigationContext._currentRoute.email
