@@ -35,10 +35,10 @@ class Confirmation extends Component {
     return (
       <Image style={styles.backgroundImage}
         source={require('../../imgs/uni.jpg')}>
-        <Text style={styles.title}> ROAM </Text>
+        <Text style={styles.title}> roam </Text>
 
-          <Text>Great! We are working on finding your next Roam!</Text>
-          <Text>We will notify you the details through email.</Text>
+          <Text style={styles.confirmation}>Great! We are working on finding your next Roam!</Text>
+          <Text style={styles.confirmation}>We will notify you the details through email.</Text>
           <TouchableHighlight
             style={styles.button}
             onPress={this.handleCancel.bind(this)}

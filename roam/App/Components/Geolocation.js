@@ -66,7 +66,7 @@ class Geolocation extends Component {
   render() {
     return (
       <View>
-        <Text style={{backgroundColor: 'coral'}}>{`Your Current Location`}</Text>
+        <Text style={styles.location}>Your Current Location</Text>
           <MapView
           showsUserLocation={true}
           style={styles.map}
@@ -82,18 +82,17 @@ class Geolocation extends Component {
 
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
   map: {
     height: 250,
     margin: 10,
     borderWidth: 1,
     borderColor: '#000000'
   },
+  location: {
+    backgroundColor: 'transparent',
+    fontSize: 20,
+    color: 'white'
+  }
 });
 
 module.exports = Geolocation;

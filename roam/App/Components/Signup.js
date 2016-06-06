@@ -61,10 +61,11 @@ class SignUp extends Component {
           email: this.state.email,
         })
       })
+      // .then((res) => {
+      //   return res.json();
+      // })
       .then((res) => {
-        return res.json();
-      })
-      .then((res) => {
+        res = res.json();
         console.log('RESPONSE FROM SERVER ON SIGNUP PAGE', res);
         if (res.message === 'User created') {
           this.props.navigator.push({
@@ -78,10 +79,12 @@ class SignUp extends Component {
           });
         } else {
           this.setState({
-            errorMessage: res.message,
+            error: true,
+            errorMessage: 'Email already exists!',
             isLoading: false
           });
-
+          console.log('CURRENT ERROR:',this.state.error);
+          console.log('SIGNUP ERROR MESSAGE:', this.state.errorMessage);
         }
 
       })
@@ -98,12 +101,12 @@ class SignUp extends Component {
 
   render() {
     var showErr = (
-      this.state.error ? <Text> {this.state.errorMessage} </Text> : <View></View>
+      this.state.error ? <Text style={styles.errorMessage}> {this.state.errorMessage} </Text> : <View></View>
     );
     return(
       <Image style={styles.backgroundImage}
         source={require('../../imgs/uni.jpg')} >
-        <Text style={styles.title}> SIGN UP </Text>
+        <Text style={styles.title}> sign up </Text>
         {/* Fields that we want to bind the username and password input */}
         <TextInput
           style={styles.submit}

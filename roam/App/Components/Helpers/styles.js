@@ -9,12 +9,24 @@ import {
 const styles = StyleSheet.create({
   title: {
     marginBottom: 20,
-    fontSize: 60,
-    // fontFamily: 'Neutra Text',
+    fontSize: 70,
+    fontWeight: "100",
+    fontFamily: 'Gill Sans',
     textAlign: 'center',
     color: 'white',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    letterSpacing: 5
   },
+  header: {
+    marginBottom: 20,
+    fontSize: 50,
+    fontWeight: "100",
+    fontFamily: 'Gill Sans',
+    textAlign: 'center',
+    color: 'white',
+    backgroundColor: 'transparent',
+    letterSpacing: 3
+  },  
   submit: {
     height: 50,
     padding: 10,
@@ -38,9 +50,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff0066',
     borderRadius:10,
     marginBottom: 10,
-    marginTop: 10,
+    marginTop: 20,
     alignSelf: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+  },
+  signUpButton: {
+    color: 'white',
+    textAlign: 'center',
+    paddingTop: 10,
+    fontSize: 18
   },
   unselected: {
     fontSize: 20,
@@ -70,6 +88,26 @@ const styles = StyleSheet.create({
     marginTop: 65,
     flexDirection: 'column',
     justifyContent: 'center'
+  },
+  errorMessage: {
+    backgroundColor: 'transparent',
+    color: '#ff0066',
+    textAlign: 'center',
+    fontSize: 20,
+    marginTop: -23
+  },
+  confirmation: {
+    color: 'white',
+    textAlign: 'center',
+    backgroundColor: 'transparent',
+    fontSize: 25,
+    paddingBottom: 10
+  },
+  location: {
+    backgroundColor: 'transparent',
+    fontSize: 25,
+    color: 'white',
+    textAlign: 'center'
   }
 });
 
