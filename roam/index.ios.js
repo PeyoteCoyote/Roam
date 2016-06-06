@@ -17,7 +17,7 @@ class roam extends Component{
       style={styles.container}
         initialRoute={{
           title: 'Sign In',
-          component: Main 
+          component: Main
         }} />
     );
   }

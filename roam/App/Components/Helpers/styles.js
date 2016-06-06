@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     color: 'white',
     backgroundColor: 'transparent',
     letterSpacing: 3
-  },  
+  },
   submit: {
     height: 50,
     padding: 10,
@@ -112,4 +112,3 @@ const styles = StyleSheet.create({
 });
 
 module.exports = styles;
-
