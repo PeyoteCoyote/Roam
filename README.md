@@ -2,7 +2,8 @@
 
 New Adventures, New People
 
-## Table of Contents
+## Table of Contents 
+>>>>>>> Delete unncessary files, edit readme
 - [Technology Stack](#tech-stack)
 - [Example / Usage](#example--usage)
 - [Getting Started](#getting-started)
@@ -52,7 +53,7 @@ $ npm install
 
 Please create a developer account on Yelp and gmail for API keys. Create an apiKeys.js file within the Utils directory.
 
-Template usage:
+Template usage: 
 
 ```
 module.exports.yelpKeys = {
@@ -93,7 +94,7 @@ Features for v2.0
 - Confirmation on App
 - Chat functionality enabled once people are near venue
 - Tokened sessions
-- Push notifications
+- Push notifications 
 - Route to destination with distance and time approximation
 - User ratings and review
 - More refined matching algorithm that includes historical data
@@ -106,7 +107,7 @@ Features for v2.0
 
 Product Owner: [Kent Lee](https://github.com/kqlee)
 
-Scrum Master: [Rodaan Rabang](https://github.com/rodaan)
+Scrum Master: [Rodaan Rabang](https://github.com/rodaan) 
 
 Development Team: [Esther Cuan](https://github.com/esthercuan), [Dan Sajjad](https://github.com/Dansajjad)
 
