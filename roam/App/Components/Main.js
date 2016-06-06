@@ -110,12 +110,12 @@ class Main extends Component {
 
   render() {
     var showErr = (
-      this.state.error ? <Text> {this.state.errorMessage} </Text> : <View></View>
+      this.state.error ? <Text style={styles.errorMessage}> {this.state.errorMessage} </Text> : <View></View>
     );
     return(
       <Image style={styles.backgroundImage}
       source={require('../../imgs/uni.jpg')}>
-        <Text style={styles.title}> ROAM </Text>
+        <Text style={styles.title}> roam </Text>
         {/* Fields that we want to bind the email and password input */}
         <TextInput
           style={styles.submit}
@@ -136,13 +136,13 @@ class Main extends Component {
           style={styles.button}
           onPress={this.handleSignIn.bind(this)}
           underlayColor="white" >
-            <Text style={styles.buttonText}> Sign-In </Text>
+            <Text style={styles.buttonText}> Sign In </Text>
         </TouchableHighlight>
         <TouchableHighlight
-          style={styles.button}
+          // style={styles.button}
           onPress={this.handleSignUp.bind(this)}
-          underlayColor="white" >
-            <Text style={styles.buttonText}> Not a user? Sign-Up! </Text>
+          underlayColor="transparent" >
+            <Text style={styles.signUpButton}> Not a user? Sign Up </Text>
         </TouchableHighlight>
         {/* This is the loading animation when isLoading is set to true */}
         <ActivityIndicatorIOS

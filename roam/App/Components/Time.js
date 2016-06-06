@@ -23,7 +23,7 @@ class Time extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: null
+      selectedOption: '1 hour'
     };
   }
   handleSelected(choice) {
@@ -40,9 +40,6 @@ class Time extends Component {
       component: Confirmation
     });
 
-    console.log('EMAIL: >>>>>>>>>',
-    this.props.navigator.navigationContext._currentRoute.email)
-
     fetch('http://localhost:3000/roam', {
       method: 'POST',
       headers: {
@@ -56,21 +53,11 @@ class Time extends Component {
       })
     })
     .then((res) => {
-      console.log(res);
       console.log('Added to db. Waiting for ROAM request confirmation!');
     })
     .catch((error) => {
       console.log('Error handling submit:', error);
     });
-    console.log('ROAM!');
-    //Link to Geolocations/Event confirmation page
-    // this.props.navigator.push({
-    //   name: 'Location',
-    //   component: Location,
-    //   passProps: {
-    //     time: time
-    //   }
-    // });
   }
 
   render () {
@@ -78,25 +65,25 @@ class Time extends Component {
       '1 hour',
       '2 hours',
       '4 hours',
-      'Anytime today'
+      'Anytime'
     ];
     return (
-      <Image style = {styles.backgroundImage} source = {require('../../imgs/uni.jpg')}>
+      <Image style={styles.backgroundImage} 
+      source={require('../../imgs/uni.jpg')} >
         <Geolocation region={this.props.region}/>
-        <Text>{this.props.region}</Text>
-        <Text style={styles.title}> Free for: </Text>
+        <Text style={styles.header}> pick time : </Text>
         <SegmentedControls
-          tint={'#F80046'}
+          tint={'#ff0066'}
           selectedTint={'white'}
           backTint={'white'}
           options={options}
           allowFontScaling={false}
+          fontWeight={'bold'}
           onSelection={this.handleSelected.bind(this)}
           selectedOption={this.state.selectedOption} />
         <TouchableHighlight
           style={styles.button}
-          onPress={this.handleSubmit.bind(this)}
-          underlayColor="white" >
+          onPress={this.handleSubmit.bind(this)} >
             <Text style={styles.buttonText}> Roam! </Text>
         </TouchableHighlight>
       </Image>
@@ -138,10 +125,10 @@ class Geolocation extends Component {
         this.setState({latitude: lastPosition.coords.latitude});
 
         var newRegion = {
-            latitude: lastPosition.coords.latitude,
-            longitude: lastPosition.coords.longitude,
-            latitudeDelta: 10,
-            longitudeDelta: 10
+          latitude: lastPosition.coords.latitude,
+          longitude: lastPosition.coords.longitude,
+          latitudeDelta: 10,
+          longitudeDelta: 10
         }
 
         this.setState({ region: newRegion });
@@ -162,15 +149,12 @@ class Geolocation extends Component {
   render() {
     return (
       <View>
-        <Text style={{backgroundColor: 'coral'}}>{`Your Current Location`}</Text>
+        <Text style={styles.location}>Your Current Location:</Text>
           <MapView
           showsUserLocation={true}
           style={map.map}
           region={this.state.region}
-          //annotations={this.state.annotations}
-          followUserLocation={true}
-          />
-
+          followUserLocation={true} />
       </View>
     );
   }
@@ -178,17 +162,12 @@ class Geolocation extends Component {
 
 
 const map = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
   map: {
     height: 250,
     margin: 10,
     borderWidth: 1,
-    borderColor: '#000000'
+    borderColor: '#000000',
+    backgroundColor: 'transparent'
   },
 });
 

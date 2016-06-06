@@ -104,7 +104,7 @@ app.post('/roam', function(req, res) {
 	if(req.body.time === '4 hours') {
 		roamOffAfter += 	14400000;
 	}
-	if(req.body.time === 'Anytime today') {
+	if(req.body.time === 'Anytime') {
 		var today = new Date();
 		var millisecondsUntilMidnight = (24 - today.getHours()) * 3600000;
 		roamOffAfter += 	millisecondsUntilMidnight;

@@ -16,7 +16,7 @@ class roam extends Component{
       <NavigatorIOS
       style={styles.container}
         initialRoute={{
-          title: 'Roam',
+          title: 'Sign In',
           component: Main 
         }} />
     );
@@ -26,7 +26,7 @@ class roam extends Component{
 const styles = StyleSheet.create({
   container:{
     flex: 1,
-    backgroundColor: '#111111'
+    backgroundColor: 'red'
   },
 });
 
