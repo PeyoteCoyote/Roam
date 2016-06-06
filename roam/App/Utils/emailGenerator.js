@@ -19,5 +19,4 @@ module.exports = function(venueName, venueLocation, time) {
   '</div>';
 
   return html;
-
 }
