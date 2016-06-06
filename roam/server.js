@@ -7,6 +7,7 @@ var crypto = require('crypto');
 var yelp = require('./App/Utils/api');
 var nodemailer = require('nodemailer');
 var gmailKeys = require('./App/Utils/apiKeys').gmailKeys;
+var formattedDateHtml = require('./App/Utils/dateFormatter');
 
 var saltRounds = 10;
 
@@ -152,18 +153,18 @@ app.post('/roam', function(req, res) {
           console.log('Relationship created b/w Users created', roamRes[0].data[0].row[0]);
           var roamInfo = roamRes[0].data[0].row[0];
 
-          var date = new Date();
-          var hour = Number(date.getHours());
-          var minute = date.getMinutes();
-          var newDate = new Date(date.getFullYear(), date.getMonth(), date.getDay(), (hour + 1), minute);
-
+          // var date = new Date();
+          // var hour = Number(date.getHours());
+          // var minute = date.getMinutes();
+          // var newDate = new Date(date.getFullYear(), date.getMonth(), date.getDay(), (hour + 1), minute);
+          var date = formattedDateHtml();
 	        var mailOptions = {
 	          from: '"Roam" <Roamincenterprises@gmail.com>', // sender address 
 	          // to: 'kentqlee@gmail.com', // list of receivers 
 	          bcc: roamInfo.creatorEmail + ',' + userEmail,
 	          subject: 'Your Roam is Ready!', // Subject line 
 	          text: 'Your Roam is at:' + roamInfo.venueName + ' Roam Address: ' + roamInfo.venueAddress, // plaintext body 
-	          html: '<div><h3>Your Roam is at: ' + roamInfo.venueName + '</h3></div><div><h3>Roam Address: ' + roamInfo.venueAddress + '</h3></div><div>Please arrive at the venue by ' + newDate // html body 
+	          html: '<div><h3>Your Roam is at: ' + roamInfo.venueName + '</h3></div><div><h3>Roam Address: ' + roamInfo.venueAddress + '</h3></div><div>Please arrive at the venue by ' +  date +'</div>'// html body 
 	        };
 	         
 	        // send mail with defined transport object 
