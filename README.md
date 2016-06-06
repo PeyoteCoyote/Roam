@@ -3,7 +3,7 @@
 New Adventures, New People
 
 ## Table of Contents 
->>>>>>> Delete unncessary files, edit readme
+
 - [Technology Stack](#tech-stack)
 - [Example / Usage](#example--usage)
 - [Getting Started](#getting-started)
