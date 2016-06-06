@@ -3,7 +3,7 @@ import {Text, View, Image, TouchableHighlight, ListView} from 'react-native'
 var styles = require('./Helpers/styles');
 
 class Confirmation extends Component {
-  
+
   handleCancel() {
     //we will cancel roam from here
     //remove the roam from db
@@ -11,7 +11,7 @@ class Confirmation extends Component {
     console.log('email is:', this.props.navigator.navigationContext._currentRoute.email);
 
     this.props.navigator.pop();
-    
+
     fetch('http://localhost:3000/cancel', {
       method: 'POST',
       headers: {

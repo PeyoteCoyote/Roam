@@ -1,29 +1,28 @@
 # Roam
-** New Adventures with New People **
 
-**INSERT links to your coverage images here**
-[![Build Status](https://secure.travis-ci.org/gotwarlost/istanbul.png)](http://travis-ci.org/gotwarlost/istanbul) [![Dependency Status](https://gemnasium.com/gotwarlost/istanbul.png)](https://gemnasium.com/gotwarlost/istanbul)
---------------------
-**INSERT a link to your deployed version**
+New Adventures, New People
 
-## Table of Contents 
+## Table of Contents
+- [Technology Stack](#tech-stack)
 - [Example / Usage](#example--usage)
 - [Getting Started](#getting-started)
 - [Architecture](#architecture)
   - [High Level Architecture](#high-level-architecture)
   - [Database Schema](#database-schema)
-- [API Endpoints](#api)
-- [Contributing](#contributing)
-- [Questions and Issues](#questions-and-issues)
-- [Meta](#meta)
+- [Team Members](#team-members)
+
+##Technology Stack
+- React Native
+- Node.js & Express
+- Neo4j
+- Yelp API
+- Geolocations API
+- Gmail API
+- Nodemailer
 
 ## Example / Usage
-**INSERT a description of how to use your product, if applicable**
-* Do you have an outward-facing API? If so, make sure API documentation is linked in TOC or here.
-* Does your product have any command-line inputs?
 
-**INSERT awesome GIF of your project**
-http://gifmaker.me/
+Simply create an account, select a time when you are free, and wait for an email confirmation for your next roam!
 
 ## Getting Started
 
@@ -31,7 +30,6 @@ Please install neo4j community edition. Run the neo4j application. Upon running 
 
 ```
 :server connect
-
 ```
 
 When prompted, set a password to your neo4j database.
@@ -52,32 +50,59 @@ Next, install the client-side dependencies by going to the roam directory in ter
 $ npm install
 ```
 
-ToDO: Fill this out more.
+Please create a developer account on Yelp and gmail for API keys. Create an apiKeys.js file within the Utils directory.
+
+Template usage:
+
+```
+module.exports.yelpKeys = {
+  consumer_key: '',
+  consumer_secret: '',
+  token: '',
+  token_secret: ''
+};
+
+module.exports.gmailKeys = {
+  "client_id": '',
+  "project_id": '',
+  "auth_uri": '',
+  "token_uri": '',
+  "auth_provider_x509_cert_url": '',
+  "client_secret": ''
+};
+
+```
+Be sure to include your personal keys on the above template.
+
+Ensure ports are listed correctly.
+
+Also, create a gmail account from where the confirmation email for each roam should be received.
 
 ## Architecture
 ### High Level Architecture
 ![Architecture](http://i64.tinypic.com/2zpp661.png)
 ### Database Schema
-Postgres using SQLAlchemy ORM
-![Schema](http://i68.tinypic.com/23i6plz.jpg)
+Neo4j using apoc
 
-## API
-**For API Documentation, please see the [ENDPOINTS.md](ENDPOINTS.md) file**
+![Schema](http://i65.tinypic.com/ibvuvm.png)
 
 ### Roadmap
 
-View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
+Features for v2.0
 
-## Contributing
-**INSERT contributing workflow steps or link here**
-[APP NAME] was built using waffle.io as the project organization tool.
-Please visit the [GITFLOW.MD](GITFLOW.md) for our workflow guidelines.
+- Confirmation on App
+- Chat functionality enabled once people are near venue
+- Tokened sessions
+- Push notifications
+- Route to destination with distance and time approximation
+- User ratings and review
+- More refined matching algorithm that includes historical data
+- Uber request functionality
+- See the history of roams
+- Profile picture
+- iBeacon
 
-## Questions and Issues
-For any issues, please refer to [**our issues page**](https://github.com/[INSERT TEAM]/[INSERT REPO]/issues)
-Please direct any questions regarding [APP NAME] to [**our wiki page**](https://github.com/[INSERT TEAM]/[INSERT REPO]/wiki)
-
-## Meta
+## Team Members
 
 Product Owner: [Kent Lee](https://github.com/kqlee)
 

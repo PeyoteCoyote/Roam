@@ -68,7 +68,7 @@ class Time extends Component {
       'Anytime'
     ];
     return (
-      <Image style={styles.backgroundImage} 
+      <Image style={styles.backgroundImage}
       source={require('../../imgs/uni.jpg')} >
         <Geolocation region={this.props.region}/>
         <Text style={styles.header}> pick time : </Text>
