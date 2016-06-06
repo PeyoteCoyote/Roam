@@ -13,7 +13,7 @@ module.exports = function(venueName, venueLocation, time) {
       '<h3 style="font-family: helvetica;color:#a73fbc;">Roam Venue: </h3>' +
       '<h2 style="font-weight:100; color:#636363; font-family: helvetica;">' + venueName + '</h2>' +
 
-      '<h3 style="font-family: helvetica; font-style:italic; color:#a73fbc;">Roam Address:</h3>' +
+      '<h3 style="font-family: helvetica; color:#a73fbc;">Roam Address:</h3>' +
       '<h2 style="font-weight:100; font-family: helvetica;  color:#636363;">' + 
       venueLocation + '</h2>' +
     '<hr>' +
