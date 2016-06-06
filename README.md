@@ -2,7 +2,12 @@
 
 New Adventures, New People
 
-## Table of Contents
+![App Icon](http://i68.tinypic.com/ojkxhj.png)
+
+![mockup](http://i64.tinypic.com/2r5eosg.png)
+
+## Table of Contents 
+
 - [Technology Stack](#tech-stack)
 - [Example / Usage](#example--usage)
 - [Getting Started](#getting-started)
@@ -23,6 +28,8 @@ New Adventures, New People
 ## Example / Usage
 
 Simply create an account, select a time when you are free, and wait for an email confirmation for your next roam!
+
+![roam](http://i65.tinypic.com/t9xrwl.gif)
 
 ## Getting Started
 
@@ -52,7 +59,7 @@ $ npm install
 
 Please create a developer account on Yelp and gmail for API keys. Create an apiKeys.js file within the Utils directory.
 
-Template usage:
+Template usage: 
 
 ```
 module.exports.yelpKeys = {
@@ -80,7 +87,7 @@ Also, create a gmail account from where the confirmation email for each roam sho
 
 ## Architecture
 ### High Level Architecture
-![Architecture](http://i64.tinypic.com/2zpp661.png)
+![Architecture](http://i67.tinypic.com/rvyayu.jpg)
 ### Database Schema
 Neo4j using apoc
 
@@ -93,7 +100,7 @@ Features for v2.0
 - Confirmation on App
 - Chat functionality enabled once people are near venue
 - Tokened sessions
-- Push notifications
+- Push notifications 
 - Route to destination with distance and time approximation
 - User ratings and review
 - More refined matching algorithm that includes historical data
@@ -106,7 +113,7 @@ Features for v2.0
 
 Product Owner: [Kent Lee](https://github.com/kqlee)
 
-Scrum Master: [Rodaan Rabang](https://github.com/rodaan)
+Scrum Master: [Rodaan Rabang](https://github.com/rodaan) 
 
 Development Team: [Esther Cuan](https://github.com/esthercuan), [Dan Sajjad](https://github.com/Dansajjad)
 

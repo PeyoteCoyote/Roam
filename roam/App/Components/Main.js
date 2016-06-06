@@ -91,7 +91,6 @@ class Main extends Component {
       .catch((error) => {
         console.log('Error handling submit:', error);
       });
-
     }
   }
 

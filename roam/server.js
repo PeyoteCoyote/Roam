@@ -30,10 +30,12 @@ var transporter = nodemailer.createTransport(smtpConfig);
 
 app.use(bodyParser.json());
 
+//Checks to make sure server is working
 app.get('/', function(req, res){
   res.send('Hello World!');
 });
 
+//Post to server on signup page
 app.post('/signup', function(req, res){
   var data = req.body;
 
@@ -51,6 +53,7 @@ app.post('/signup', function(req, res){
             console.log('Error hashing password', err);
           }
           data.password = hash;
+          //Creates new server in database
           apoc.query('CREATE (newUser:User {firstName: "%firstName%", lastName: "%lastName%", password: "%password%", email: "%email%"});', data).exec().then(
             function(dbRes){
               console.log('saved to database:', dbRes);
@@ -68,6 +71,7 @@ app.post('/signup', function(req, res){
   }); //closing 'then'
 }); //close post request
 
+//Validation for sign in page
 app.post('/signin', function(req, res){
   var data = req.body;
   apoc.query('MATCH (n:User {email: "%email%"}) RETURN n.password', {email: data.email}).exec().then(function(queryRes){
@@ -89,19 +93,19 @@ app.post('/signin', function(req, res){
   });
 });
 
-
+//Page to set up event between users, making API calls to YELP
 app.post('/roam', function(req, res) {
 
 	var dateMS = Date.now();
-
   var userEmail = req.body.userEmail;
-  
   var coords = boundingBoxGenerator(req); //bounding box coordinates
   var times = roamOffGenerator(req); //time until roam ends
 
+  //Checks to make sure if there is an existing pending roam within similar location by a different user
 	apoc.query('MATCH (n:Roam) WHERE n.creatorRoamEnd > %currentDate%  AND n.status = "Pending" AND n.creatorLatitude < %maxLat% AND n.creatorLatitude > %minLat% AND n.creatorLongitude < %maxLong% AND n.creatorLongitude > %minLong% AND n.creatorEmail <> "%userEmail%" RETURN n', {currentDate:dateMS, maxLat: coords.maxLat, minLat: coords.minLat, maxLong: coords.maxLong, minLong: coords.minLong, userEmail: userEmail}).exec().then(function(matchResults) {
-    if(matchResults[0].data.length === 0) {
+    
     //if no match found create a pending roam node
+    if (matchResults[0].data.length === 0) {
     console.log('nomatch');
       var searchParams = {
         term: 'Bars',
@@ -111,37 +115,41 @@ app.post('/roam', function(req, res) {
         bounds: coords.maxLat + ',' + coords.minLong + '|' +  coords.minLat  + ',' + coords.maxLong
       };      
 
+      //Creates the YELP object to make API request to yelp servers
       yelp.searchYelp(searchParams, function(venue) {
         
         var venueName = venue.name;
         var venueAddress = venue.location.display_address.join(' ');
 
+        //Create a roam node if it doesn't exist
         apoc.query('CREATE (m:Roam {creatorEmail: "%userEmail%", creatorLatitude: %userLatitude%, creatorLongitude: %userLongitude%, creatorRoamStart: %startRoam%, creatorRoamEnd: %roamOffAfter%, status: "Pending", venueName: "%venueName%", venueAddress: "%venueAddress%"})', { email: userEmail, userEmail: userEmail, userLatitude: coords.userLatitude, userLongitude: coords.userLongitude,
       startRoam: times.startRoam, roamOffAfter: times.roamOffAfter, venueName: venueName, venueAddress: venueAddress }).exec().then(function(queryRes) {
 
-          // return as response "Matched"
+          // creates the relationship between creator of roam node and the roam node
           apoc.query('MATCH (n:User {email:"%email%"}), (m:Roam {creatorEmail: "%creatorEmail%", creatorRoamStart: %roamStart%}) CREATE (n)-[:CREATED]->(m)', {email:userEmail, creatorEmail: userEmail, roamStart: times.startRoam} ).exec().then(function(relationshipRes) {
              console.log('Relationship created', relationshipRes); 
           });
         });
       });
-		} else {
+		} else { //Roam node found within a similar geographic location
       console.log('Found a match', matchResults[0].data[0].meta[0].id);
 
       var id = matchResults[0].data[0].meta[0].id;
+
+      //Grabs roam node between similar location, and creates the relationship between node and user
       apoc.query('MATCH (n:User {email:"%email%"}), (m:Roam) WHERE id(m) = %id% SET m.status="Active" CREATE (n)-[:CREATED]->(m) RETURN m', {email:userEmail, id:id} ).exec().then(function(roamRes) {
           console.log('Relationship created b/w Users created', roamRes[0].data[0].row[0]);
           var roamInfo = roamRes[0].data[0].row[0];
 
           var date = formattedDateHtml();
 
+          //Generates an automatic email message
 	        var mailOptions = {
 	          from: '"Roam" <Roamincenterprises@gmail.com>', // sender address 
-	          // to: 'kentqlee@gmail.com', // list of receivers 
-	          bcc: roamInfo.creatorEmail + ',' + userEmail,
+	          bcc: roamInfo.creatorEmail + ',' + userEmail, // List of users who are matched
 	          subject: 'Your Roam is Ready!', // Subject line 
 	          text: 'Your Roam is at:' + roamInfo.venueName + ' Roam Address: ' + roamInfo.venueAddress, // plaintext body 
-	          html: generateEmail(roamInfo.venueName, roamInfo.venueAddress, date)// html body 
+	          html: generateEmail(roamInfo.venueName, roamInfo.venueAddress, date) // html body 
 	        };
 	         
 	        // send mail with defined transport object 
@@ -153,20 +161,24 @@ app.post('/roam', function(req, res) {
 	        });
 
           res.send("You have been matched"); 
-        })
+        });
     }
 	});
 });
 
+//Cancellation of roam; only the creator has cancellation abilities
 app.post('/cancel', function(req, res){
   var userEmail = req.body.userEmail;
-  console.log('useremail is:', userEmail)
+  console.log('useremail is:', userEmail);
+
+  //Finds roam node that user created and cancels it
   apoc.query('MATCH (m:Roam {creatorEmail: "%userEmail%"}) WHERE m.status="Pending" SET m.status="Canceled" RETURN m', {userEmail: userEmail}).exec().then(function(cancelRes){
 
   	console.log('Roam canceled:', cancelRes[0].data[0].row[0]);
 
     var roamInfo = cancelRes[0].data[0].row[0];
 
+    //Sends cancellation email
     var mailOptions = {
       from: '"Roam" <Roamincenterprises@gmail.com>', // sender address 
       bcc: roamInfo.creatorEmail + ',' + userEmail,
