@@ -8,7 +8,7 @@ var yelp = require('./App/Utils/api');
 var nodemailer = require('nodemailer');
 var gmailKeys = require('./App/Utils/apiKeys').gmailKeys;
 var formattedDateHtml = require('./App/Utils/dateFormatter');
-
+var generateEmail = require('./App/Utils/emailGenerator');
 var saltRounds = 10;
 
 var smtpConfig = {
@@ -158,13 +158,17 @@ app.post('/roam', function(req, res) {
           // var minute = date.getMinutes();
           // var newDate = new Date(date.getFullYear(), date.getMonth(), date.getDay(), (hour + 1), minute);
           var date = formattedDateHtml();
+          var x = generateEmail();
+          console.log('<<><><><><><><><><><><', x);
+
+
 	        var mailOptions = {
 	          from: '"Roam" <Roamincenterprises@gmail.com>', // sender address 
 	          // to: 'kentqlee@gmail.com', // list of receivers 
 	          bcc: roamInfo.creatorEmail + ',' + userEmail,
 	          subject: 'Your Roam is Ready!', // Subject line 
 	          text: 'Your Roam is at:' + roamInfo.venueName + ' Roam Address: ' + roamInfo.venueAddress, // plaintext body 
-	          html: '<div><h3>Your Roam is at: ' + roamInfo.venueName + '</h3></div><div><h3>Roam Address: ' + roamInfo.venueAddress + '</h3></div><div>Please arrive at the venue by ' +  date +'</div>'// html body 
+	          html: generateEmail(roamInfo.venueName, roamInfo.venueAddress, date)// html body 
 	        };
 	         
 	        // send mail with defined transport object 
@@ -196,7 +200,7 @@ app.post('/cancel', function(req, res){
       bcc: roamInfo.creatorEmail + ',' + userEmail,
       subject: 'Your Roam has been canceled!', // Subject line 
       text: 'Your Roam at:' + roamInfo.venueName + ' Roam Address: ' + roamInfo.venueAddress + ' has been canceled.', // plaintext body 
-      html: '<div><h3>Your Roam at: ' + roamInfo.venueName + '</h3></div><div><h3>Roam Address: ' + roamInfo.venueAddress + ' has been canceled.</h3></div>' // html body 
+      html: '<div><h3>Roam Venue: <br>' + roamInfo.venueName + '</h3></div><div><h3>Roam Address: ' + roamInfo.venueAddress + ' has been canceled.</h3></div>' // html body 
     };
      
     // send mail with defined transport object 
