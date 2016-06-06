@@ -13,7 +13,9 @@ var boundingBoxGenerator = require('./App/Utils/boundingBoxGenerator');
 var roamOffGenerator = require('./App/Utils/roamOffGenerator');
 var saltRounds = 10;
 
-var smtpConfig = {
+
+//config for email SMTP for gmail. We are send email notifications to users
+var smtpConfig = { 
   host: 'smtp.gmail.com',
   port: 465,
   secure: true, // use SSL 
@@ -23,9 +25,8 @@ var smtpConfig = {
   }
 };
 
-var transporter = nodemailer.createTransport(smtpConfig);
-
-// const offsetToDegrees = 0.02;
+//transport vehicle for nodemailer to send out email
+var transporter = nodemailer.createTransport(smtpConfig); 
 
 app.use(bodyParser.json());
 
@@ -92,10 +93,13 @@ app.post('/signin', function(req, res){
 app.post('/roam', function(req, res) {
 
 	var dateMS = Date.now();
-  var coords = boundingBoxGenerator(req);
-	var userEmail = req.body.userEmail;
-  var times = roamOffGenerator(req);
 
+  var userEmail = req.body.userEmail;
+  
+  var coords = boundingBoxGenerator(req); //bounding box coordinates
+  var times = roamOffGenerator(req); //time until roam ends
+
+	apoc.query('MATCH (n:Roam) WHERE n.creatorRoamEnd > %currentDate%  AND n.status = "Pending" AND n.creatorLatitude < %maxLat% AND n.creatorLatitude > %minLat% AND n.creatorLongitude < %maxLong% AND n.creatorLongitude > %minLong% AND n.creatorEmail <> "%userEmail%" RETURN n', {currentDate:dateMS, maxLat: coords.maxLat, minLat: coords.minLat, maxLong: coords.maxLong, minLong: coords.minLong, userEmail: userEmail}).exec().then(function(matchResults) {
     if(matchResults[0].data.length === 0) {
     //if no match found create a pending roam node
     console.log('nomatch');

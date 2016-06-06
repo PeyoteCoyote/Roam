@@ -1,4 +1,5 @@
-//boundingBoxGenerator.js
+//This file takes the user coordinates and generates a boundary within which
+//we want to find another match and also find a meeting venue
 
 module.exports = function(req) {
 
@@ -15,7 +16,4 @@ module.exports = function(req) {
   var minLong = userLongitude - offsetToDegrees;
 
   return ({userLatitude, userLongitude, maxLat, minLat, maxLong, minLong});
-
-  // console.log(maxLat, minLat, maxLong, minLong);
-  
 }

@@ -1,4 +1,6 @@
 // Email Generator
+//Email notification to the users after the match has been made & 
+//the location has been set
 
 module.exports = function(venueName, venueLocation, time) {
   var html =   

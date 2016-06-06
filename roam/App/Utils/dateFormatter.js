@@ -1,5 +1,4 @@
-//dateFormatter.js
-//return a formatted date in HTML for the email
+//return a formatted date to be used in the notification email to the users
 
 module.exports = function() {
   var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
