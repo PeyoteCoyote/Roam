@@ -2,6 +2,10 @@
 
 New Adventures, New People
 
+![App Icon](http://i68.tinypic.com/ojkxhj.png)
+
+![mockup](http://i64.tinypic.com/2r5eosg.png)
+
 ## Table of Contents 
 
 - [Technology Stack](#tech-stack)
@@ -24,6 +28,8 @@ New Adventures, New People
 ## Example / Usage
 
 Simply create an account, select a time when you are free, and wait for an email confirmation for your next roam!
+
+![roam](http://i65.tinypic.com/t9xrwl.gif)
 
 ## Getting Started
 
@@ -81,7 +87,7 @@ Also, create a gmail account from where the confirmation email for each roam sho
 
 ## Architecture
 ### High Level Architecture
-![Architecture](http://i64.tinypic.com/2zpp661.png)
+![Architecture](http://i67.tinypic.com/rvyayu.jpg)
 ### Database Schema
 Neo4j using apoc
 
