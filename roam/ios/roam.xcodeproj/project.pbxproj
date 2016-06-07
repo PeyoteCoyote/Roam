@@ -22,6 +22,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		B5A0C9FF1D075D9200C89CFC /* RCTRootView.m in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0C9FE1D075D9200C89CFC /* RCTRootView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +128,9 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		8E50557A1D05F1180010AF57 /* GillSans.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; name = GillSans.ttc; path = ../../../../../Library/Fonts/GillSans.ttc; sourceTree = "<group>"; };
+		B5A0C9F01D075B5900C89CFC /* react-native */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "react-native"; path = "../../../app/node_modules/react-native"; sourceTree = "<group>"; };
+		B5A0C9FC1D075BFB00C89CFC /* RCTRootView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RCTRootView.h; path = "../../../app/node_modules/react-native/React/Base/RCTRootView.h"; sourceTree = "<group>"; };
+		B5A0C9FE1D075D9200C89CFC /* RCTRootView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RCTRootView.m; path = "../node_modules/react-native/React/Base/RCTRootView.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +145,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5A0C9FF1D075D9200C89CFC /* RCTRootView.m in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
@@ -289,6 +294,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				B5A0C9FE1D075D9200C89CFC /* RCTRootView.m */,
+				B5A0C9FC1D075BFB00C89CFC /* RCTRootView.h */,
+				B5A0C9F01D075B5900C89CFC /* react-native */,
 				13B07FAE1A68108700A75B9A /* roam */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* roamTests */,
