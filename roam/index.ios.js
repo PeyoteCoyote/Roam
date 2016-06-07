@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 var Main = require('./App/Components/Main');
+var GeolocationView = require('./App/Components/Geolocation.js')
 
 class roam extends Component{
   render() {
@@ -17,7 +18,7 @@ class roam extends Component{
       style={styles.container}
         initialRoute={{
           title: 'Sign In',
-          component: Main
+          component: GeolocationView
         }} />
     );
   }
