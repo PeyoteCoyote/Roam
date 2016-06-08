@@ -43,7 +43,6 @@ class CameraView extends Component {
         username: props.username,
         password: props.password,
         id: props.id, 
-        lastPhoto: props.lastPhoto,
         type: Camera.constants.Type.back,
         flag: true
       }
@@ -62,11 +61,11 @@ class CameraView extends Component {
             type = {this.state.type}
             >
             <TouchableHighlight style={styles.switchCam} onPress={this.switchCamType.bind(this)} underlayColor='transparent'>
-              <Image style = {{height:40, width: 40, marginLeft: 40}} source={require('./images/switch_camera_type.png')}/>
+              <Image style = {{height:40, width: 40, marginLeft: 40}} source={require('./Images/switch_camera_type.png')}/>
             </TouchableHighlight>
             <View style={styles.buttons}>
               <TouchableHighlight onPress={this.takePicture.bind(this)} style={styles.capture} underlayColor='transparent'>
-                <Image style = {{height: deviceWidth/6, width: deviceWidth/5.5}} source={require('./images/camera_icon3.png')}/>
+                <Image style = {{height: deviceWidth/6, width: deviceWidth/5.5}} source={require('./Images/camera_icon3.png')}/>
               </TouchableHighlight>
             </View>
 
@@ -75,13 +74,13 @@ class CameraView extends Component {
       );
   }
 
-  goImageViewPage() {
-    this.props.navigator.push({
-      title: "verify.me",
-      component: ViewPage,
-      passProps: {user: this.state.user, username: this.state.username, password: this.state.password, image: this.state.image, id: this.state.id, lastPhoto: this.state.lastPhoto},
-    })
-  }
+  // goImageViewPage() {
+  //   this.props.navigator.push({
+  //     title: "verify.me",
+  //     component: ViewPage,
+  //     passProps: {user: this.state.user, username: this.state.username, password: this.state.password, image: this.state.image, id: this.state.id, lastPhoto: this.state.lastPhoto},
+  //   })
+  // }
 
   switchCamType() {
     if (this.state.flag) {
@@ -97,11 +96,13 @@ class CameraView extends Component {
       });        
     }
   }
+
   takePicture() {
     this.camera.capture()
       .then((data) => this.setState({image: data}))
       .catch(err => console.error(err))
-      .then(() => this.goImageViewPage());
+      // .then(() => this.goImageViewPage());
+      .then(() => console.err('sent image data!'));
   }
 };
  
@@ -125,10 +126,6 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: 'row'
-  },
-  swipe: {
-    paddingRight: deviceWidth/5,
-    paddingTop: deviceHeight/15
   },
   home: {
     paddingLeft: deviceWidth/5,
