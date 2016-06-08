@@ -23,7 +23,7 @@ class Confirmation extends Component {
       })
     })
     .then((res) => {
-      console.log('Canceled Roam:', res);
+      console.log('Cancelled Roam:', res);
     })
     .catch((error) => {
       console.log('Error handling submit:', error);
