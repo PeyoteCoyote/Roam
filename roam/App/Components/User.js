@@ -2,14 +2,18 @@ import React, { Component } from 'react';
 import { SegmentedControls } from 'react-native-radio-buttons';
 // var Geolocation = require('./Geolocation');
 var Confirmation = require('./Confirmation');
+var CameraView = require('./CameraView')
 var Separator = require('./Helpers/Separator');
-var styles = require('./Helpers/styles');
+import Icon from 'react-native-vector-icons/FontAwesome';
+import GridView from 'react-native-grid-view';
+var dummyData = require('./data');
 
 var coordinates = {};
 
 import {
   Animated,
   Image,
+  Dimensions,
   View,
   Text,
   StyleSheet,
@@ -20,8 +24,8 @@ import {
   MapView
 } from 'react-native';
 
-var flag = false;
-var flag2 = false;
+var deviceWidth = Dimensions.get('window').width;
+var deviceHeight = Dimensions.get('window').height;
 
 class User extends Component {
   constructor(props) {
@@ -36,211 +40,148 @@ class User extends Component {
     });
   }
 
-  handleSubmit() {
-    console.log('Sending ROAM request!', coordinates);
-    // this.props.navigator.push({
-    //   title: 'Confirmation',
-    //   email: this.props.navigator.navigationContext._currentRoute.email,
-    //   component: Confirmation
-    // });
-
-    fetch('http://localhost:3000/roam', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        time: this.state.selectedOption,
-        coordinates: coordinates,
-        userEmail: this.props.navigator.navigationContext._currentRoute.email
-      })
-    })
-    .then((res) => {
-      console.log('Added to db. Waiting for ROAM request confirmation!');
-    })
-    .catch((error) => {
-      console.log('Error handling submit:', error);
-    });
-  }
+  // handleSettings(){
+  //   this.props.navigator.push({
+  //     title: 'CameraView',
+  //     component: 'CameraView'
+  //   });
+  // }
 
   render () {
-    const options = [
-      '1 hour',
-      '2 hours',
-      '4 hours',
-      'Anytime'
-    ];
     return (
-      <Image style={styles.backgroundImage}
-      source={require('../../imgs/uni.jpg')} >
-        <Geolocation region={this.props.region}/>
-        <Text style={styles.header}> User Page </Text>
-        <SegmentedControls
-          tint={'#ff0066'}
-          selectedTint={'white'}
-          backTint={'white'}
-          options={options}
-          allowFontScaling={false}
-          fontWeight={'bold'}
-          onSelection={this.handleSelected.bind(this)}
-          selectedOption={this.state.selectedOption} />
-        <TouchableHighlight
-          style={styles.button}
-          onPress={this.handleSubmit.bind(this)} >
-            <Text style={styles.buttonText}> Roam! </Text>
-        </TouchableHighlight>
-      </Image>
-    );
-  }
-}
+      <View>
+        <View style={styles.navbarContainer}>
 
+          <View style={styles.navLeft}>
+            <TouchableHighlight underlayColor='transparent'>
+              <Icon name="sign-out" size={25} color="#fff" />
+            </TouchableHighlight>
+          </View>
 
-class Geolocation extends Component {
-    constructor(props) {
-    super(props);
-    this.state = {
-      region: {
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
-      },
-      fadeAnim: new Animated.Value(0),
-      fadeAnim2: new Animated.Value(0),
-      alternate: false
-    };
-  }
+          <View style={styles.navMiddle}>
+            <Image style={styles.circleImage} source={{uri: 'https://support.files.wordpress.com/2009/07/pigeony.jpg?w=688'}}/> 
+            
+          </View>
 
-  componentDidMount () {
-      console.log('Hello From Geolocation')
-      if (!navigator.geolocation) {console.log('geoloaction not available')};
-      if (navigator.geolocation) {console.log('geoloaction available')};
-      navigator.geolocation.getCurrentPosition(
-        (initialPosition) => {
-         console.log(initialPosition);
-          this.setState({initialPosition});
-        },
-        (error) => alert(error.message),
-        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-      );
+          <View style={styles.navRight}>
+            <View style={styles.refresh}>
+            <TouchableHighlight underlayColor='transparent'>
+              <Icon name="bars" size={23} color="#fff" />
+            </TouchableHighlight>
+            </View>
+          </View>
 
-      this.watchID = navigator.geolocation.watchPosition((lastPosition) => {
-        coordinates = lastPosition;
-        console.log(lastPosition);
-        this.setState({latitude: lastPosition.coords.latitude});
-        this.setState({latitude: lastPosition.coords.latitude});
+        </View>
+        <View style={styles.mainContainer}>
+          <Image style={styles.backgroundImage}
+        source={require('../../imgs/uni.jpg')}>
+        <GridView>
+          {dummyData.map( user =>
+        <Image style={styles.circleImage} source={{uri:user.image}}/>
+      )}
+        </GridView>
+        </Image>
 
-        var newRegion = {
-          latitude: lastPosition.coords.latitude,
-          longitude: lastPosition.coords.longitude,
-          latitudeDelta: 10,
-          longitudeDelta: 10
-        }
-
-        this.setState({ region: newRegion });
-
-        this.setState({ annotations: [{
-          latitude: lastPosition.coords.latitude,
-          longitude: lastPosition.coords.longitude,
-          title: 'Current Location',
-          subtitle: 'This is your current location'
-        }]});
-      });
-    }
-
-    componentWillUnmount() {
-      navigator.geolocation.clearWatch(this.watchID);
-    }
-
-componentDidMount() {
-  this.determineFadingAction();
-  setInterval( () => {
-    this.determineFadingAction();
-  },5000);              
-}
-
-determineFadingAction() {
-  if (!flag && !flag2){
-    Animated.timing(          
-      this.state.fadeAnim,    
-      {
-        toValue: 1,
-        duration:6000
-      }
-    ).start();
-    flag = !flag;   
-  } 
-  if (flag && !flag2) {
-    Animated.timing(          
-    this.state.fadeAnim,    
-      {
-        toValue: 0,
-        duration:6000
-      }
-    ).start();
-    this.state.fadeAnim = new Animated.Value(0);
-    flag = !flag;
-    flag2 = !flag2;
-  }
-  if (!flag && flag2){
-    Animated.timing(          
-      this.state.fadeAnim2,    
-      {
-        toValue: 1,
-        duration:6000
-      }
-    ).start();
-    flag = !flag;   
-  }
-  if (flag && flag2){
-    Animated.timing(          
-    this.state.fadeAnim2,    
-      {
-        toValue: 0,
-        duration:6000
-      }
-    ).start();
-    this.state.fadeAnim2 = new Animated.Value(0);
-    flag = !flag;
-    flag2 = !flag2;
-  }
-}
-
-
-alternateImageSettings() {
-    return (
-      <View style={{flex:1}}>
-        <Animated.Image source={require('./a.jpg')} style={{width:320,height:320,resizeMode:'cover',position:'absolute'}}  />
-        <Animated.Image source={require('./b.jpg')} style={{width:320,height:320,resizeMode:'cover',opacity:this.state.fadeAnim}}  />
-        <Animated.Image source={require('./c.jpg')} style={{width:320,height:320,resizeMode:'cover',opacity:this.state.fadeAnim2}}  />
+        </View>
+      
       </View>
     );
-
- }
-      // <View>
-      //   <Text style={styles.location}>Your Current Location:</Text>
-      //     <MapView
-      //     showsUserLocation={true}
-      //     style={map.map}
-      //     region={this.state.region}
-      //     followUserLocation={true} />
-      // </View>
-  render() {
-    return this.alternateImageSettings();
   }
 }
 
-
-const map = StyleSheet.create({
-  map: {
-    height: 250,
-    margin: 10,
-    borderWidth: 1,
-    borderColor: '#000000',
-    backgroundColor: 'transparent'
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex:1,
+    width:null,
+    height: null,
+    padding: 30,
+    marginTop: 20,
+    flexDirection: 'column',
+    justifyContent: 'center'
   },
-});
+  header: {
+    // marginBottom: 20,
+    fontSize: 50,
+    fontWeight: "100",
+    fontFamily: 'Gill Sans',
+    textAlign: 'center',
+    color: 'white',
+    backgroundColor: 'transparent',
+    letterSpacing: 3
+  },
+  buttonText: {
+    fontSize: 18,
+    color: 'white',
+    alignSelf: 'center'
+  },
+  button: {
+    height: 50,
+    width: 300,
+    flexDirection: 'row',
+    backgroundColor: '#ff0066',
+    borderRadius:10,
+    marginBottom: 10,
+    marginTop: 20,
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+  navbarContainer:{
+    backgroundColor:'#8C4DCB',
+    paddingTop: deviceHeight/25,
+    height: deviceHeight/5,
+    flexDirection: 'row',
+    // paddingBottom: deviceHeight/80
+  },
+  navLeft: {
+    width: deviceWidth/3,
+    // borderWidth: 0.5,
+    // borderColor: '#555555',
+    justifyContent: 'center',
+    paddingLeft: deviceWidth/20,
+  },
+  navMiddle: {
+    width: deviceWidth/3,
+    // borderWidth: 0.5,
+    // borderColor: '#555555',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
+  },
+  navRight: {
+    width: deviceWidth/3,
+    // borderWidth: 0.5,
+    // borderColor: '#555555',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    paddingRight: deviceWidth/20
+    // flexDirection: 'row'
+  },
+  navTitle: {
+    color:'#fff',
+    textAlign:'center',
+    fontWeight:'bold',
+    fontSize: 20,
+    fontFamily: 'Avenir',
+  },
+  backgroundImage: {
+    flex:1,
+    width:null,
+    height: null,
+    padding: 30,
+    marginTop: 20,
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
+  mainContainer: {
+    height: deviceHeight,
+    marginTop: -20
+  },
+  circleImage: {
+    height: 100,
+    borderRadius: 50,
+    width: 100
+  }
+})
 
 
 

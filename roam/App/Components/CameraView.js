@@ -12,27 +12,22 @@ import {
   Text,
   TouchableHighlight
 } from 'react-native';
- 
- 
-import UserPageObj from './UserPage.ios.js';
-var UserPage = UserPageObj.UserPage;
 
-import SwipePage from './SwipeView.ios.js';
-import Camera from 'react-native-camera';
-import ViewPage from './ImageView.ios.js';
+// import Camera from 'react-native-camera';
+// import ViewPage from './ImageView.ios.js';
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
-var icons = {
-  list: 'http://www.iconsdb.com/icons/preview/gray/list-xxl.png',
-  grid: 'http://www.myiconfinder.com/uploads/iconsets/256-256-ed559f9ab4ee6cec08ffde71c58a68af-grid.png',
-  home: 'http://summer.newark.rutgers.edu/wp-content/uploads/2015/02/homeicon.png',
-  camera: 'http://aspenwillows.com/wp-content/uploads/2015/03/cameraicon.png',
-  swipe: 'https://www.one.org/wp-content/plugins/ebola-tracker/images/swipe_icon.png',
-  pressCamera: 'http://www.iconsplace.com/icons/preview/white/switch-camera-256.png',
-  switchCamera: 'http://www.iconsplace.com/icons/preview/white/switch-camera-256.png'
-}
+// var icons = {
+//   list: 'http://www.iconsdb.com/icons/preview/gray/list-xxl.png',
+//   grid: 'http://www.myiconfinder.com/uploads/iconsets/256-256-ed559f9ab4ee6cec08ffde71c58a68af-grid.png',
+//   home: 'http://summer.newark.rutgers.edu/wp-content/uploads/2015/02/homeicon.png',
+//   camera: 'http://aspenwillows.com/wp-content/uploads/2015/03/cameraicon.png',
+//   swipe: 'https://www.one.org/wp-content/plugins/ebola-tracker/images/swipe_icon.png',
+//   pressCamera: 'http://www.iconsplace.com/icons/preview/white/switch-camera-256.png',
+//   switchCamera: 'http://www.iconsplace.com/icons/preview/white/switch-camera-256.png'
+// }
 
 class CameraView extends Component {
  
@@ -50,26 +45,7 @@ class CameraView extends Component {
   render() {
       return (
         <View style={styles.container}>
-          <Camera
-            ref={(cam) => {
-              this.camera = cam;
-            }}
-            style={styles.preview}
-            captureTarget={Camera.constants.CaptureTarget.disk}
-            aspect={Camera.constants.Aspect.fill}
-            orientation={Camera.constants.Orientation.portrait}
-            type = {this.state.type}
-            >
-            <TouchableHighlight style={styles.switchCam} onPress={this.switchCamType.bind(this)} underlayColor='transparent'>
-              <Image style = {{height:40, width: 40, marginLeft: 40}} source={require('./Images/switch_camera_type.png')}/>
-            </TouchableHighlight>
-            <View style={styles.buttons}>
-              <TouchableHighlight onPress={this.takePicture.bind(this)} style={styles.capture} underlayColor='transparent'>
-                <Image style = {{height: deviceWidth/6, width: deviceWidth/5.5}} source={require('./Images/camera_icon3.png')}/>
-              </TouchableHighlight>
-            </View>
 
-          </Camera>
         </View>
       );
   }

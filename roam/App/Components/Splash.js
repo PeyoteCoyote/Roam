@@ -112,8 +112,8 @@ determineFadingAction() {
   render() {
     return (      
       <View style={{flex:1}}>
-        <Animated.Image source={require('./a.jpg')} style={{width:320,height:320,resizeMode:'cover',position:'absolute'}}  />
-        <Animated.Image source={require('./b.jpg')} style={{width:320,height:320,resizeMode:'cover',opacity:this.state.fadeAnim}}  />
+        <Animated.Image source={require('./Images/a.jpg')} style={{width:320,height:320,resizeMode:'cover',position:'absolute'}}  />
+        <Animated.Image source={require('./Images/b.jpg')} style={{width:320,height:320,resizeMode:'cover',opacity:this.state.fadeAnim}}  />
       </View>)
   }
 }
