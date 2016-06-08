@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     width:null,
     height: null,
     padding: 30,
-    marginTop: 65,
+    marginTop: 20,
     flexDirection: 'column',
     justifyContent: 'center'
   },

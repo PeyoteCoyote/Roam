@@ -33,9 +33,9 @@ class TabBar extends Component {
     return (
       <TabBarIOS>
         <Icon.TabBarItem
-          title='Home'
+          title='User'
           selected={this.state.selectedTab === 'home'}
-          iconName={'home'}
+          iconName={'user'}
           iconSize={25}
           onPress={() => {
               this.setState({
@@ -45,9 +45,9 @@ class TabBar extends Component {
           {this.renderUserPage()}
         </Icon.TabBarItem>
         <Icon.TabBarItem
-          title="Camera"
+          title="Chat"
           selected={this.state.selectedTab === 'camera'}
-          iconName={'camera'}
+          iconName={'group'}
           iconSize={20}
           onPress={() => {
               this.setState({
@@ -57,7 +57,7 @@ class TabBar extends Component {
           {this.renderRoamView()}
         </Icon.TabBarItem>
         <Icon.TabBarItem
-          title="Map"
+          title="Roam"
           selected={this.state.selectedTab === 'map'}
           iconName={'map'}
           iconSize={20}
@@ -67,6 +67,18 @@ class TabBar extends Component {
               });
           }}>
           {this.renderDummyView()}
+        </Icon.TabBarItem>
+        <Icon.TabBarItem
+          title="Uber"
+          selected={this.state.selectedTab === 'uber'}
+          iconName={'cab'}
+          iconSize={20}
+          onPress={() => {
+              this.setState({
+                selectedTab: 'uber'
+              });
+          }}>
+          {this.renderUberView()}
         </Icon.TabBarItem>
       </TabBarIOS>
       )
@@ -97,6 +109,15 @@ class TabBar extends Component {
       <Time
         style={styles.container}
         ref='mapRef'         
+        user={this.state.user}
+        navigator={this.props.navigator}/>
+        )
+  }
+  renderUberView() {
+    return (
+      <Time
+        style={styles.container}
+        ref='uberRef'         
         user={this.state.user}
         navigator={this.props.navigator}/>
         )
