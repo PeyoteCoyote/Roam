@@ -11,7 +11,7 @@ import {
 var Login = require('./App/Components/Login');
 var GeolocationView = require('./App/Components/Geolocation.js');
 var Time = require('./App/Components/Time.js');
-
+var Splash = require('./App/Components/Splash.js');
 class roam extends Component{
   render() {
     return (
