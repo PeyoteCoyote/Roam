@@ -88,6 +88,7 @@ class Login extends Component {
             },
             body: JSON.stringify({id: res.id})
           })
+<<<<<<< HEAD
           .then(resp => {
             if (resp.status === 200) {
               this.props.navigator.push({
@@ -104,6 +105,14 @@ class Login extends Component {
             }
           })
           
+=======
+          .then((res) => console.error(res));
+          this.props.navigator.push({
+            title: 'Roam',
+            username: res,
+            component: TabBar
+          });
+>>>>>>> 16466e797a445eed96d2f9e0336936c615b29747
           this.setState({
             isLoading: false
           });
