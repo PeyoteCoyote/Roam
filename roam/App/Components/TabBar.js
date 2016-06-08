@@ -14,6 +14,9 @@ import {
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Time from './Time.js'
+import User from './User.js'
+import Chat from './Chat.js'
+import Uber from './Uber.js'
 
 // var key_file = require('../../config.js');
 var deviceWidth = Dimensions.get('window').width;
@@ -54,7 +57,7 @@ class TabBar extends Component {
                 selectedTab: 'camera'
               });
           }}>
-          {this.renderRoamView()}
+          {this.renderChatView()}
         </Icon.TabBarItem>
         <Icon.TabBarItem
           title="Roam"
@@ -66,7 +69,7 @@ class TabBar extends Component {
                 selectedTab: 'map'
               });
           }}>
-          {this.renderDummyView()}
+          {this.renderRoamView()}
         </Icon.TabBarItem>
         <Icon.TabBarItem
           title="Uber"
@@ -86,7 +89,7 @@ class TabBar extends Component {
 
   renderUserPage() {
     return (
-      <Time
+      <User
         style={styles.container}
         ref='swipeRef'
         user={this.state.user}
@@ -94,9 +97,9 @@ class TabBar extends Component {
         )
   }
 
-  renderRoamView() {
+  renderChatView() {
     return (
-      <Time
+      <Chat
         style={styles.container}
         ref='cameraRef'         
         user={this.state.user}
@@ -104,7 +107,7 @@ class TabBar extends Component {
         )
   }
 
-  renderDummyView() {
+  renderRoamView() {
     return (
       <Time
         style={styles.container}
@@ -115,7 +118,7 @@ class TabBar extends Component {
   }
   renderUberView() {
     return (
-      <Time
+      <Uber
         style={styles.container}
         ref='uberRef'         
         user={this.state.user}
