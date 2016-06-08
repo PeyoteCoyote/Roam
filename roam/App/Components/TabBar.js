@@ -13,12 +13,13 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Time from './Time.js'
 
 // var key_file = require('../../config.js');
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
-class MainView extends Component {  
+class TabBar extends Component {  
   constructor(props) {
   	super(props)
   	this.state = {
@@ -41,7 +42,7 @@ class MainView extends Component {
                 selectedTab: 'home'
               });
           }}>
-          {this.renderSwipeView()}
+          {this.renderUserPage()}
         </Icon.TabBarItem>
         <Icon.TabBarItem
           title="Camera"
@@ -53,7 +54,7 @@ class MainView extends Component {
                 selectedTab: 'camera'
               });
           }}>
-          {this.renderCameraView()}
+          {this.renderRoamView()}
         </Icon.TabBarItem>
         <Icon.TabBarItem
           title="Map"
@@ -65,78 +66,38 @@ class MainView extends Component {
                 selectedTab: 'map'
               });
           }}>
-          {this.renderMapPage()}
-        </Icon.TabBarItem>
-        <Icon.TabBarItem
-          title="Profile"
-          selected={this.state.selectedTab === 'user'}
-          iconName={'user'}
-          iconSize={20}
-          onPress={() => {
-              this.setState({
-                selectedTab: 'user'
-              });
-          }}>
-          {this.renderUserPage()}
+          {this.renderDummyView()}
         </Icon.TabBarItem>
       </TabBarIOS>
       )
   }
 
-  renderSwipeView() {
+  renderUserPage() {
     return (
-      <SwipeView
+      <Time
         style={styles.container}
         ref='swipeRef'
         user={this.state.user}
-        username={this.state.username}
-        password={this.state.password}
-        id={this.state.id} 
-        lastPhoto={this.state.lastPhoto}
         navigator={this.props.navigator}/>
         )
   }
 
-  renderCameraView() {
+  renderRoamView() {
     return (
-      <CameraView
+      <Time
         style={styles.container}
         ref='cameraRef'         
         user={this.state.user}
-        username={this.state.username}
-        password={this.state.password}
-        id={this.state.id} 
-        lastPhoto={this.state.lastPhoto}
         navigator={this.props.navigator}/>
         )
   }
 
-  renderMapPage() {
+  renderDummyView() {
     return (
-      <MapViewPage
+      <Time
         style={styles.container}
         ref='mapRef'         
         user={this.state.user}
-        username={this.state.username}
-        password={this.state.password}
-        id={this.state.id} 
-        lastPhoto={this.state.lastPhoto}
-        userLocation={this.state.userLocation}
-        locationDataArray={this.state.locationDataArray}
-        navigator={this.props.navigator}/>
-        )
-  }
-
-  renderUserPage() {
-    return (
-      <UserPage
-        style={styles.container}
-        ref='userRef'         
-        user={this.state.user}
-        username={this.state.username}
-        password={this.state.password}
-        id={this.state.id} 
-        lastPhoto={this.state.lastPhoto}
         navigator={this.props.navigator}/>
         )
   }
@@ -148,4 +109,4 @@ var styles = StyleSheet.create({
 		width: deviceWidth
 	}
 });
-module.exports = MainView;
+module.exports = TabBar;

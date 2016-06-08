@@ -56,8 +56,8 @@ var getUser = (username, password, res) => {
           name: name,
           username: usernameFetched,
           password: passwordFetched,
-          currentlocation: currentlocation,
-          phone: phone
+          phone: phone,
+          currentlocation: currentlocation
         };
         console.log('returnobj', returnObj);
         if (flag) {
@@ -84,7 +84,7 @@ module.exports = {
       phone: phone,
       currentlocation: currentlocation
     };
-
+    console.log('obj.......', obj)
     //Hash password
     // bcrypt.genSalt(saltRounds, function(err, salt) {
     //   if (err) {

@@ -57,7 +57,7 @@ class SignUp extends Component {
 
 
     //ensure all fields in our state is not empty
-    if (this.state.firstName !== '' && this.state.userName !== '' && this.state.password !== '' && this.state.passwordAgain !== '' && (this.state.password === this.state.passwordAgain)) {
+    if (this.state.firstName !== '' && this.state.userName !== '' && this.state.password !== '' && this.state.passwordAgain !== '' && (this.state.password === this.state.passwordAgain) && (rePhone.test(this.state.phone) || rePhone2.test(this.state.phone))) {
       fetch('http://localhost:3000/signup', {
         method: 'POST',
         headers: {

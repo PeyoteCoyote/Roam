@@ -34,11 +34,11 @@ class Time extends Component {
 
   handleSubmit() {
     console.log('Sending ROAM request!', coordinates);
-    this.props.navigator.push({
-      title: 'Confirmation',
-      email: this.props.navigator.navigationContext._currentRoute.email,
-      component: Confirmation
-    });
+    // this.props.navigator.push({
+    //   title: 'Confirmation',
+    //   email: this.props.navigator.navigationContext._currentRoute.email,
+    //   component: Confirmation
+    // });
 
     fetch('http://localhost:3000/roam', {
       method: 'POST',
