@@ -31,6 +31,16 @@ class SignUp extends Component {
     };
   }
 
+  getCode() {
+    var text = "";
+    var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 4; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+  }
+
   handleSubmit() {
     console.log(this.state);
     this.setState({
@@ -58,6 +68,7 @@ class SignUp extends Component {
 
     //ensure all fields in our state is not empty
     if (this.state.firstName !== '' && this.state.userName !== '' && this.state.password !== '' && this.state.passwordAgain !== '' && (this.state.password === this.state.passwordAgain) && (rePhone.test(this.state.phone) || rePhone2.test(this.state.phone))) {
+      var verificationCode = this.getCode();
       fetch('http://localhost:3000/signup', {
         method: 'POST',
         headers: {
@@ -69,7 +80,9 @@ class SignUp extends Component {
           username: this.state.userName,
           password: this.state.password,
           phone: this.state.phone,
-          currentlocation: {latitude: 0, longitude: 0}
+          currentlocation: {latitude: 0, longitude: 0},
+          verifiedPhone: false,
+          verificationCode: verificationCode
         })
       })
       .then((res) => {
