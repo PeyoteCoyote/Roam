@@ -8,6 +8,7 @@ var styles = require('./Helpers/styles');
 var coordinates = {};
 
 import {
+  Animated,
   Image,
   View,
   Text,
@@ -19,11 +20,14 @@ import {
   MapView
 } from 'react-native';
 
+var flag = false;
+var flag2 = false;
+
 class Time extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: '1 hour'
+      selectedOption: '1 hour',
     };
   }
   handleSelected(choice) {
@@ -101,7 +105,10 @@ class Geolocation extends Component {
         longitude: -122.4324,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
-      }
+      },
+      fadeAnim: new Animated.Value(0),
+      fadeAnim2: new Animated.Value(0),
+      alternate: false
     };
   }
 
@@ -146,17 +153,80 @@ class Geolocation extends Component {
       navigator.geolocation.clearWatch(this.watchID);
     }
 
-  render() {
+componentDidMount() {
+  this.determineFadingAction();
+  setInterval( () => {
+    this.determineFadingAction();
+  },5000);              
+}
+
+determineFadingAction() {
+  if (!flag && !flag2){
+    Animated.timing(          
+      this.state.fadeAnim,    
+      {
+        toValue: 1,
+        duration:6000
+      }
+    ).start();
+    flag = !flag;   
+  } 
+  if (flag && !flag2) {
+    Animated.timing(          
+    this.state.fadeAnim,    
+      {
+        toValue: 0,
+        duration:6000
+      }
+    ).start();
+    this.state.fadeAnim = new Animated.Value(0);
+    flag = !flag;
+    flag2 = !flag2;
+  }
+  if (flag && flag2){
+    Animated.timing(          
+      this.state.fadeAnim2,    
+      {
+        toValue: 1,
+        duration:6000
+      }
+    ).start();
+    flag = !flag;   
+  } else {
+    Animated.timing(          
+    this.state.fadeAnim2,    
+      {
+        toValue: 0,
+        duration:6000
+      }
+    ).start();
+    this.state.fadeAnim2 = new Animated.Value(0);
+    flag = !flag;
+    flag2 = !flag2;
+  }
+}
+
+
+alternateImageSettings() {
     return (
-      <View>
-        <Text style={styles.location}>Your Current Location:</Text>
-          <MapView
-          showsUserLocation={true}
-          style={map.map}
-          region={this.state.region}
-          followUserLocation={true} />
+      <View style={{flex:1}}>
+        <Animated.Image source={require('./a.jpg')} style={{width:320,height:320,resizeMode:'cover',position:'absolute'}}  />
+        <Animated.Image source={require('./b.jpg')} style={{width:320,height:320,resizeMode:'cover',opacity:this.state.fadeAnim}}  />
+        <Animated.Image source={require('./c.jpg')} style={{width:320,height:320,resizeMode:'cover',opacity:this.state.fadeAnim2}}  />
       </View>
     );
+
+ }
+      // <View>
+      //   <Text style={styles.location}>Your Current Location:</Text>
+      //     <MapView
+      //     showsUserLocation={true}
+      //     style={map.map}
+      //     region={this.state.region}
+      //     followUserLocation={true} />
+      // </View>
+  render() {
+    return this.alternateImageSettings();
   }
 }
 
