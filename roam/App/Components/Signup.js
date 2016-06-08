@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 // var Interests = require('./Interests');
 var Time = require('./Time');
 var TabBar = require('./TabBar.js');
+var VerificationPage = require('./VerifyText.js');
 
 var styles = require('./Helpers/styles');
 
@@ -33,7 +34,7 @@ class SignUp extends Component {
 
   getCode() {
     var text = "";
-    var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+    var possible = "0123456789";
 
     for( var i=0; i < 4; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -89,11 +90,12 @@ class SignUp extends Component {
         // res = res.json();
         if (res.status === 200) {
           var body = JSON.parse(res._bodyInit);
-          console.warn('RESPONSE FROM SERVER ON SIGNUP PAGE', body);
+          body.verifiedPhone = false;
+          body.verificationCode = verificationCode;
           this.props.navigator.push({
-            title: 'Roam',
-            component: TabBar,
-            user: body
+            title: 'Verify Phone Link',
+            component: VerificationPage,
+            passProps: {user: body}
           });
           //Set isloading to false after conditions
           this.setState({
