@@ -23,7 +23,7 @@ import {
 var flag = false;
 var flag2 = false;
 
-class Uber extends Component {
+class CurrentRoam extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -244,4 +244,4 @@ const map = StyleSheet.create({
 
 
 
-module.exports = Uber;
+module.exports = CurrentRoam;
