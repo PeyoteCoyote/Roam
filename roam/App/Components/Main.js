@@ -37,6 +37,12 @@ class Main extends Component {
     this.setState({
       password: event.nativeEvent.text
     });
+  }  
+
+  handleUsername(event) {
+    this.setState({
+      username: event.nativeEvent.text
+    });
   }
 
   handleSignIn() {
@@ -51,7 +57,7 @@ class Main extends Component {
       });
     }
     //If username and password exists on the database, log the user into the select time page
-    if(this.state.username !== '' && re.test(this.state.username) && this.state.password !== ''){
+    if(this.state.username !== '' && this.state.password !== ''){
       fetch('http://localhost:3000/signin', {
         method: 'POST',
         headers: {
@@ -107,21 +113,20 @@ class Main extends Component {
       <Image style={styles.backgroundImage}
       source={require('../../imgs/uni.jpg')}>
         <Text style={styles.title}> roam </Text>
-        {/* Fields that we want to bind the username and password input */}
         <TextInput
           style={styles.submit}
           placeholder="Username"
           placeholderTextColor="white"
           value={this.state.username}
-          />
+          onChange={this.handleUsername.bind(this)}/>
         <TextInput
           style={styles.submit}
           placeholder="Password"
           placeholderTextColor="white"
           value={this.state.password}
           onChange={this.handlePassword.bind(this)}
-          secureTextEntry={true}
-        />
+          secureTextEntry={true}/>
+
         <TouchableHighlight
           style={styles.button}
           onPress={this.handleSignIn.bind(this)}
