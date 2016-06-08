@@ -23,7 +23,8 @@ class MainView extends Component {
   	super(props)
   	this.state = {
       user: props.user,
-      navigator: props.navigator
+      navigator: props.navigator,
+      selectedTab: 'home'
   	}
   }
 

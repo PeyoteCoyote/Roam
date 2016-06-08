@@ -73,10 +73,10 @@ class SignUp extends Component {
         })
       })
       .then((res) => {
-        res = res.json();
-        console.log('RESPONSE FROM SERVER ON SIGNUP PAGE', res);
-        var body = JSON.parse(res._bodyInit);
+        // res = res.json();
         if (res.status === 200) {
+          var body = JSON.parse(res._bodyInit);
+          console.warn('RESPONSE FROM SERVER ON SIGNUP PAGE', body);
           this.props.navigator.push({
             title: 'Roam',
             component: TabBar,
