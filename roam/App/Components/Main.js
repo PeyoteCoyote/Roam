@@ -26,7 +26,7 @@ class Main extends Component {
       errorMessage: ''
     };
   }
-
+ // test
   // handleEmail(event) {
   //   this.setState({
   //     email: event.nativeEvent.text
