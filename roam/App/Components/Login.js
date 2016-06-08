@@ -5,6 +5,8 @@ var SignUp = require('./Signup');
 var Time = require('./Time');
 var styles = require('./Helpers/styles');
 var TabBar = require('./TabBar.js');
+var VerifyText = require('./VerifyText.js');
+
 import {
   Image,
   View,
@@ -86,12 +88,22 @@ class Login extends Component {
             },
             body: JSON.stringify({id: res.id})
           })
-          .then((res) => console.error(res));
-          this.props.navigator.push({
-            title: 'Roam',
-            username: res,
-            component: TabBar
-          });
+          .then(resp => {
+            if (resp.status === 200) {
+              this.props.navigator.push({
+                title: 'Roam',
+                username: res,
+                component: TabBar
+              });
+            } else {
+              this.props.navigator.push({
+                title: 'Verify Phone Link',
+                component: VerifyText,
+                passProps: {user: res}
+              });
+            }
+          })
+          
           this.setState({
             isLoading: false
           });
