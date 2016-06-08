@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { SegmentedControls } from 'react-native-radio-buttons';
-// var Geolocation = require('./Geolocation');
 var Confirmation = require('./Confirmation');
 var Separator = require('./Helpers/Separator');
-var styles = require('./Helpers/styles');
 
 var coordinates = {};
 
 import {
+  Animated,
   Image,
   View,
   Text,
@@ -16,14 +15,18 @@ import {
   ListView,
   TouchableHighlight,
   ActivityIndicatorIOS,
-  MapView
+  MapView,
+  Dimensions
 } from 'react-native';
+
+var deviceWidth = Dimensions.get('window').width;
+var deviceHeight = Dimensions.get('window').height;
 
 class Time extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: '1 hour'
+      selectedOption: '1 hour',
     };
   }
   handleSelected(choice) {
@@ -34,11 +37,11 @@ class Time extends Component {
 
   handleSubmit() {
     console.log('Sending ROAM request!', coordinates);
-    this.props.navigator.push({
-      title: 'Confirmation',
-      email: this.props.navigator.navigationContext._currentRoute.email,
-      component: Confirmation
-    });
+    // this.props.navigator.push({
+    //   title: 'Confirmation',
+    //   email: this.props.navigator.navigationContext._currentRoute.email,
+    //   component: Confirmation
+    // });
 
     fetch('http://localhost:3000/roam', {
       method: 'POST',
@@ -101,50 +104,12 @@ class Geolocation extends Component {
         longitude: -122.4324,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
-      }
+      },
     };
   }
 
-  componentDidMount () {
-      console.log('Hello From Geolocation')
-      if (!navigator.geolocation) {console.log('geoloaction not available')};
-      if (navigator.geolocation) {console.log('geoloaction available')};
-      navigator.geolocation.getCurrentPosition(
-        (initialPosition) => {
-         console.log(initialPosition);
-          this.setState({initialPosition});
-        },
-        (error) => alert(error.message),
-        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-      );
-
-      this.watchID = navigator.geolocation.watchPosition((lastPosition) => {
-        coordinates = lastPosition;
-        console.log(lastPosition);
-        this.setState({latitude: lastPosition.coords.latitude});
-        this.setState({latitude: lastPosition.coords.latitude});
-
-        var newRegion = {
-          latitude: lastPosition.coords.latitude,
-          longitude: lastPosition.coords.longitude,
-          latitudeDelta: 10,
-          longitudeDelta: 10
-        }
-
-        this.setState({ region: newRegion });
-
-        this.setState({ annotations: [{
-          latitude: lastPosition.coords.latitude,
-          longitude: lastPosition.coords.longitude,
-          title: 'Current Location',
-          subtitle: 'This is your current location'
-        }]});
-      });
-    }
-
-    componentWillUnmount() {
-      navigator.geolocation.clearWatch(this.watchID);
-    }
+  componentDidMount() {             
+  }
 
   render() {
     return (
@@ -152,7 +117,7 @@ class Geolocation extends Component {
         <Text style={styles.location}>Your Current Location:</Text>
           <MapView
           showsUserLocation={true}
-          style={map.map}
+          style={styles.map}
           region={this.state.region}
           followUserLocation={true} />
       </View>
@@ -160,16 +125,119 @@ class Geolocation extends Component {
   }
 }
 
-
-const map = StyleSheet.create({
+const styles = StyleSheet.create({
+  title: {
+    marginBottom: 20,
+    fontSize: 70,
+    fontWeight: "100",
+    fontFamily: 'Gill Sans',
+    textAlign: 'center',
+    color: 'white',
+    backgroundColor: 'transparent',
+    letterSpacing: 5
+  },
+  header: {
+    marginBottom: 20,
+    fontSize: 50,
+    fontWeight: "100",
+    fontFamily: 'Gill Sans',
+    textAlign: 'center',
+    color: 'white',
+    backgroundColor: 'transparent',
+    letterSpacing: 3
+  },
+  submit: {
+    height: 50,
+    padding: 10,
+    marginRight: 5,
+    marginBottom: 15,
+    fontSize: 18,
+    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: 8,
+    color: 'white'
+  },
+  buttonText: {
+    fontSize: 18,
+    color: 'white',
+    alignSelf: 'center'
+  },
+  button: {
+    height: 50,
+    width: 300,
+    flexDirection: 'row',
+    backgroundColor: '#ff0066',
+    borderRadius:10,
+    marginBottom: 10,
+    marginTop: 20,
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+  signUpButton: {
+    color: 'white',
+    textAlign: 'center',
+    paddingTop: 10,
+    fontSize: 18
+  },
+  unselected: {
+    fontSize: 20,
+    backgroundColor: 'orange',
+    marginTop: 20,
+    marginBottom: 20,
+    borderColor: 'black',
+    padding: 10,
+    textAlign: 'center',
+    justifyContent: 'center'
+  },
+  selected: {
+    fontSize: 20,
+    backgroundColor: 'green',
+    marginTop: 20,
+    marginBottom: 20,
+    borderColor: 'black',
+    padding: 10,
+    textAlign: 'center',
+    justifyContent: 'center'
+  },
+  backgroundImage: {
+    flex:1,
+    width:null,
+    height: null,
+    padding: 30,
+    marginTop: 20,
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
+  errorMessage: {
+    backgroundColor: 'transparent',
+    color: '#ff0066',
+    textAlign: 'center',
+    fontSize: 20,
+    marginTop: -23
+  },
+  confirmation: {
+    color: 'white',
+    textAlign: 'center',
+    backgroundColor: 'transparent',
+    fontSize: 25,
+    paddingBottom: 10
+  },
+  location: {
+    backgroundColor: 'transparent',
+    fontSize: 25,
+    color: 'white',
+    textAlign: 'center'
+  },
   map: {
-    height: 250,
+    height: deviceHeight/2,
+    width: deviceWidth/2,
     margin: 10,
     borderWidth: 1,
     borderColor: '#000000',
     backgroundColor: 'transparent'
   },
 });
+
 
 
 

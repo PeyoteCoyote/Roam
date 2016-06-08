@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 var SignUp = require('./Signup');
 var Time = require('./Time');
 var styles = require('./Helpers/styles');
-
+var TabBar = require('./TabBar.js');
 import {
   Image,
   View,
@@ -15,27 +15,34 @@ import {
   ActivityIndicatorIOS
 } from 'react-native';
 
-class Main extends Component {
+
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
+      username: '',
       password: '',
       isLoading: false,
       error: false,
       errorMessage: ''
     };
   }
-
-  handleEmail(event) {
-    this.setState({
-      email: event.nativeEvent.text
-    });
-  }
+ // test
+  // handleEmail(event) {
+  //   this.setState({
+  //     email: event.nativeEvent.text
+  //   });
+  // }
 
   handlePassword(event) {
     this.setState({
       password: event.nativeEvent.text
+    });
+  }  
+
+  handleUsername(event) {
+    this.setState({
+      username: event.nativeEvent.text
     });
   }
 
@@ -43,14 +50,6 @@ class Main extends Component {
     this.setState({
       isLoading: true
     });
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (this.state.email === '' || !re.test(this.state.email)) {
-      this.setState({
-        isLoading: false,
-        error: true,
-        errorMessage: 'Invalid Email!'
-      });
-    }
     if (this.state.password === '') {
       this.setState({
         isLoading: false,
@@ -58,8 +57,8 @@ class Main extends Component {
         errorMessage: 'Invalid Password!'
       });
     }
-    //If email and password exists on the database, log the user into the select time page
-    if(this.state.email !== '' && re.test(this.state.email) && this.state.password !== ''){
+    //If username and password exists on the database, log the user into the select time page
+    if(this.state.username !== '' && this.state.password !== ''){
       fetch('http://localhost:3000/signin', {
         method: 'POST',
         headers: {
@@ -68,20 +67,20 @@ class Main extends Component {
         },
         body: JSON.stringify({
           password: this.state.password,
-          email: this.state.email.toLowerCase(),
+          username: this.state.username,
         })
       })
       .then((res) => {
         return res.json();
       })
       .then((res) => {
-        if(res.message === 'Incorrect email/password combination!'){
+        if(res.message === 'Incorrect username/password combination!'){
           this.setState({errorMessage: res.message, error: true, isLoading: false});
         } else{
           this.props.navigator.push({
-            title: 'When are you free?',
-            email: this.state.email.toLowerCase(),
-            component: Time
+            title: 'Roam',
+            username: res._bodyInit,
+            component: TabBar
           });
           this.setState({
             isLoading: false
@@ -99,7 +98,7 @@ class Main extends Component {
       isLoading: true
     });
     this.props.navigator.push({
-      title: 'Sign Up',
+      title: 'Create Account',
       component: SignUp
     });
     this.setState({
@@ -115,22 +114,20 @@ class Main extends Component {
       <Image style={styles.backgroundImage}
       source={require('../../imgs/uni.jpg')}>
         <Text style={styles.title}> roam </Text>
-        {/* Fields that we want to bind the email and password input */}
         <TextInput
           style={styles.submit}
-          placeholder="Email"
+          placeholder="Username"
           placeholderTextColor="white"
-          value={this.state.email}
-          onChange={this.handleEmail.bind(this)}
-          />
+          value={this.state.username}
+          onChange={this.handleUsername.bind(this)}/>
         <TextInput
           style={styles.submit}
           placeholder="Password"
           placeholderTextColor="white"
           value={this.state.password}
           onChange={this.handlePassword.bind(this)}
-          secureTextEntry={true}
-        />
+          secureTextEntry={true}/>
+
         <TouchableHighlight
           style={styles.button}
           onPress={this.handleSignIn.bind(this)}
@@ -154,4 +151,4 @@ class Main extends Component {
   }
 }
 
-module.exports = Main;
+module.exports = Login;
