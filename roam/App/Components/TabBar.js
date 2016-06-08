@@ -15,8 +15,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Time from './Time.js'
 import User from './User.js'
-import Chat from './Chat.js'
-import Uber from './Uber.js'
+import CurrentRoam from './CurrentRoam.js'
 
 // var key_file = require('../../config.js');
 var deviceWidth = Dimensions.get('window').width;
@@ -48,18 +47,6 @@ class TabBar extends Component {
           {this.renderUserPage()}
         </Icon.TabBarItem>
         <Icon.TabBarItem
-          title="Chat"
-          selected={this.state.selectedTab === 'camera'}
-          iconName={'group'}
-          iconSize={20}
-          onPress={() => {
-              this.setState({
-                selectedTab: 'camera'
-              });
-          }}>
-          {this.renderChatView()}
-        </Icon.TabBarItem>
-        <Icon.TabBarItem
           title="Roam"
           selected={this.state.selectedTab === 'map'}
           iconName={'map'}
@@ -72,16 +59,16 @@ class TabBar extends Component {
           {this.renderRoamView()}
         </Icon.TabBarItem>
         <Icon.TabBarItem
-          title="Uber"
+          title="Current"
           selected={this.state.selectedTab === 'uber'}
-          iconName={'cab'}
+          iconName={'envira'}
           iconSize={20}
           onPress={() => {
               this.setState({
                 selectedTab: 'uber'
               });
           }}>
-          {this.renderUberView()}
+          {this.renderCurrentRoamView()}
         </Icon.TabBarItem>
       </TabBarIOS>
       )
@@ -97,16 +84,6 @@ class TabBar extends Component {
         )
   }
 
-  renderChatView() {
-    return (
-      <Chat
-        style={styles.container}
-        ref='cameraRef'         
-        user={this.state.user}
-        navigator={this.props.navigator}/>
-        )
-  }
-
   renderRoamView() {
     return (
       <Time
@@ -116,9 +93,9 @@ class TabBar extends Component {
         navigator={this.props.navigator}/>
         )
   }
-  renderUberView() {
+  renderCurrentRoamView() {
     return (
-      <Uber
+      <CurrentRoam
         style={styles.container}
         ref='uberRef'         
         user={this.state.user}
