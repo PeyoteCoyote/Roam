@@ -13,6 +13,11 @@ var bodyParser = require('body-parser');
 // var saltRounds = 10;
 
 //Frantic_Rust Requires
+var config = require('../config.js');
+var twilio = require('twilio');
+
+var client = new twilio.RestClient(config.accountSid, config.authToken);
+
 var fetch = require('node-fetch');
 const mongoDB_API_KEY = 'yjH4qEJR-Olag89IaUTXd06IpuVDZWx1';
 const baseLink_users = 'https://api.mlab.com/api/1/databases/frantic-rust-roam/collections/users?apiKey=';
@@ -76,15 +81,19 @@ module.exports = {
     const password = req.body.password;
     const phone = req.body.phone;
     const currentlocation = req.body.currentlocation;
+    const verificationCode = req.body.verificationCode;
+    const verifiedPhone = req.body.verifiedPhone;
 
     const obj = {
       name: name,
       username: username,
       password: password,
       phone: phone,
-      currentlocation: currentlocation
+      currentlocation: currentlocation,
+      verificationCode: verificationCode,
+      verifiedPhone: verifiedPhone
     };
-    console.log('obj.......', obj)
+    console.log('obj.......', obj);
     //Hash password
     // bcrypt.genSalt(saltRounds, function(err, salt) {
     //   if (err) {
@@ -107,10 +116,21 @@ module.exports = {
       },
       body: JSON.stringify(obj)
     })
+    .then(() => {
+      fetch('http://localhost:3000/sendTxt', 
+      {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({code: verificationCode})
+      });
+    })
     .then( err => {
-      getUser(obj.username, obj.password, res)
+      getUser(obj.username, obj.password, res);
     }).catch((err) => {
-        console.log('did not post user info')
+        console.log('did not post user info');
         res.sendStatus(400);
     });
   },
@@ -121,6 +141,24 @@ module.exports = {
     const password = req.body.password;
     getUser(username, password, res);
   },
+
+  sendSMS: (req, res) => {
+    client.sendSms({
+      to:'+15106766768',
+      from:'+19259058241',
+      body:'!!!!!!!!!!!!!!!!!'
+    }, function(error, message) {
+        if (!error) {
+            console.log('Success! The SID for this SMS message is:');
+            console.log(message.sid);
+            console.log('Message sent on:');
+            console.log(message.dateCreated);
+        } else {
+            console.log('Oops! There was an error.');
+        }
+    });
+  }
+
 }
 
   //Page to set up event between users, making API calls to YELP
