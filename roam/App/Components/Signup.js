@@ -57,7 +57,7 @@ class SignUp extends Component {
 
 
     //ensure all fields in our state is not empty
-    if (this.state.firstName !== '' && this.state.userName !== '' && this.state.password !== '' && this.state.passwordAgain !== '' && (this.state.password === this.state.passwordAgain)) {
+    if (this.state.firstName !== '' && this.state.userName !== '' && this.state.password !== '' && this.state.passwordAgain !== '' && (this.state.password === this.state.passwordAgain) && (rePhone.test(this.state.phone) || rePhone2.test(this.state.phone))) {
       fetch('http://localhost:3000/signup', {
         method: 'POST',
         headers: {
@@ -73,10 +73,10 @@ class SignUp extends Component {
         })
       })
       .then((res) => {
-        res = res.json();
-        console.log('RESPONSE FROM SERVER ON SIGNUP PAGE', res);
-        var body = JSON.parse(res._bodyInit);
+        // res = res.json();
         if (res.status === 200) {
+          var body = JSON.parse(res._bodyInit);
+          console.warn('RESPONSE FROM SERVER ON SIGNUP PAGE', body);
           this.props.navigator.push({
             title: 'Roam',
             component: TabBar,

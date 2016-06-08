@@ -9,7 +9,8 @@ import {
 } from 'react-native';
 
 var Main = require('./App/Components/Main');
-var GeolocationView = require('./App/Components/Geolocation.js')
+var GeolocationView = require('./App/Components/Geolocation.js');
+var Time = require('./App/Components/Time.js');
 
 class roam extends Component{
   render() {
