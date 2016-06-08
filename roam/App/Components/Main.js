@@ -57,7 +57,7 @@ class Main extends Component {
       });
     }
     //If username and password exists on the database, log the user into the select time page
-    if(this.state.username !== '' && re.test(this.state.username) && this.state.password !== ''){
+    if(this.state.username !== '' && this.state.password !== ''){
       fetch('http://localhost:3000/signin', {
         method: 'POST',
         headers: {
