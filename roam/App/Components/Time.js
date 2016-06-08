@@ -183,7 +183,7 @@ determineFadingAction() {
     flag = !flag;
     flag2 = !flag2;
   }
-  if (flag && flag2){
+  if (!flag && flag2){
     Animated.timing(          
       this.state.fadeAnim2,    
       {
@@ -192,7 +192,8 @@ determineFadingAction() {
       }
     ).start();
     flag = !flag;   
-  } else {
+  }
+  if (flag && flag2){
     Animated.timing(          
     this.state.fadeAnim2,    
       {
