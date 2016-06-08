@@ -20,7 +20,8 @@ class roam extends Component{
         initialRoute={{
           title: 'Sign In',
           component: Login
-        }} />
+        }}
+        navigationBarHidden={true} />
     );
   }
 };
