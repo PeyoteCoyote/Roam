@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 var SignUp = require('./Signup');
 var Time = require('./Time');
 var styles = require('./Helpers/styles');
-
+var TabBar = require('./TabBar.js');
 import {
   Image,
   View,
@@ -15,7 +15,8 @@ import {
   ActivityIndicatorIOS
 } from 'react-native';
 
-class Main extends Component {
+
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -77,9 +78,9 @@ class Main extends Component {
           this.setState({errorMessage: res.message, error: true, isLoading: false});
         } else{
           this.props.navigator.push({
-            title: 'When are you free?',
-            username: this.state.username.toLowerCase(),
-            component: Time
+            title: 'Roam',
+            username: res._bodyInit,
+            component: TabBar
           });
           this.setState({
             isLoading: false
@@ -150,4 +151,4 @@ class Main extends Component {
   }
 }
 
-module.exports = Main;
+module.exports = Login;
