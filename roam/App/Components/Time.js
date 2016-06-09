@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { SegmentedControls } from 'react-native-radio-buttons';
+import MapView from 'react-native-maps';
+
 var Confirmation = require('./Confirmation');
 var Separator = require('./Helpers/Separator');
 
@@ -15,8 +17,8 @@ import {
   ListView,
   TouchableHighlight,
   ActivityIndicatorIOS,
-  MapView,
-  Dimensions
+  Dimensions,
+  Slider
 } from 'react-native';
 
 var deviceWidth = Dimensions.get('window').width;
@@ -28,7 +30,7 @@ class Time extends Component {
     this.state = {
       selectedOption: '1 hour',
       user: props.user,
-      navigator: props.navigator
+      navigator: props.navigator,
     };
   }
   handleSelected(choice) {
@@ -65,7 +67,6 @@ class Time extends Component {
         <View style={styles.statsContainer}>
         </View> 
         </View>
-        
         <SegmentedControls
           tint={'#ff0066'}
           selectedTint={'white'}
@@ -97,6 +98,11 @@ class Geolocation extends Component {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
       },
+      markers: [{
+        latitude: 37.78825,
+        longitude: -122.4324,
+      }],
+      circleRadius: 200,
     };
   }
 
@@ -106,11 +112,26 @@ class Geolocation extends Component {
   render() {
     return (
       <View>
-        <MapView
-        showsUserLocation={true}
+        <View style={styles.sliderContainer}>
+            <Slider 
+                onValueChange={(value) => this.setState({circleRadius: value})} 
+                style={styles.slider}
+                minimumValue={100}
+                maximumValue={2000}
+                step={1}
+            />
+            <Text>{this.state.circleRadius}</Text>
+        </View>
+        <MapView 
         style={styles.map}
-        region={this.state.region}
-        followUserLocation={true} />
+        initialRegion={this.state.region}>
+          <MapView.Circle
+            center={this.state.markers[0]}
+            radius={800}
+            fillColor="rgba(200, 0, 0, 0.5)"
+            strokeColor="rgba(0,0,0,0.5)"
+          />
+        </MapView>
       </View>
     );
   }
