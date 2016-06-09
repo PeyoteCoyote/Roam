@@ -8,6 +8,7 @@ import {
   View
 } from 'react-native';
 
+var Login = require('./App/Components/Login');
 var User = require('./App/Components/User');
 var GeolocationView = require('./App/Components/Geolocation.js');
 var Time = require('./App/Components/Time.js');
@@ -21,7 +22,7 @@ class roam extends Component{
       style={styles.container}
         initialRoute={{
           title: 'User',
-          component: User
+          component: Login
         }}
         navigationBarHidden={true} />
     );

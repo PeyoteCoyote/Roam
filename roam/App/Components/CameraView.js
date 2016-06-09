@@ -12,22 +12,29 @@ import {
   Text,
   TouchableHighlight
 } from 'react-native';
+ 
+ 
+// import UserPageObj from './UserPage.ios.js';
+// var UserPage = UserPageObj.UserPage;
 
-// import Camera from 'react-native-camera';
+// import SwipePage from './SwipeView.ios.js';
+
+import Camera from 'react-native-camera';
 // import ViewPage from './ImageView.ios.js';
+// import NewUserInstructionModal from './NewUserInstructionModal.ios.js';
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
-// var icons = {
-//   list: 'http://www.iconsdb.com/icons/preview/gray/list-xxl.png',
-//   grid: 'http://www.myiconfinder.com/uploads/iconsets/256-256-ed559f9ab4ee6cec08ffde71c58a68af-grid.png',
-//   home: 'http://summer.newark.rutgers.edu/wp-content/uploads/2015/02/homeicon.png',
-//   camera: 'http://aspenwillows.com/wp-content/uploads/2015/03/cameraicon.png',
-//   swipe: 'https://www.one.org/wp-content/plugins/ebola-tracker/images/swipe_icon.png',
-//   pressCamera: 'http://www.iconsplace.com/icons/preview/white/switch-camera-256.png',
-//   switchCamera: 'http://www.iconsplace.com/icons/preview/white/switch-camera-256.png'
-// }
+var icons = {
+  list: 'http://www.iconsdb.com/icons/preview/gray/list-xxl.png',
+  grid: 'http://www.myiconfinder.com/uploads/iconsets/256-256-ed559f9ab4ee6cec08ffde71c58a68af-grid.png',
+  home: 'http://summer.newark.rutgers.edu/wp-content/uploads/2015/02/homeicon.png',
+  camera: 'http://aspenwillows.com/wp-content/uploads/2015/03/cameraicon.png',
+  swipe: 'https://www.one.org/wp-content/plugins/ebola-tracker/images/swipe_icon.png',
+  pressCamera: 'http://www.iconsplace.com/icons/preview/white/switch-camera-256.png',
+  switchCamera: 'http://www.iconsplace.com/icons/preview/white/switch-camera-256.png'
+}
 
 class CameraView extends Component {
  
@@ -35,9 +42,7 @@ class CameraView extends Component {
       super(props);
       this.state = {
         user: props.user,
-        username: props.username,
-        password: props.password,
-        id: props.id, 
+        image: null,
         type: Camera.constants.Type.back,
         flag: true
       }
@@ -45,18 +50,37 @@ class CameraView extends Component {
   render() {
       return (
         <View style={styles.container}>
+          <Camera
+            ref={(cam) => {
+              this.camera = cam;
+            }}
+            style={styles.preview}
+            captureTarget={Camera.constants.CaptureTarget.disk}
+            aspect={Camera.constants.Aspect.fill}
+            orientation={Camera.constants.Orientation.portrait}
+            type = {this.state.type}
+            >
+            <TouchableHighlight style={styles.switchCam} onPress={this.switchCamType.bind(this)} underlayColor='transparent'>
+              <Image style = {{height:40, width: 40, marginLeft: 40}} source={require('./Images/switch_camera_type.png')}/>
+            </TouchableHighlight>
+            <View style={styles.buttons}>
+              <TouchableHighlight onPress={this.takePicture.bind(this)} style={styles.capture} underlayColor='transparent'>
+                <Image style = {{height: deviceWidth/6, width: deviceWidth/5.5}} source={require('./Images/camera_icon3.png')}/>
+              </TouchableHighlight>
+            </View>
 
+          </Camera>
         </View>
       );
   }
 
-  // goImageViewPage() {
-  //   this.props.navigator.push({
-  //     title: "verify.me",
-  //     component: ViewPage,
-  //     passProps: {user: this.state.user, username: this.state.username, password: this.state.password, image: this.state.image, id: this.state.id, lastPhoto: this.state.lastPhoto},
-  //   })
-  // }
+  goImageViewPage() {
+    // this.props.navigator.push({
+    //   title: "verify.me",
+    //   component: ViewPage,
+    //   passProps: {user: this.state.user, username: this.state.username, password: this.state.password, image: this.state.image, id: this.state.id, lastPhoto: this.state.lastPhoto},
+    // })
+  }
 
   switchCamType() {
     if (this.state.flag) {
@@ -72,13 +96,11 @@ class CameraView extends Component {
       });        
     }
   }
-
   takePicture() {
     this.camera.capture()
       .then((data) => this.setState({image: data}))
       .catch(err => console.error(err))
-      // .then(() => this.goImageViewPage());
-      .then(() => console.err('sent image data!'));
+      .then(() => this.goImageViewPage());
   }
 };
  
@@ -103,6 +125,10 @@ const styles = StyleSheet.create({
   buttons: {
     flexDirection: 'row'
   },
+  swipe: {
+    paddingRight: deviceWidth/5,
+    paddingTop: deviceHeight/15
+  },
   home: {
     paddingLeft: deviceWidth/5,
     paddingTop: deviceHeight/15
@@ -114,3 +140,4 @@ const styles = StyleSheet.create({
 });
  
 module.exports = CameraView;
+

@@ -1,52 +1,130 @@
-var cats = [
+var pictures = [
   {
-    "name":"Bowser",
-    "owner":"mario@mushroomkingdom.com",
-    "image":"http://tinyurl.com/h7n8vcy",
-    "description":"Just looking for someone to capture princesses and throw fireballs with. Interests include: Gokarting, tennis, golf, parties, and mushrooms."
+    imagelink: 'http://sev.h-cdn.co/assets/cm/15/09/480x600/54eea1b96a6c9_-_sev-cool-girl-jacket-de.jpg',
+    likes: 300,
+    dislikes: 60,
+    comment: 'test',
+    username: 'jjones',
   },
   {
-    "name":"Wompy",
-    "owner":"stompy@wompystompy.com",
-    "image":"http://tinyurl.com/jh8nxq8",
-    "description":"Looking for a companion to support me in my quest to come in second place on every TV game show. Must love hairpieces, Bob Barker, and the center square."
+    imagelink: 'http://fazewp.fazemediainc.netdna-cdn.com/cms/wp-content/uploads/2015/08/OOTD-magazine-600x600.jpg',
+    likes: 400,
+    dislikes: 40,
+    comment: 'test',
+    username: 'jjones',
   },
   {
-    "name":"Mr. Wiggles",
-    "owner":"tiger@hotmail.com",
-    "image":"http://tinyurl.com/gmqkunq",
-    "description":"Loves everything music, with the expection of children's stuff. Especially the Wiggles."
+    imagelink: 'https://s-media-cache-ak0.pinimg.com/736x/e3/a7/da/e3a7da120339ef36a391861eb1b3e385.jpg',
+    likes: 100,
+    dislikes: 30,
+    comment: 'test',
+    username: 'jjones',
   },
   {
-    "name":"Smokey",
-    "owner":"smokey@gmail.com",
-    "image":"http://tinyurl.com/jsrlc5j",
-    "description":"Spends the days roaming the back country of Alberta, Canada looking for someone who will cherish and respect him."
+    imagelink: 'https://thefancypantsreport.files.wordpress.com/2013/08/20130806-_1tb2757.jpg',
+    likes: 200,
+    dislikes: 40,
+    comment: 'test',
+    username: 'jjones',
   },
   {
-    "name":"Bub",
-    "owner":"hello@bubtastic.com",
-    "image":"http://tinyurl.com/h98z9cq",
-    "description":"Total comic book nerd who someday wishes to have his bones replaced with adamantium."
+    imagelink: 'http://sev.h-cdn.co/assets/cm/15/08/980x1306/54e82bf780285_-_sev-ootd-daniela-leather-pants-s2.jpg',
+    likes: 200,
+    dislikes: 60,
+    comment: 'test',
+    username: 'jjones',
   },
   {
-    "name":"Misty",
-    "owner":"misty@aol.com",
-    "image":"http://tinyurl.com/6742zga",
-    "description":"A sweet, sentimental cat who likes to sit by the window and watch the rain fall."
+    imagelink: 'http://sev.h-cdn.co/assets/cm/15/08/54e83fc238143_-_sev-julianne-hough-ootd-2-lgn-64347111.jpg',
+    likes: 190,
+    dislikes: 50,
+    comment: 'test',
+    username: 'jjones',
   },
   {
-    "name":"Kitty",
-    "owner":"kitty@askjeeves.com",
-    "image":"http://tinyurl.com/hqkgoee",
-    "description":"An unimaginative cat with an unimaginative name. If you borrow Kitty, please return her with a better name."
+    imagelink: 'http://bondgirlglam.com/wp-content/uploads/2015/01/bond_girl_glam_floppy_hat_gucci_sukey_fur_vest_boots_skinny_jeans_loren_hope_necklace.jpg',
+    likes: 200,
+    dislikes: 60,
+    comment: 'test',
+    username: 'jjones',
   },
   {
-    "name":"Oscar",
-    "owner":"oscar@gmail.com",
-    "image":"http://tinyurl.com/jxg5seh",
-    "description":"Not to be confused with a hot dog, Oscar is a theatrical cat who longs to appear on the silver screen of your heart."
-  }
+    imagelink: 'http://pixel.brit.co/wp-content/uploads/2014/12/2-OOTD.jpg',
+    likes: 300,
+    dislikes: 60,
+    comment: 'test',
+    username: 'jjones',
+  },
+  {
+    imagelink: 'http://bondgirlglam.com/wp-content/uploads/2014/08/pregnant-maternity-fashion-ootd-bump-style-stripe-ruched-dress11.jpg',
+    likes: 240,
+    dislikes: 40,
+    comment: 'test',
+    username: 'jjones',
+  },
+  {
+    imagelink: 'http://sev.h-cdn.co/assets/cm/15/09/480x600/54eea1b96a6c9_-_sev-cool-girl-jacket-de.jpg',
+    likes: 300,
+    dislikes: 60,
+    comment: 'test',
+    username: 'jjones',
+  },
+  {
+    imagelink: 'http://fazewp.fazemediainc.netdna-cdn.com/cms/wp-content/uploads/2015/08/OOTD-magazine-600x600.jpg',
+    likes: 400,
+    dislikes: 40,
+    comment: 'test',
+    username: 'jjones',
+  },
+  {
+    imagelink: 'https://s-media-cache-ak0.pinimg.com/736x/e3/a7/da/e3a7da120339ef36a391861eb1b3e385.jpg',
+    likes: 100,
+    dislikes: 30,
+    comment: 'test',
+    username: 'jjones',
+  },
+  {
+    imagelink: 'https://thefancypantsreport.files.wordpress.com/2013/08/20130806-_1tb2757.jpg',
+    likes: 200,
+    dislikes: 40,
+    comment: 'test',
+    username: 'jjones',
+  },
+  {
+    imagelink: 'http://sev.h-cdn.co/assets/cm/15/08/980x1306/54e82bf780285_-_sev-ootd-daniela-leather-pants-s2.jpg',
+    likes: 200,
+    dislikes: 60,
+    comment: 'test',
+    username: 'jjones',
+  },
+  {
+    imagelink: 'http://sev.h-cdn.co/assets/cm/15/08/54e83fc238143_-_sev-julianne-hough-ootd-2-lgn-64347111.jpg',
+    likes: 190,
+    dislikes: 50,
+    comment: 'test',
+    username: 'jjones',
+  },
+  {
+    imagelink: 'http://bondgirlglam.com/wp-content/uploads/2015/01/bond_girl_glam_floppy_hat_gucci_sukey_fur_vest_boots_skinny_jeans_loren_hope_necklace.jpg',
+    likes: 200,
+    dislikes: 60,
+    comment: 'test',
+    username: 'jjones',
+  },
+  {
+    imagelink: 'http://pixel.brit.co/wp-content/uploads/2014/12/2-OOTD.jpg',
+    likes: 300,
+    dislikes: 60,
+    comment: 'test',
+    username: 'jjones',
+  },
+  {
+    imagelink: 'http://bondgirlglam.com/wp-content/uploads/2014/08/pregnant-maternity-fashion-ootd-bump-style-stripe-ruched-dress11.jpg',
+    likes: 240,
+    dislikes: 40,
+    comment: 'test',
+    username: 'jjones',
+  },
 ];
 
-module.exports = cats;
+module.exports = pictures;
