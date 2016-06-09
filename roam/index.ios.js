@@ -22,7 +22,7 @@ class roam extends Component{
       style={styles.container}
         initialRoute={{
           title: 'User',
-          component: Login
+          component: User,
         }}
         navigationBarHidden={true} />
     );
