@@ -47,9 +47,10 @@ class User extends Component {
   // }
 
   goToCamera(){
+    var getCamera = require('./CameraView');
     this.props.navigator.push({
-      title: 'CameraView',
-      component: 'CameraView',
+      title: CameraView.title,
+      component: CameraView,
       passProps: { user: this.state.user}
 
     });
