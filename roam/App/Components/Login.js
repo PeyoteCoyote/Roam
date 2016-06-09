@@ -122,18 +122,20 @@ class Login extends Component {
 
   render() {
     var showErr = (
-      this.state.error ? <Text style={styles.errorMessage}> {this.state.errorMessage} </Text> : <View></View>
+      this.state.error ? <Text style={styles.errorMessage}> {this.state.errorMessage} </Text> : <Text style={styles.errorMessage}> </Text>
     );
     return(
       <Image style={styles.backgroundImage}
       source={require('../../imgs/uni.jpg')}>
         <Text style={styles.title}> roam </Text>
+        <View style={styles.inputBar}>
         <TextInput
           style={styles.submit}
           placeholder="Username"
           placeholderTextColor="white"
           value={this.state.username}
           onChange={this.handleUsername.bind(this)}/>
+        </View>
         <TextInput
           style={styles.submit}
           placeholder="Password"

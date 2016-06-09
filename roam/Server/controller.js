@@ -160,16 +160,16 @@ module.exports = {
     client.sendSms({
       to:'+1' + phoneNumber,
       from:'+19259058241',
-      body:'Greetings ' + name + '! Welcome to Roam!\nHere is your unique code: ' + code +'\nPlease enter it into the verification code box'
+      body:'Greetings ' + name + ', welcome to Roam!\n\nYour unique code: ' + code
     }, function(error, message) {
         if (!error) {
-            console.log('Success! The code is:' + code);
-            console.log('Message sent on:');
-            console.log(message.dateCreated);
+          console.log('Success! The code is:' + code);
+          console.log('Message sent on:');
+          console.log(message.dateCreated);
         } else {
-            console.log('Oops! There was an error.');
+          console.log('Oops! There was an error.');
         }
-    });
+      });
   },
 
   checkCode: (req, res) => {
@@ -189,7 +189,7 @@ module.exports = {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          },
+        },
         body: JSON.stringify( { "username": req.body.username, "phone": req.body.phone })
       });
 

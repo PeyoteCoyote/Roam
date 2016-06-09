@@ -4,6 +4,7 @@ var SignUp = require('./Signup');
 var styles = require('./Helpers/styles');
 var TabBar = require('./TabBar.js');
 import {
+  AlertIOS,
   Image,
   View,
   Text,
@@ -23,6 +24,10 @@ class VerifyText extends Component {
       error: false,
       errorMessage: ''
     };
+  }
+
+  didComponentDidMount() {
+    this.handleResendCode();
   }
 
   handleTextCode(event) {
@@ -52,7 +57,8 @@ class VerifyText extends Component {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({id: this.state.user.id})
-        })
+        });
+        AlertIOS.alert('One-time Verification Complete\n\nPhone Linked');
         this.props.navigator.push({
           title: 'Roam',
           component: TabBar,
@@ -73,7 +79,8 @@ class VerifyText extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({name: this.state.user.name, code: this.state.user.verificationCode, phoneNumber: this.state.user.phone})
-    });
+    })
+    .then(() => AlertIOS.alert('Code Sent'));
   }
 
   render() {
