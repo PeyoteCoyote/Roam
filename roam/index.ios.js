@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 var Login = require('./App/Components/Login');
+var User = require('./App/Components/User');
 var GeolocationView = require('./App/Components/Geolocation.js');
 var Time = require('./App/Components/Time.js');
 var Splash = require('./App/Components/Splash.js');
@@ -20,7 +21,7 @@ class roam extends Component{
       <NavigatorIOS
       style={styles.container}
         initialRoute={{
-          title: 'Sign In',
+          title: 'User',
           component: Login
         }}
         navigationBarHidden={true} />

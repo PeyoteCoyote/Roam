@@ -211,9 +211,9 @@ determineFadingAction() {
 alternateImageSettings() {
     return (
       <View style={{flex:1}}>
-        <Animated.Image source={require('./a.jpg')} style={{width:320,height:320,resizeMode:'cover',position:'absolute'}}  />
-        <Animated.Image source={require('./b.jpg')} style={{width:320,height:320,resizeMode:'cover',opacity:this.state.fadeAnim}}  />
-        <Animated.Image source={require('./c.jpg')} style={{width:320,height:320,resizeMode:'cover',opacity:this.state.fadeAnim2}}  />
+        <Animated.Image source={require('./Images/a.jpg')} style={{width:320,height:320,resizeMode:'cover',position:'absolute'}}  />
+        <Animated.Image source={require('./Images/b.jpg')} style={{width:320,height:320,resizeMode:'cover',opacity:this.state.fadeAnim}}  />
+        <Animated.Image source={require('./Images/c.jpg')} style={{width:320,height:320,resizeMode:'cover',opacity:this.state.fadeAnim2}}  />
       </View>
     );
 

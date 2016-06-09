@@ -6,6 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
+    "airbnb-style": "^2.0.0",
     "apoc": "^2.1.6",
     "bcrypt": "^0.8.6",
     "body-parser": "~1.13.2",
@@ -14,6 +15,8 @@
     "nodemailer": "^2.4.2",
     "react": "15.0.2",
     "react-native": "^0.26.2",
+    "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
+    "react-native-grid-view": "^0.4.1",
     "react-native-radio-buttons": "^0.11.0",
     "react-native-vector-icons": "^2.0.3",
     "rnpm": "^1.8.0",
