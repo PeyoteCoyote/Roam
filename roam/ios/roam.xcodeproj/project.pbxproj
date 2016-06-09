@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -30,6 +31,7 @@
 		A1B55829477245879C6B6D26 /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDD104B30194410685A86C71 /* libRCTCamera.a */; };
 		AFDAAFC663C442F9A8341748 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 54A4654C53AC4DAD96761456 /* libRNVectorIcons.a */; };
 		B5A0C9FF1D075D9200C89CFC /* RCTRootView.m in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0C9FE1D075D9200C89CFC /* RCTRootView.m */; };
+		B5C087DF1D08EE8900AD9112 /* RCTCamera.m in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C087DE1D08EE8900AD9112 /* RCTCamera.m */; };
 		C1AF1D2713FF40038CC8A878 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0FC7AAE5289640C1871E2689 /* Octicons.ttf */; };
 		E026F18D21B947FEBBE648D3 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FEEBB3FC9136431E9A26FC4B /* EvilIcons.ttf */; };
 		EF66767103B5461B82EBD4EB /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 046325FD76B543098F902CC0 /* Foundation.ttf */; };
@@ -164,6 +166,7 @@
 		B5A0C9F01D075B5900C89CFC /* react-native */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "react-native"; path = "../../../app/node_modules/react-native"; sourceTree = "<group>"; };
 		B5A0C9FC1D075BFB00C89CFC /* RCTRootView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RCTRootView.h; path = "../../../app/node_modules/react-native/React/Base/RCTRootView.h"; sourceTree = "<group>"; };
 		B5A0C9FE1D075D9200C89CFC /* RCTRootView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RCTRootView.m; path = "../node_modules/react-native/React/Base/RCTRootView.m"; sourceTree = "<group>"; };
+		B5C087DE1D08EE8900AD9112 /* RCTCamera.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RCTCamera.m; path = "../node_modules/react-native-camera/ios/RCTCamera.m"; sourceTree = "<group>"; };
 		FA11ACCC35D1441FAC38DBB6 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		FAF2FC82EEF54309A8C0A62F /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		FDD104B30194410685A86C71 /* libRCTCamera.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTCamera.a; sourceTree = "<group>"; };
@@ -182,6 +185,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5C087DF1D08EE8900AD9112 /* RCTCamera.m in Frameworks */,
 				65F5B2B31D07AE160020A6EE /* RNVectorIconsManager.m in Frameworks */,
 				B5A0C9FF1D075D9200C89CFC /* RCTRootView.m in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -352,6 +356,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				B5C087DE1D08EE8900AD9112 /* RCTCamera.m */,
 				65F5B2B21D07AE150020A6EE /* RNVectorIconsManager.m */,
 				B5A0C9FE1D075D9200C89CFC /* RCTRootView.m */,
 				B5A0C9FC1D075BFB00C89CFC /* RCTRootView.h */,

@@ -205,9 +205,11 @@ module.exports = {
   },
 
   isUserVerified: (req, res) => {
+    console.log(req.body.id);
     fetch(baseLink_users_query + req.body.id + '?apiKey=' + mongoDB_API_KEY)
     .then((res) => res.json())
     .then((responseData) => {
+      console.log(responseData);
       if(responseData.verifiedPhone) {
         res.sendStatus(200);
       } else {

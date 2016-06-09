@@ -29,12 +29,6 @@ class Login extends Component {
     };
   }
 
-  // handleEmail(event) {
-  //   this.setState({
-  //     email: event.nativeEvent.text
-  //   });
-  // }
-
   handlePassword(event) {
     this.setState({
       password: event.nativeEvent.text
@@ -58,6 +52,7 @@ class Login extends Component {
         errorMessage: 'Invalid Password!'
       });
     }
+
     //If username and password exists on the database, log the user into the select time page
     if(this.state.username !== '' && this.state.password !== ''){
       fetch('http://localhost:3000/signin', {
@@ -72,12 +67,10 @@ class Login extends Component {
         })
       })
       .then((res) => {
-        return res.json();
-      })
-      .then((res) => {
-        if(res.message === 'Incorrect username/password combination!'){
-          this.setState({errorMessage: res.message, error: true, isLoading: false});
+        if (res.status === 400) {
+          this.setState({errorMessage: "Incorrect Username or Password", password: '', error: true, isLoading: false});
         } else{
+          res = JSON.parse(res._bodyInit);
           fetch('http://localhost:3000/isVerified',
           {
             method: 'POST',
@@ -87,7 +80,6 @@ class Login extends Component {
             },
             body: JSON.stringify({id: res.id})
           })
-<<<<<<< HEAD
           .then(resp => {
             if (resp.status === 200) {
               this.props.navigator.push({
@@ -104,14 +96,6 @@ class Login extends Component {
             }
           })
           
-=======
-          .then((res) => console.error(res));
-          this.props.navigator.push({
-            title: 'Roam',
-            username: res,
-            component: TabBar
-          });
->>>>>>> 16466e797a445eed96d2f9e0336936c615b29747
           this.setState({
             isLoading: false
           });
