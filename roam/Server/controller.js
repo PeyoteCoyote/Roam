@@ -51,7 +51,7 @@ var getUser = (username, password, res) => {
     .then((response) => response.json())
       .then((responseData) => {
         var flag = false;
-        var id, name, usernameFetched, passwordFetched, currentlocation, phone;
+        var id, name, usernameFetched, passwordFetched, currentlocation, phone, code, verifiedPhone;
         for (var i = 0; i < responseData.length; i++) {
           if (responseData[i].username === username && responseData[i].password === password) {
             id = responseData[i]._id.$oid;
@@ -60,6 +60,8 @@ var getUser = (username, password, res) => {
             passwordFetched = responseData[i].password;
             currentlocation = responseData[i].currentlocation;
             phone = responseData[i].phone;
+            code = responseData[i].verificationCode;
+            verifiedPhone = responseData[i].verifiedPhone;
             flag = true;
             break;
           }
@@ -70,7 +72,9 @@ var getUser = (username, password, res) => {
           username: usernameFetched,
           password: passwordFetched,
           phone: phone,
-          currentlocation: currentlocation
+          currentlocation: currentlocation,
+          verificationCode: code,
+          verifiedPhone: verifiedPhone
         };
         if (flag) {
           res.status(200).send(returnObj);
@@ -201,9 +205,17 @@ module.exports = {
   },
 
   isUserVerified: (req, res) => {
+    console.log(req.body.id);
     fetch(baseLink_users_query + req.body.id + '?apiKey=' + mongoDB_API_KEY)
     .then((res) => res.json())
-    .then((responseData) => console.log(responseData));
+    .then((responseData) => {
+      console.log(responseData);
+      if(responseData.verifiedPhone) {
+        res.sendStatus(200);
+      } else {
+        res.sendStatus(400);
+      }
+    });
   }
 // amend old commit git
 };
