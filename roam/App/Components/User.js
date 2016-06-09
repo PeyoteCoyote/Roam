@@ -2,14 +2,19 @@ import React, { Component } from 'react';
 import { SegmentedControls } from 'react-native-radio-buttons';
 // var Geolocation = require('./Geolocation');
 var Confirmation = require('./Confirmation');
+var CameraView = require('./CameraView')
 var Separator = require('./Helpers/Separator');
-var styles = require('./Helpers/styles');
+import Icon from 'react-native-vector-icons/FontAwesome';
+var dummyData = require('./data');
 
 var coordinates = {};
+var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
 
 import {
   Animated,
   Image,
+  Dimensions,
   View,
   Text,
   StyleSheet,
@@ -17,230 +22,326 @@ import {
   ListView,
   TouchableHighlight,
   ActivityIndicatorIOS,
-  MapView
+  MapView,
+  Modal
 } from 'react-native';
 
-var flag = false;
-var flag2 = false;
+var deviceWidth = Dimensions.get('window').width;
+var deviceHeight = Dimensions.get('window').height;
 
 class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      user: props.user,
       selectedOption: '1 hour',
+      pictures: dummyData,
+      dataSource: ds.cloneWithRows(dummyData),
+      navigator: props.navigator
     };
   }
-  handleSelected(choice) {
-    this.setState({
-      selectedOption: choice
-    });
-  }
+  // handleSelected(choice) {
+  //   this.setState({
+  //     selectedOption: choice
+  //   });
+  // }
 
-  handleSubmit() {
-    console.log('Sending ROAM request!', coordinates);
-    // this.props.navigator.push({
-    //   title: 'Confirmation',
-    //   email: this.props.navigator.navigationContext._currentRoute.email,
-    //   component: Confirmation
-    // });
+  goToCamera(){
+    this.props.navigator.push({
+      title: 'CameraView',
+      component: 'CameraView',
+      passProps: { user: this.state.user}
 
-    fetch('http://localhost:3000/roam', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        time: this.state.selectedOption,
-        coordinates: coordinates,
-        userEmail: this.props.navigator.navigationContext._currentRoute.email
-      })
-    })
-    .then((res) => {
-      console.log('Added to db. Waiting for ROAM request confirmation!');
-    })
-    .catch((error) => {
-      console.log('Error handling submit:', error);
     });
   }
 
   render () {
-    const options = [
-      '1 hour',
-      '2 hours',
-      '4 hours',
-      'Anytime'
-    ];
     return (
-      <Image style={styles.backgroundImage}
-      source={require('../../imgs/uni.jpg')} >
-        <Geolocation region={this.props.region}/>
-        <Text style={styles.header}> User Page </Text>
-        <SegmentedControls
-          tint={'#ff0066'}
-          selectedTint={'white'}
-          backTint={'white'}
-          options={options}
-          allowFontScaling={false}
-          fontWeight={'bold'}
-          onSelection={this.handleSelected.bind(this)}
-          selectedOption={this.state.selectedOption} />
-        <TouchableHighlight
-          style={styles.button}
-          onPress={this.handleSubmit.bind(this)} >
-            <Text style={styles.buttonText}> Roam! </Text>
-        </TouchableHighlight>
-      </Image>
+      <View>
+        <View style={styles.navbarContainer}>
+
+          <View style={styles.navLeft}>
+            <Image style={styles.circleImage} source={{uri: 'https://support.files.wordpress.com/2009/07/pigeony.jpg?w=688'}}/> 
+          </View>
+
+          <View style={styles.navMiddle}>
+            <Text style={styles.navTitle}>Hi Jessica</Text>
+            
+          </View>
+
+          <View style={styles.navRight}>
+            <View style={styles.refresh}>
+            <TouchableHighlight underlayColor='transparent'>
+              <Icon name="camera" onPress={this.goToCamera.bind(this)} size={23} color="#fff" />
+            </TouchableHighlight>
+            </View>
+          </View>
+
+        </View>
+        <View style={styles.mainContainer}>
+          <Image style={styles.backgroundImage}
+          source={require('../../imgs/uni.jpg')}>
+          <ListView
+            contentContainerStyle={styles.gridList}
+            dataSource={this.state.dataSource}
+            enableEmptySections={true}
+            automaticallyAdjustContentInsets={false}
+            // renderRow={(rowData) => this.typeOfList.bind(this, rowData)}
+            renderRow={(rowData) => <GridListItem picture={rowData} />}
+          />
+          </Image>
+        </View>
+      
+      </View>
     );
   }
 }
 
-
-class Geolocation extends Component {
-    constructor(props) {
+class GridListItem extends Component {
+  constructor(props) {
     super(props);
     this.state = {
-      region: {
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
-      },
-      fadeAnim: new Animated.Value(0),
-      fadeAnim2: new Animated.Value(0),
-      alternate: false
+      picture: props.picture,
+      animationType: 'slide',
+      modalVisible: false,
+      transparent: true,
+      rating: Math.floor(props.picture.likes / (props.picture.likes + props.picture.dislikes) * 100) || 0
     };
   }
 
-  componentDidMount () {
-      console.log('Hello From Geolocation')
-      if (!navigator.geolocation) {console.log('geoloaction not available')};
-      if (navigator.geolocation) {console.log('geoloaction available')};
-      navigator.geolocation.getCurrentPosition(
-        (initialPosition) => {
-         console.log(initialPosition);
-          this.setState({initialPosition});
-        },
-        (error) => alert(error.message),
-        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-      );
-
-      this.watchID = navigator.geolocation.watchPosition((lastPosition) => {
-        coordinates = lastPosition;
-        console.log(lastPosition);
-        this.setState({latitude: lastPosition.coords.latitude});
-        this.setState({latitude: lastPosition.coords.latitude});
-
-        var newRegion = {
-          latitude: lastPosition.coords.latitude,
-          longitude: lastPosition.coords.longitude,
-          latitudeDelta: 10,
-          longitudeDelta: 10
-        }
-
-        this.setState({ region: newRegion });
-
-        this.setState({ annotations: [{
-          latitude: lastPosition.coords.latitude,
-          longitude: lastPosition.coords.longitude,
-          title: 'Current Location',
-          subtitle: 'This is your current location'
-        }]});
-      });
-    }
-
-    componentWillUnmount() {
-      navigator.geolocation.clearWatch(this.watchID);
-    }
-
-componentDidMount() {
-  this.determineFadingAction();
-  setInterval( () => {
-    this.determineFadingAction();
-  },5000);              
-}
-
-determineFadingAction() {
-  if (!flag && !flag2){
-    Animated.timing(          
-      this.state.fadeAnim,    
-      {
-        toValue: 1,
-        duration:6000
-      }
-    ).start();
-    flag = !flag;   
-  } 
-  if (flag && !flag2) {
-    Animated.timing(          
-    this.state.fadeAnim,    
-      {
-        toValue: 0,
-        duration:6000
-      }
-    ).start();
-    this.state.fadeAnim = new Animated.Value(0);
-    flag = !flag;
-    flag2 = !flag2;
+  setModalVisible(visible, deleteFlag, picID) {
+    this.setState({modalVisible: visible});
   }
-  if (!flag && flag2){
-    Animated.timing(          
-      this.state.fadeAnim2,    
-      {
-        toValue: 1,
-        duration:6000
-      }
-    ).start();
-    flag = !flag;   
-  }
-  if (flag && flag2){
-    Animated.timing(          
-    this.state.fadeAnim2,    
-      {
-        toValue: 0,
-        duration:6000
-      }
-    ).start();
-    this.state.fadeAnim2 = new Animated.Value(0);
-    flag = !flag;
-    flag2 = !flag2;
-  }
-}
 
-
-alternateImageSettings() {
-    return (
-      <View style={{flex:1}}>
-        <Animated.Image source={require('./a.jpg')} style={{width:320,height:320,resizeMode:'cover',position:'absolute'}}  />
-        <Animated.Image source={require('./b.jpg')} style={{width:320,height:320,resizeMode:'cover',opacity:this.state.fadeAnim}}  />
-        <Animated.Image source={require('./c.jpg')} style={{width:320,height:320,resizeMode:'cover',opacity:this.state.fadeAnim2}}  />
-      </View>
-    );
-
- }
-      // <View>
-      //   <Text style={styles.location}>Your Current Location:</Text>
-      //     <MapView
-      //     showsUserLocation={true}
-      //     style={map.map}
-      //     region={this.state.region}
-      //     followUserLocation={true} />
-      // </View>
   render() {
-    return this.alternateImageSettings();
+    
+    var modalBackgroundStyle = {backgroundColor: 'rgba(0, 0, 0, 0.5)'};
+    var innerContainerTransparentStyle = {backgroundColor: '#fff', padding: 20};
+
+    return (
+      <View>
+        <Modal
+          animationType={this.state.animationType}
+          transparent={this.state.transparent}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {this.setModalVisible(false)}}
+          >
+          <View style={[styles.container, modalBackgroundStyle]}>
+            <View style={[styles.innerContainer, innerContainerTransparentStyle]}>
+              <View style={styles.modalTitleContainer}>
+                <Text
+                  style={styles.modalTitle}>
+                  {this.state.picture.comment.charAt(0).toUpperCase() + this.state.picture.comment.slice(1)}
+                </Text>
+              </View>
+              <Image 
+                source={{uri: this.state.picture.imagelink}}
+                style={styles.modalPicture}/>
+              <View style={styles.modalInfoContainer}>
+              <View style={styles.deletePicContainer}> 
+                <TouchableHighlight style={styles.deletePicButton} onPress={this.setModalVisible.bind(this, false)} underlayColor='transparent'>
+                  <Text style={styles.deletePicText}>Delete Picture</Text>
+                </TouchableHighlight>
+              </View>
+              </View>
+              <View style={styles.modalInfoContainer}>
+                <View style={styles.modalInfoBox}>
+                  <Text style={styles.statNumbers}>{this.state.rating}%</Text>
+                  <Text style={styles.statText}>Approval Rating</Text>
+                </View>
+                <View style={styles.modalInfoBox}>
+                  <Text style={styles.statNumbers}>{this.state.picture.likes}</Text>
+                  <Text style={styles.statText}>Likes</Text>
+                </View>
+              </View>
+              <View style={styles.closeContainer}> 
+                <TouchableHighlight style={styles.closeButton} onPress={this.setModalVisible.bind(this, false, false)}>
+                  <Text style={styles.closeText}>Close</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <View style={styles.gridListItem}>
+          <TouchableHighlight
+            onPress={this.setModalVisible.bind(this, true)}>
+            <Image 
+              source={{uri: this.state.picture.imagelink}}
+              style={styles.gridListPicture}
+            />
+          </TouchableHighlight>
+        </View>
+      </View>
+    )
   }
 }
 
-
-const map = StyleSheet.create({
-  map: {
-    height: 250,
-    margin: 10,
-    borderWidth: 1,
-    borderColor: '#000000',
-    backgroundColor: 'transparent'
+const styles = StyleSheet.create({
+  // backgroundImage: {
+  //   flex:1,
+  //   width:null,
+  //   height: null,
+  //   // padding: 30,
+  //   // marginTop: 20,
+  //   flexDirection: 'column',
+  //   justifyContent: 'center'
+  // },
+  header: {
+    // marginBottom: 20,
+    fontSize: 50,
+    fontWeight: "100",
+    fontFamily: 'Gill Sans',
+    textAlign: 'center',
+    color: 'white',
+    backgroundColor: 'transparent',
+    letterSpacing: 3
   },
-});
+  buttonText: {
+    fontSize: 18,
+    color: 'white',
+    alignSelf: 'center'
+  },
+  button: {
+    height: 50,
+    width: 300,
+    flexDirection: 'row',
+    backgroundColor: '#ff0066',
+    borderRadius:10,
+    marginBottom: 10,
+    marginTop: 20,
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+  navbarContainer:{
+    backgroundColor:'#8C4DCB',
+    paddingTop: deviceHeight/25,
+    height: deviceHeight/5,
+    flexDirection: 'row',
+    // paddingBottom: deviceHeight/80
+  },
+  navLeft: {
+    width: deviceWidth/3,
+    // borderWidth: 0.5,
+    // borderColor: '#555555',
+    justifyContent: 'center',
+    paddingLeft: deviceWidth/20,
+  },
+  navMiddle: {
+    width: deviceWidth/3,
+    // borderWidth: 0.5,
+    // borderColor: '#555555',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
+  },
+  navRight: {
+    width: deviceWidth/3,
+    // borderWidth: 0.5,
+    // borderColor: '#555555',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    paddingRight: deviceWidth/20
+    // flexDirection: 'row'
+  },
+  navTitle: {
+    color:'#fff',
+    textAlign:'center',
+    fontWeight:'bold',
+    fontSize: 20,
+    fontFamily: 'Avenir',
+  },
+  backgroundImage: {
+    flex:1,
+    width:null,
+    height: null,
+    // padding: 30,
+    // marginTop: 20,
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
+  circleImage: {
+    height: 80,
+    borderRadius: 40,
+    width: 80
+  },
+  mainContainer: {
+    height: deviceHeight
+  },
+  gridList: {
+    justifyContent: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    // borderBottomColor: '#47315a',
+    // borderBottomWidth: 0.5,
+    // borderTopColor: '#47315a',
+    // borderTopWidth: 0.5,
+    marginBottom: 5,
+    // height: deviceHeight/2
+  },
+  gridListItem: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: deviceWidth/3,
+    height: deviceWidth/3,
+  },
+  gridListPicture: {
+    width: deviceWidth/5,
+    height: deviceWidth/5,
+    borderRadius: deviceWidth/10
+    // paddingTop: deviceWidth/20,
+    // paddingBottom:deviceWidth/20,
+    // paddingLeft: deviceWidth/20,
+    // paddingRight: deviceWidth/20
+  },
+  modalTitle: {
+    width: deviceWidth/2,
+    textAlign: 'center',
+    borderWidth: 0.5,
+    paddingTop: deviceHeight/110,
+    paddingBottom: deviceHeight/110,
+    margin: 5,
+    fontSize: 18,
+    fontFamily: 'Avenir'
+  },
+  modalInfoContainer: {
+    flexDirection: 'row',
+    // borderTopColor: '#47315a',
+    // borderTopWidth: 0.5,
+    // borderBottomColor: '#47315a',
+    // borderBottomWidth: 0.5,
+  },
+  modalInfoBox: {
+    width: deviceWidth/3.3,
+    alignItems: 'center',
+    borderWidth: 0.5,
+    paddingTop: deviceHeight/110,
+    paddingBottom: deviceHeight/110,
+    margin: 5
+  },
+  modalPicture: {
+    width: deviceWidth/2,
+    height: deviceHeight/2
+  },
+  modalButton: {
+    width: deviceWidth/3.3,
+    textAlign: 'center',
+    borderWidth: 0.5,
+    paddingTop: deviceHeight/110,
+    paddingBottom: deviceHeight/110,
+    margin: 5
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    // padding: 10
+  },
+  innerContainer: {
+    borderRadius: 6,
+    alignItems: 'center',
+    marginLeft: deviceWidth/12,
+    marginRight: deviceWidth/12
+  },
+})
 
 
 

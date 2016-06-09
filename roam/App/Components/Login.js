@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 //Require authentication component
 var SignUp = require('./Signup');
 var Time = require('./Time');

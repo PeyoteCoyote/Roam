@@ -66,7 +66,6 @@ class Geolocation extends Component {
   render() {
     return (
       <View>
-        <Text style={styles.location}>Your Current Location</Text>
           <MapView
           showsUserLocation={true}
           style={styles.map}
