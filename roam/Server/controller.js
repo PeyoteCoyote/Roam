@@ -183,6 +183,12 @@ module.exports = {
   },
 
   verifyUser: (req, res) => {
+    var verifiedObj = {
+      username: req.body.username,
+      phone: req.body.phone,
+    };
+    console.log(req.body);
+
     fetch(baseLink_verified + mongoDB_API_KEY,
       {
         method: 'POST',
@@ -190,8 +196,9 @@ module.exports = {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify( { "username": req.body.username, "phone": req.body.phone })
-      });
+        body: JSON.stringify(verifiedObj)
+      }).then(res => res.json())
+      .then(responseData => console.log(responseData));
 
     fetch(baseLink_users_query + req.body.id + '?apiKey=' + mongoDB_API_KEY,
     {
