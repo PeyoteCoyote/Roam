@@ -160,16 +160,16 @@ module.exports = {
     client.sendSms({
       to:'+1' + phoneNumber,
       from:'+19259058241',
-      body:'Greetings ' + name + '! Welcome to Roam!\nHere is your unique code: ' + code +'\nPlease enter it into the verification code box'
+      body:'Greetings ' + name + ', welcome to Roam!\n\nYour unique code: ' + code
     }, function(error, message) {
         if (!error) {
-            console.log('Success! The code is:' + code);
-            console.log('Message sent on:');
-            console.log(message.dateCreated);
+          console.log('Success! The code is:' + code);
+          console.log('Message sent on:');
+          console.log(message.dateCreated);
         } else {
-            console.log('Oops! There was an error.');
+          console.log('Oops! There was an error.');
         }
-    });
+      });
   },
 
   checkCode: (req, res) => {
@@ -183,15 +183,22 @@ module.exports = {
   },
 
   verifyUser: (req, res) => {
+    var verifiedObj = {
+      username: req.body.username,
+      phone: req.body.phone,
+    };
+    console.log(req.body);
+
     fetch(baseLink_verified + mongoDB_API_KEY,
       {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          },
-        body: JSON.stringify( { "username": req.body.username, "phone": req.body.phone })
-      });
+        },
+        body: JSON.stringify(verifiedObj)
+      }).then(res => res.json())
+      .then(responseData => console.log(responseData));
 
     fetch(baseLink_users_query + req.body.id + '?apiKey=' + mongoDB_API_KEY,
     {

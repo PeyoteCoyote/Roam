@@ -3,29 +3,34 @@
 import React, { Component } from 'react';
 
 import {
+  Dimensions,
   StyleSheet
 } from 'react-native';
 
+
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
   title: {
-    marginBottom: 20,
-    fontSize: 70,
+    marginBottom: deviceHeight/20,
+    fontSize: deviceHeight/12,
     fontWeight: "100",
     fontFamily: 'Gill Sans',
     textAlign: 'center',
     color: 'white',
     backgroundColor: 'transparent',
-    letterSpacing: 5,
+    letterSpacing: deviceWidth/50,
   },
   subTitle: {
-    marginBottom: 4,
-    fontSize: 20,
+    marginBottom: deviceHeight/80,
+    fontSize: deviceHeight/40,
     fontWeight: "100",
     fontFamily: 'Gill Sans',
     textAlign: 'center',
     color: 'white',
     backgroundColor: 'transparent',
-    letterSpacing: 1
+    letterSpacing: deviceWidth/500
   },
   header: {
     marginBottom: 20,
@@ -38,16 +43,22 @@ const styles = StyleSheet.create({
     letterSpacing: 3
   },
   submit: {
-    height: 50,
-    padding: 10,
-    marginRight: 5,
-    marginBottom: 15,
-    fontSize: 18,
-    borderWidth: 1,
+    height: deviceHeight/40,
+    marginBottom: deviceHeight/200,
+    fontSize: deviceHeight/40,
     borderColor: 'white',
-    borderRadius: 8,
-    color: 'white'
+    color: 'white',
+    textAlign: 'center'
   },
+  inputBar: {
+    marginBottom: deviceHeight/30,
+    // borderBottomColor: 'red',
+    // borderLeftColor: 'red',
+    // // borderRightColor: 'red',
+    // // borderTopColor: 'transparent',
+    // borderWidth: 1
+  },
+
   buttonText: {
     fontSize: 18,
     color: 'white',
@@ -57,21 +68,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   button: {
-    height: 50,
-    width: 300,
+    height: deviceHeight/20,
+    width: deviceWidth/2,
     flexDirection: 'row',
     backgroundColor: 'pink',
-    borderRadius:10,
-    marginBottom: 10,
-    marginTop: 20,
+    marginBottom: deviceHeight/40,
+    marginTop: deviceHeight/40,
     alignSelf: 'center',
     justifyContent: 'center',
   },
   signUpButton: {
     color: 'white',
     textAlign: 'center',
-    paddingTop: 10,
-    fontSize: 18
+    paddingTop: deviceHeight/40,
+    fontSize: deviceHeight/40
   },
   unselected: {
     fontSize: 20,
@@ -95,20 +105,20 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     flex: 1,
-    width: null,
-    height: null,
-    padding: 30,
-    paddingTop: 2,
-    marginTop: 20,
+    width: deviceWidth,
+    height: deviceHeight,
+    padding: deviceWidth/10,
+    paddingTop: deviceHeight/6,
+    marginTop: deviceHeight/30,
     flexDirection: 'column',
     justifyContent: 'center'
   },
   errorMessage: {
     backgroundColor: 'transparent',
+    height: deviceHeight/10,
     color: '#ff0066',
     textAlign: 'center',
-    fontSize: 20,
-    marginTop: -23
+    fontSize: deviceHeight/40,
   },
   confirmation: {
     color: 'white',
@@ -122,7 +132,11 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: 'white',
     textAlign: 'center'
-  }
+  },
+    map: {
+    height: deviceHeight/2.5,
+    width: deviceWidth/1.25,
+  },
 });
 
 module.exports = styles;

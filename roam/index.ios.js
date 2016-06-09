@@ -14,6 +14,8 @@ var GeolocationView = require('./App/Components/Geolocation.js');
 var Time = require('./App/Components/Time.js');
 var Splash = require('./App/Components/Splash.js');
 var VerifyText = require('./App/Components/VerifyText.js');
+var CurrentRoam = require('./App/Components/CurrentRoam.js');
+var Signup = require('./App/Components/Signup.js');
 
 class roam extends Component{
   render() {
