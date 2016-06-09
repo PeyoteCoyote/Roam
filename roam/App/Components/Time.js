@@ -58,15 +58,32 @@ class Time extends Component {
     return (
       <Image style={styles.backgroundImage}
       source={require('../../imgs/uni.jpg')} >
-        
-        <View style={styles.userContainer}>
+
+      <View style={styles.navbarContainer}>
         <View style={styles.profileContainer}>
-          <Image style={styles.image}
-          source={require('../../imgs/uni.jpg')} />
+          <View>
+            <Image style={styles.circleImage} source={{uri: 'http://liketherazor.com/wp-content/uploads/2014/12/13-Chris-Gillett-Houston-Headshot-Photographer-Brenna-Smith-1024x732.jpg'}}/> 
+          </View>
+          <View style={styles.titles}>
+            <Text style={styles.navTitle}>jjones</Text>
+          </View>
         </View>
         <View style={styles.statsContainer}>
+          <View style={styles.statBox}>
+            <Text style={styles.stat}>18</Text>
+            <Text style={styles.statTitle}>Roams</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text style={styles.stat}>8.5</Text>
+            <Text style={styles.statTitle}>Rating</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text style={styles.stat}>18</Text>
+            <Text style={styles.statTitle}>Roams</Text>
+          </View>
         </View> 
-        </View>
+      </View>
+
         <SegmentedControls
           tint={'#ff0066'}
           selectedTint={'white'}
@@ -138,25 +155,56 @@ class Geolocation extends Component {
 }
 
 const styles = StyleSheet.create({
-  userContainer: {
-    width: deviceWidth,
-    height: deviceHeight/4,
-    borderColor: 'white',
-    borderWidth: 4
+  navbarContainer:{
+    backgroundColor: 'transparent',
+    paddingTop: deviceHeight/25,
+    height: deviceHeight/3,
+    borderBottomColor: 'white',
+    // borderWidth: 2
+  },
+  navTitle: {
+    color:'#fff',
+    textAlign:'center',
+    fontWeight:'bold',
+    fontSize: 20,
+    fontFamily: 'Avenir',
+    marginRight: deviceWidth/40
   },
   profileContainer: {
+    height: deviceHeight/6,
     width: deviceWidth,
-    height: deviceHeight/8,
-    borderColor: 'white',
-    borderWidth: 4,
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'center', 
   },
-  image: {
-    height: deviceWidth/5,
-    width: deviceWidth/5,
-    borderRadius: 40,
+  statsContainer: {
+    height: deviceHeight/9,
+    width: deviceWidth,
+    flexDirection: 'row'
+  },
+  statBox: {
+    width: deviceWidth/3,
+    alignItems: 'center',
     borderColor: 'white',
-    borderWidth: 4
+    borderWidth: 2,
+    justifyContent: 'center'
+  },
+  stat: {
+    fontSize: 25,
+    color: 'white',
+  },
+  statTitle: {
+    fontSize: 10,
+    color: '#ff0066',
+  },
+  titles: {
+    flexDirection: 'row',
+  },
+  circleImage: {
+    height: deviceWidth/5,
+    borderRadius: deviceWidth/10,
+    width: deviceWidth/5,
+    borderColor: 'white',
+    borderWidth: 1.5
   },
   buttonText: {
     fontSize: 18,
@@ -188,7 +236,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     marginTop: 20,
     marginBottom: 20,
-    borderColor: 'black',
     padding: 10,
     textAlign: 'center',
     justifyContent: 'center'
@@ -208,11 +255,8 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   map: {
-    height: deviceHeight/2,
+    height: deviceHeight/3,
     width: deviceWidth,
-    // margin: 10,
-    // borderWidth: 1,
-    // borderColor: '#000000',
     backgroundColor: 'transparent'
   },
 });

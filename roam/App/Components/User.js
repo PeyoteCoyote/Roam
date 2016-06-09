@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   },
   statTitle: {
     fontSize: 10,
-    color: 'pink',
+    color: '#ff0066',
   },
   titles: {
     flexDirection: 'row',
