@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 // var Interests = require('./Interests');
 var Time = require('./Time');
+var TabBar = require('./TabBar.js');
+var VerificationPage = require('./VerifyText.js');
 
 var styles = require('./Helpers/styles');
 
@@ -20,14 +22,24 @@ class SignUp extends Component {
     super(props);
     this.state = {
       firstName: '',
-      lastName: '',
+      userName: '',
       password: '',
       passwordAgain: '',
-      email: '',
+      phone: '',
       isLoading: false,
       error: false,
       errorMessage: ''
     };
+  }
+
+  getCode() {
+    var text = "";
+    var possible = "0123456789";
+
+    for( var i=0; i < 4; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
   }
 
   handleSubmit() {
@@ -36,18 +48,28 @@ class SignUp extends Component {
       isLoading: true
     });
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const rePhone = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
+    const rePhone2 = /[1-9][0-9]{2}[1-9][0-9]{6}/; 
+
     //check if the passwords entered matches
     if (this.state.password !== this.state.passwordAgain) {
       this.setState({isLoading: false, error: true, errorMessage: 'Passwords do not match!'});
     }
-    //check if the email supplied is valid
-    if (!re.test(this.state.email)) {
-      this.setState({isLoading: false, error: true, errorMessage: 'Invalid Email!'});
+
+    //check if the phone supplied is valid
+    if (!rePhone.test(this.state.phone) && !rePhone2.test(this.state.phone) ) {
+      this.setState({isLoading: false, error: true, errorMessage: 'Invalid phone number!', phone: ''});
+    } else {
+      this.setState({
+        error: false,
+        errorMessage: ''
+      });
     }
 
-    //ensure all fields in our state is not empty
-    if (this.state.firstName !== '' && this.state.lastName !== '' && this.state.password !== '' && this.state.passwordAgain !== '' && (this.state.password === this.state.passwordAgain) && re.test(this.state.email)) {
 
+    //ensure all fields in our state is not empty
+    if (this.state.firstName !== '' && this.state.userName !== '' && this.state.password !== '' && this.state.passwordAgain !== '' && (this.state.password === this.state.passwordAgain) && (rePhone.test(this.state.phone) || rePhone2.test(this.state.phone))) {
+      var verificationCode = this.getCode();
       fetch('http://localhost:3000/signup', {
         method: 'POST',
         headers: {
@@ -55,23 +77,25 @@ class SignUp extends Component {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          firstName: this.state.firstName,
-          lastName: this.state.lastName,
+          name: this.state.firstName,
+          username: this.state.userName,
           password: this.state.password,
-          email: this.state.email,
+          phone: this.state.phone,
+          currentlocation: {latitude: 0, longitude: 0},
+          verifiedPhone: false,
+          verificationCode: verificationCode
         })
       })
-      // .then((res) => {
-      //   return res.json();
-      // })
       .then((res) => {
-        res = res.json();
-        console.log('RESPONSE FROM SERVER ON SIGNUP PAGE', res);
-        if (res.message === 'User created') {
+        // res = res.json();
+        if (res.status === 200) {
+          var body = JSON.parse(res._bodyInit);
+          body.verifiedPhone = false;
+          body.verificationCode = verificationCode;
           this.props.navigator.push({
-            title: 'Select Time',
-            email: this.state.email.toLowerCase(),
-            component: Time
+            title: 'Verify Phone Link',
+            component: VerificationPage,
+            passProps: {user: body}
           });
           //Set isloading to false after conditions
           this.setState({
@@ -80,7 +104,7 @@ class SignUp extends Component {
         } else {
           this.setState({
             error: true,
-            errorMessage: 'Email already exists!',
+            errorMessage: 'Phone already exists!',
             isLoading: false
           });
           console.log('CURRENT ERROR:',this.state.error);
@@ -93,7 +117,7 @@ class SignUp extends Component {
       });
       //Need logic to check if username is taken in the database
       //Check if the passwords are matching
-      //Check if the email is valid
+      //Check if the phone is valid
       //Route to the hobbies screen
     }
 
@@ -108,44 +132,55 @@ class SignUp extends Component {
         source={require('../../imgs/uni.jpg')} >
         <Text style={styles.title}> sign up </Text>
         {/* Fields that we want to bind the username and password input */}
-        <TextInput
-          style={styles.submit}
-          placeholder="Your first name"
-          placeholderTextColor="white"
-          onChangeText={(text) => this.setState({firstName: text})}
-          value={this.state.firstName}
-          />
-        <TextInput
-          style={styles.submit}
-          placeholder="Your last name"
-          placeholderTextColor="white"
-          onChangeText={(text) => this.setState({lastName: text})}
-          value={this.state.lastName}
-          />
-        <TextInput
-          style={styles.submit}
-          placeholder="Enter a password"
-          placeholderTextColor="white"
-          onChangeText={(text) => this.setState({password: text})}
-          value={this.state.password}
-          secureTextEntry={true}
-          />
-        <TextInput
-          style={styles.submit}
-          placeholder="Enter password again"
-          placeholderTextColor="white"
-          onChangeText={(text) => this.setState({passwordAgain: text})}
-          value={this.state.passwordAgain}
-          secureTextEntry={true}
-          />
-        <TextInput
-          style={styles.submit}
-          autoCapitalize="none"
-          placeholder="Email"
-          placeholderTextColor="white"
-          onChangeText={(text) => this.setState({email: text})}
-          value={this.state.email}
-          />
+        <View style={styles.inputBar}>
+          <TextInput
+            style={styles.submit}
+            placeholder="First name"
+            placeholderTextColor="white"
+            onChangeText={(text) => this.setState({firstName: text})}
+            value={this.state.firstName}
+            />
+        </View>
+        <View style={styles.inputBar}>
+          <TextInput
+            style={styles.submit}
+            placeholder="Username"
+            placeholderTextColor="white"
+            onChangeText={(text) => this.setState({userName: text})}
+            value={this.state.userName}
+            />
+          </View>
+        <View style={styles.inputBar}>  
+          <TextInput
+            style={styles.submit}
+            placeholder="Enter a password"
+            placeholderTextColor="white"
+            onChangeText={(text) => this.setState({password: text})}
+            value={this.state.password}
+            secureTextEntry={true}
+            />
+        </View>
+        <View style={styles.inputBar}>
+          <TextInput
+            style={styles.submit}
+            placeholder="Enter password again"
+            placeholderTextColor="white"
+            onChangeText={(text) => this.setState({passwordAgain: text})}
+            value={this.state.passwordAgain}
+            secureTextEntry={true}
+            />
+        </View>
+        <View style={styles.inputBar}>
+          <TextInput
+            style={styles.submit}
+            autoCapitalize="none"
+            placeholder="Phone number"
+            placeholderTextColor="white"
+            onChangeText={(text) => this.setState({phone: text})}
+            value={this.state.phone}
+            keyboardType="number-pad"
+            />
+        </View>
         <TouchableHighlight
           style={styles.button}
           onPress={this.handleSubmit.bind(this)}

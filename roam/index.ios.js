@@ -8,7 +8,14 @@ import {
   View
 } from 'react-native';
 
-var Main = require('./App/Components/Main');
+var Login = require('./App/Components/Login');
+var User = require('./App/Components/User');
+var GeolocationView = require('./App/Components/Geolocation.js');
+var Time = require('./App/Components/Time.js');
+var Splash = require('./App/Components/Splash.js');
+var VerifyText = require('./App/Components/VerifyText.js');
+var CurrentRoam = require('./App/Components/CurrentRoam.js');
+var Signup = require('./App/Components/Signup.js');
 
 class roam extends Component{
   render() {
@@ -16,9 +23,10 @@ class roam extends Component{
       <NavigatorIOS
       style={styles.container}
         initialRoute={{
-          title: 'Sign In',
-          component: Main
-        }} />
+          title: 'Login',
+          component: Login,
+        }}
+        navigationBarHidden={true} />
     );
   }
 };

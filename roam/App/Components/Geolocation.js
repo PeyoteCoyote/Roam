@@ -7,6 +7,7 @@
 
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, Text, View, MapView, ListView} from 'react-native'
+var styles = require('./Helpers/styles');
 // import MapView from 'react-native-maps'
 
 class Geolocation extends Component {
@@ -66,7 +67,6 @@ class Geolocation extends Component {
   render() {
     return (
       <View>
-        <Text style={styles.location}>Your Current Location</Text>
           <MapView
           showsUserLocation={true}
           style={styles.map}
@@ -80,19 +80,5 @@ class Geolocation extends Component {
   }
 }
 
-
-const styles = StyleSheet.create({
-  map: {
-    height: 250,
-    margin: 10,
-    borderWidth: 1,
-    borderColor: '#000000'
-  },
-  location: {
-    backgroundColor: 'transparent',
-    fontSize: 20,
-    color: 'white'
-  }
-});
 
 module.exports = Geolocation;

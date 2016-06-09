@@ -1,6 +1,9 @@
 package com.roam;
 
 import com.facebook.react.ReactActivity;
+import com.AirMaps.AirPackage;
+import com.lwansbrough.ReactCamera.ReactCamera;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 
@@ -34,7 +37,10 @@ public class MainActivity extends ReactActivity {
     @Override
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
-            new MainReactPackage()
+            new MainReactPackage(),
+            new AirPackage(),
+            new ReactCamera(),
+            new VectorIconsPackage()
         );
     }
 }

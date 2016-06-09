@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-
 //Require authentication component
 var SignUp = require('./Signup');
 var Time = require('./Time');
 var styles = require('./Helpers/styles');
+var TabBar = require('./TabBar.js');
+var VerifyText = require('./VerifyText.js');
 
 import {
   Image,
@@ -15,11 +16,12 @@ import {
   ActivityIndicatorIOS
 } from 'react-native';
 
-class Main extends Component {
+
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
+      username: '',
       password: '',
       isLoading: false,
       error: false,
@@ -27,15 +29,15 @@ class Main extends Component {
     };
   }
 
-  handleEmail(event) {
-    this.setState({
-      email: event.nativeEvent.text
-    });
-  }
-
   handlePassword(event) {
     this.setState({
       password: event.nativeEvent.text
+    });
+  }  
+
+  handleUsername(event) {
+    this.setState({
+      username: event.nativeEvent.text
     });
   }
 
@@ -43,14 +45,6 @@ class Main extends Component {
     this.setState({
       isLoading: true
     });
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (this.state.email === '' || !re.test(this.state.email)) {
-      this.setState({
-        isLoading: false,
-        error: true,
-        errorMessage: 'Invalid Email!'
-      });
-    }
     if (this.state.password === '') {
       this.setState({
         isLoading: false,
@@ -58,8 +52,9 @@ class Main extends Component {
         errorMessage: 'Invalid Password!'
       });
     }
-    //If email and password exists on the database, log the user into the select time page
-    if(this.state.email !== '' && re.test(this.state.email) && this.state.password !== ''){
+
+    //If username and password exists on the database, log the user into the select time page
+    if(this.state.username !== '' && this.state.password !== ''){
       fetch('http://localhost:3000/signin', {
         method: 'POST',
         headers: {
@@ -68,21 +63,39 @@ class Main extends Component {
         },
         body: JSON.stringify({
           password: this.state.password,
-          email: this.state.email.toLowerCase(),
+          username: this.state.username,
         })
       })
       .then((res) => {
-        return res.json();
-      })
-      .then((res) => {
-        if(res.message === 'Incorrect email/password combination!'){
-          this.setState({errorMessage: res.message, error: true, isLoading: false});
+        if (res.status === 400) {
+          this.setState({errorMessage: "Incorrect Username or Password", password: '', error: true, isLoading: false});
         } else{
-          this.props.navigator.push({
-            title: 'When are you free?',
-            email: this.state.email.toLowerCase(),
-            component: Time
-          });
+          res = JSON.parse(res._bodyInit);
+          fetch('http://localhost:3000/isVerified',
+          {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({id: res.id})
+          })
+          .then(resp => {
+            if (resp.status === 200) {
+              this.props.navigator.push({
+                title: 'Roam',
+                username: res,
+                component: TabBar
+              });
+            } else {
+              this.props.navigator.push({
+                title: 'Verify Phone Link',
+                component: VerifyText,
+                passProps: {user: res}
+              });
+            }
+          })
+          
           this.setState({
             isLoading: false
           });
@@ -99,7 +112,7 @@ class Main extends Component {
       isLoading: true
     });
     this.props.navigator.push({
-      title: 'Sign Up',
+      title: 'Create Account',
       component: SignUp
     });
     this.setState({
@@ -109,28 +122,28 @@ class Main extends Component {
 
   render() {
     var showErr = (
-      this.state.error ? <Text style={styles.errorMessage}> {this.state.errorMessage} </Text> : <View></View>
+      this.state.error ? <Text style={styles.errorMessage}> {this.state.errorMessage} </Text> : <Text style={styles.errorMessage}> </Text>
     );
     return(
       <Image style={styles.backgroundImage}
       source={require('../../imgs/uni.jpg')}>
         <Text style={styles.title}> roam </Text>
-        {/* Fields that we want to bind the email and password input */}
+        <View style={styles.inputBar}>
         <TextInput
           style={styles.submit}
-          placeholder="Email"
+          placeholder="Username"
           placeholderTextColor="white"
-          value={this.state.email}
-          onChange={this.handleEmail.bind(this)}
-          />
+          value={this.state.username}
+          onChange={this.handleUsername.bind(this)}/>
+        </View>
         <TextInput
           style={styles.submit}
           placeholder="Password"
           placeholderTextColor="white"
           value={this.state.password}
           onChange={this.handlePassword.bind(this)}
-          secureTextEntry={true}
-        />
+          secureTextEntry={true}/>
+
         <TouchableHighlight
           style={styles.button}
           onPress={this.handleSignIn.bind(this)}
@@ -154,4 +167,4 @@ class Main extends Component {
   }
 }
 
-module.exports = Main;
+module.exports = Login;
