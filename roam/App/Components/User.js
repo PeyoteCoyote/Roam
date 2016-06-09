@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { SegmentedControls } from 'react-native-radio-buttons';
-// var Geolocation = require('./Geolocation');
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 var Confirmation = require('./Confirmation');
 var CameraView = require('./CameraView')
 var Separator = require('./Helpers/Separator');
-import Icon from 'react-native-vector-icons/FontAwesome';
 var dummyData = require('./data');
+
+import history from './data-new.js';
 
 var coordinates = {};
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -34,9 +36,8 @@ class User extends Component {
     super(props);
     this.state = {
       user: props.user,
-      selectedOption: '1 hour',
-      pictures: dummyData,
-      dataSource: ds.cloneWithRows(dummyData),
+      pictures: history,
+      dataSource: ds.cloneWithRows(history),
       navigator: props.navigator
     };
   }
@@ -51,7 +52,7 @@ class User extends Component {
     this.props.navigator.push({
       title: CameraView.title,
       component: CameraView,
-      passProps: { user: this.state.user}
+      passProps: { user: this.state.user }
 
     });
   }
@@ -59,39 +60,47 @@ class User extends Component {
   render () {
     return (
       <View>
+        <Image style={styles.backgroundImage}
+        source={require('../../imgs/uni.jpg')}>
         <View style={styles.navbarContainer}>
-
-          <View style={styles.navLeft}>
-            <Image style={styles.circleImage} source={{uri: 'https://support.files.wordpress.com/2009/07/pigeony.jpg?w=688'}}/> 
-          </View>
-
-          <View style={styles.navMiddle}>
-            <Text style={styles.navTitle}>Hi Jessica</Text>
-            
-          </View>
-
-          <View style={styles.navRight}>
-            <View style={styles.refresh}>
-            <TouchableHighlight underlayColor='transparent'>
-              <Icon name="camera" onPress={this.goToCamera.bind(this)} size={23} color="#fff" />
-            </TouchableHighlight>
+          <View style={styles.profileContainer}>
+            <View>
+              <Image style={styles.circleImage} source={{uri: 'http://liketherazor.com/wp-content/uploads/2014/12/13-Chris-Gillett-Houston-Headshot-Photographer-Brenna-Smith-1024x732.jpg'}}/> 
+            </View>
+            <View style={styles.titles}>
+              <Text style={styles.navTitle}>jjones</Text>
+              <TouchableHighlight underlayColor='transparent'>
+                <Icon name="camera" onPress={this.goToCamera.bind(this)} size={23} color="#fff" />
+              </TouchableHighlight>
             </View>
           </View>
-
+          <View style={styles.statsContainer}>
+            <View style={styles.statBox}>
+              <Text style={styles.stat}>18</Text>
+              <Text style={styles.statTitle}>Roams</Text>
+            </View>
+            <View style={styles.statBox}>
+              <Text style={styles.stat}>8.5</Text>
+              <Text style={styles.statTitle}>Rating</Text>
+            </View>
+            <View style={styles.statBox}>
+              <Text style={styles.stat}>18</Text>
+              <Text style={styles.statTitle}>Roams</Text>
+            </View>
+          </View> 
         </View>
+
         <View style={styles.mainContainer}>
-          <Image style={styles.backgroundImage}
-          source={require('../../imgs/uni.jpg')}>
           <ListView
             contentContainerStyle={styles.gridList}
             dataSource={this.state.dataSource}
             enableEmptySections={true}
             automaticallyAdjustContentInsets={false}
             // renderRow={(rowData) => this.typeOfList.bind(this, rowData)}
-            renderRow={(rowData) => <GridListItem picture={rowData} />}
+            renderRow={(rowData) => <GridListItem history={rowData} />}
           />
-          </Image>
         </View>
+        </Image>
       
       </View>
     );
@@ -102,11 +111,10 @@ class GridListItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      picture: props.picture,
+      history: props.history,
       animationType: 'slide',
       modalVisible: false,
       transparent: true,
-      rating: Math.floor(props.picture.likes / (props.picture.likes + props.picture.dislikes) * 100) || 0
     };
   }
 
@@ -132,27 +140,20 @@ class GridListItem extends Component {
               <View style={styles.modalTitleContainer}>
                 <Text
                   style={styles.modalTitle}>
-                  {this.state.picture.comment.charAt(0).toUpperCase() + this.state.picture.comment.slice(1)}
+                  {this.state.history.username2}
                 </Text>
               </View>
               <Image 
-                source={{uri: this.state.picture.imagelink}}
-                style={styles.modalPicture}/>
-              <View style={styles.modalInfoContainer}>
-              <View style={styles.deletePicContainer}> 
-                <TouchableHighlight style={styles.deletePicButton} onPress={this.setModalVisible.bind(this, false)} underlayColor='transparent'>
-                  <Text style={styles.deletePicText}>Delete Picture</Text>
-                </TouchableHighlight>
-              </View>
-              </View>
+                source={{uri: this.state.history.username2pic}}
+                style={styles.modalCircleImage}/>
               <View style={styles.modalInfoContainer}>
                 <View style={styles.modalInfoBox}>
-                  <Text style={styles.statNumbers}>{this.state.rating}%</Text>
-                  <Text style={styles.statText}>Approval Rating</Text>
+                  <Text style={styles.statNumbers}>Roamed in</Text>
+                  <Text style={styles.statText}>{this.state.history.placeRoamed}</Text>
                 </View>
                 <View style={styles.modalInfoBox}>
-                  <Text style={styles.statNumbers}>{this.state.picture.likes}</Text>
-                  <Text style={styles.statText}>Likes</Text>
+                  <Text style={styles.statNumbers}>Rating</Text>
+                  <Text style={styles.statText}>{this.state.history.rating2}</Text>
                 </View>
               </View>
               <View style={styles.closeContainer}> 
@@ -165,9 +166,10 @@ class GridListItem extends Component {
         </Modal>
         <View style={styles.gridListItem}>
           <TouchableHighlight
+            underlayColor='transparent'
             onPress={this.setModalVisible.bind(this, true)}>
             <Image 
-              source={{uri: this.state.picture.imagelink}}
+              source={{uri: this.state.history.username2pic}}
               style={styles.gridListPicture}
             />
           </TouchableHighlight>
@@ -178,15 +180,50 @@ class GridListItem extends Component {
 }
 
 const styles = StyleSheet.create({
-  // backgroundImage: {
-  //   flex:1,
-  //   width:null,
-  //   height: null,
-  //   // padding: 30,
-  //   // marginTop: 20,
-  //   flexDirection: 'column',
-  //   justifyContent: 'center'
-  // },
+  navbarContainer:{
+    backgroundColor: 'transparent',
+    paddingTop: deviceHeight/25,
+    height: deviceHeight/3,
+    borderBottomColor: 'white',
+    borderWidth: 2
+  },
+  navTitle: {
+    color:'#fff',
+    textAlign:'center',
+    fontWeight:'bold',
+    fontSize: 20,
+    fontFamily: 'Avenir',
+    marginRight: deviceWidth/40
+  },
+  profileContainer: {
+    height: deviceHeight/6,
+    width: deviceWidth,
+    alignItems: 'center',
+    justifyContent: 'center', 
+  },
+  statsContainer: {
+    height: deviceHeight/9,
+    width: deviceWidth,
+    flexDirection: 'row'
+  },
+  statBox: {
+    width: deviceWidth/3,
+    alignItems: 'center',
+    borderColor: 'white',
+    borderWidth: 2,
+    justifyContent: 'center'
+  },
+  stat: {
+    fontSize: 25,
+    color: 'white',
+  },
+  statTitle: {
+    fontSize: 10,
+    color: '#ff0066',
+  },
+  titles: {
+    flexDirection: 'row',
+  },
   header: {
     // marginBottom: 20,
     fontSize: 50,
@@ -213,44 +250,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
   },
-  navbarContainer:{
-    backgroundColor:'#8C4DCB',
-    paddingTop: deviceHeight/25,
-    height: deviceHeight/5,
-    flexDirection: 'row',
-    // paddingBottom: deviceHeight/80
-  },
-  navLeft: {
-    width: deviceWidth/3,
-    // borderWidth: 0.5,
-    // borderColor: '#555555',
-    justifyContent: 'center',
-    paddingLeft: deviceWidth/20,
-  },
-  navMiddle: {
-    width: deviceWidth/3,
-    // borderWidth: 0.5,
-    // borderColor: '#555555',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row'
-  },
-  navRight: {
-    width: deviceWidth/3,
-    // borderWidth: 0.5,
-    // borderColor: '#555555',
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    paddingRight: deviceWidth/20
-    // flexDirection: 'row'
-  },
-  navTitle: {
-    color:'#fff',
-    textAlign:'center',
-    fontWeight:'bold',
-    fontSize: 20,
-    fontFamily: 'Avenir',
-  },
   backgroundImage: {
     flex:1,
     width:null,
@@ -261,9 +260,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   circleImage: {
-    height: 80,
-    borderRadius: 40,
-    width: 80
+    height: deviceWidth/5,
+    borderRadius: deviceWidth/10,
+    width: deviceWidth/5,
+    borderColor: 'white',
+    borderWidth: 1.5
+  },
+  modalCircleImage: {
+    height: deviceWidth/3,
+    borderRadius: deviceWidth/6,
+    width: deviceWidth/3,
+    borderColor: 'white'
   },
   mainContainer: {
     height: deviceHeight
@@ -288,7 +295,9 @@ const styles = StyleSheet.create({
   gridListPicture: {
     width: deviceWidth/5,
     height: deviceWidth/5,
-    borderRadius: deviceWidth/10
+    borderRadius: deviceWidth/10,
+    borderColor: 'white',
+    borderWidth: 1.5
     // paddingTop: deviceWidth/20,
     // paddingBottom:deviceWidth/20,
     // paddingLeft: deviceWidth/20,

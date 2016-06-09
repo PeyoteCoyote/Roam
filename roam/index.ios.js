@@ -21,8 +21,8 @@ class roam extends Component{
       <NavigatorIOS
       style={styles.container}
         initialRoute={{
-          title: 'User',
-          component: Login
+          title: 'Login',
+          component: Login,
         }}
         navigationBarHidden={true} />
     );

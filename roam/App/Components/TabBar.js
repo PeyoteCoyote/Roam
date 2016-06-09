@@ -33,7 +33,7 @@ class TabBar extends Component {
 
   render() {
     return (
-      <TabBarIOS>
+      <TabBarIOS translucent={false}>
         <Icon.TabBarItem
           title='User'
           selected={this.state.selectedTab === 'home'}
