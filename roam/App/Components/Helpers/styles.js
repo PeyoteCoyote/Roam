@@ -15,7 +15,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
     backgroundColor: 'transparent',
-    letterSpacing: 5
+    letterSpacing: 5,
+  },
+  subTitle: {
+    marginBottom: 4,
+    fontSize: 20,
+    fontWeight: "100",
+    fontFamily: 'Gill Sans',
+    textAlign: 'center',
+    color: 'white',
+    backgroundColor: 'transparent',
+    letterSpacing: 1
   },
   header: {
     marginBottom: 20,
@@ -43,11 +53,13 @@ const styles = StyleSheet.create({
     color: 'white',
     alignSelf: 'center'
   },
+  boldify: {
+    fontWeight: 'bold',
+  },
   button: {
     height: 50,
     width: 300,
     flexDirection: 'row',
-    backgroundColor: '#ff0066',
     borderRadius:10,
     marginBottom: 10,
     marginTop: 20,
@@ -81,10 +93,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   backgroundImage: {
-    flex:1,
-    width:null,
+    flex: 1,
+    width: null,
     height: null,
     padding: 30,
+    paddingTop: 2,
     marginTop: 20,
     flexDirection: 'column',
     justifyContent: 'center'

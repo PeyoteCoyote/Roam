@@ -40,11 +40,11 @@ const baseLink_verified = 'https://api.mlab.com/api/1/databases/frantic-rust-roa
 
 //transport vehicle for nodemailer to send out email
 // var transporter = nodemailer.createTransport(smtpConfig); 
-var checkUser = (username, phone) => {
-    fetch(baseLink_users + mongoDB_API_KEY)
-    .then((response) => response.json())
-      .then((responseData) => {
-}
+// var checkUser = (username, phone) => {
+//     fetch(baseLink_users + mongoDB_API_KEY)
+//     .then((response) => response.json())
+//       .then((responseData) => {
+// }
 
 var getUser = (username, password, res) => {
   fetch(baseLink_users + mongoDB_API_KEY)
